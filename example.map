@@ -1,0 +1,5 @@
+pointer up 5
+pointer right 3
+draw grass
+pointer down 2
+draw tree
