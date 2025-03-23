@@ -23,8 +23,17 @@ class MapperInterpreter(MapperVisitor):
         print(f"Tile assigned: {name} = {value}")
 
     def visitNumberAssign(self, ctx):
-        name = ctx.IDENTIFIER().getText()
-        value = self.visit(ctx.expr())
+        print(f"handling: {ctx.getText()}")  # Debugging
+
+        name = ctx.IDENTIFIER().getText()  # Get variable name
+
+        # Debugging: check if expr() exists
+        expr_ctx = ctx.expr()
+        if not expr_ctx:
+            print("Error: ctx.expr() is None!")
+            return None
+        value = expr_ctx.getText()
+        print(f"Evaluated value: {value}")
         self.variables[name] = value
         print(f"Number assigned: {name} = {value}")
 
@@ -33,6 +42,19 @@ class MapperInterpreter(MapperVisitor):
         value = self.visit(ctx.expr())  # Parsowanie wyrażenia logicznego
         self.variables[name] = value
         print(f"Boolean assigned: {name} = {value}")
+        return value
+
+    def visitIncrement(self, ctx):
+        name = ctx.IDENTIFIER().getText()
+        print(f"name {name}")
+        value = ctx.expr().getText()# Pobierz wartość po +=
+        if name not in self.variables:
+            raise RuntimeError(f"❌ Błąd: Nieznana zmienna '{name}'!")
+
+        print(f"🔄 Aktualizuję {name}: {self.variables[name]} += {value}")
+        self.variables[name] += value  # Dodaj wartość do zmiennej
+        return self.variables[name]
+
 
     def visitAssignment(self, ctx):
         print("⚠️ Visiting assignment...")  # Debug
@@ -45,7 +67,9 @@ class MapperInterpreter(MapperVisitor):
         elif ctx.boolAssign():
             print("✅ Boolean assignment detected!")
             return self.visitBoolAssign(ctx.boolAssign())
-
+        elif ctx.increment():
+            print("incrementing")
+            return self.visitIncrement(ctx.increment())
         else:
             print("❌ Unknown assignment type!")
     def visitMove(self, ctx):
@@ -70,6 +94,8 @@ class MapperInterpreter(MapperVisitor):
     def visitErrorHandling(self, ctx):
         message = ctx.STRING().getText()
         print(f"Error: {message}")
+
+
 
 # Uruchomienie interpretera
 if __name__ == "__main__":

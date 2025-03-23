@@ -19,6 +19,11 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#increment.
+    def visitIncrement(self, ctx:MapperParser.IncrementContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#tileAssign.
     def visitTileAssign(self, ctx:MapperParser.TileAssignContext):
         return self.visitChildren(ctx)

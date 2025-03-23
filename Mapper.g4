@@ -13,10 +13,11 @@ statement   : assignment
             ;
 
 // Przypisania zmiennych
+increment : IDENTIFIER '+=' expr; // problem bo chyba to dziala dla kazdej zmiennej nie tylko number    2432
 tileAssign  : 'tile' IDENTIFIER '=' IDENTIFIER ('+' IDENTIFIER)?;
 numberAssign : 'number' IDENTIFIER '=' expr;
 boolAssign   : 'bool' IDENTIFIER '=' expr;
-assignment  : tileAssign | numberAssign | boolAssign;
+assignment  : tileAssign | numberAssign | boolAssign|increment;
 
 // Rysowanie płytek
 draw        : 'draw' IDENTIFIER;

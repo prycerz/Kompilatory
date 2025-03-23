@@ -3,3 +3,7 @@ pointer right 3
 draw grass
 pointer down 2
 draw tree
+number i = 0
+i += 1
+
+
