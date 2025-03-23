@@ -1,5 +1,5 @@
 import pygame
-
+from Tile import Tile
 # Ustawienia ekranu
 TILE_SIZE = 32
 MAP_WIDTH = 25  # 25x32 = 800px
@@ -15,6 +15,7 @@ TILE_COLORS = {
 	"tree": (139, 69, 19),
 	"rock": (105, 105, 105),
 	"cabin": (160, 82, 45),
+	"grass+tree": (100,100,100)
 }
 
 class MapperRenderer:
@@ -45,13 +46,17 @@ class MapperRenderer:
 		self.pointer_x = max(0, min(MAP_WIDTH - 1, self.pointer_x + dx))
 		self.pointer_y = max(0, min(MAP_HEIGHT - 1, self.pointer_y + dy))
 
-	def draw_tile(self, tile_name):
+	def draw_tile(self, tile):
+		if isinstance(tile,str):
+			if tile in TILE_COLORS:
+				print(f"drawing tile {tile}")
+				self.map_data[self.pointer_y][self.pointer_x] = tile
 
-		if tile_name in TILE_COLORS:
-			print(f"drawing tile {tile_name}")
-			self.map_data[self.pointer_y][self.pointer_x] = tile_name
 
-			self.render()  # Force an update on screen
+		elif isinstance(tile,Tile):
+			self.map_data[self.pointer_y][self.pointer_x] = tile.background + (tile.foreground if tile.foreground else "")
+
+		self.render()  # Force an update on screen
 
 	def render(self):
 		self.screen.fill((0, 0, 0))  # Clear screen

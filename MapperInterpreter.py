@@ -1,7 +1,7 @@
 import sys
 from antlr4 import *
 from vtk.numpy_interface.algorithms import condition
-
+from Tile import Tile
 from MapperLexer import MapperLexer
 from MapperParser import MapperParser
 from MapperVisitor import MapperVisitor
@@ -13,16 +13,16 @@ class MapperInterpreter(MapperVisitor):
         
     def visitTileAssign(self, ctx):
         name = ctx.IDENTIFIER(0).getText()
-        base = ctx.IDENTIFIER(1).getText()
+        background = ctx.IDENTIFIER(1).getText()
         
         if ctx.IDENTIFIER(2):  # Jeśli jest drugi obiekt (np. "trawa = grass + tree")
-            obj = ctx.IDENTIFIER(2).getText()
-            value = f"{base} + {obj}"
+            foreground = ctx.IDENTIFIER(2).getText()
+            tile = Tile(background, foreground)
         else:
-            value = base
+            tile = Tile(background)
 
-        self.variables[name] = value
-        print(f"Tile assigned: {name} = {value}")
+        self.variables[name] = tile
+        print(f"Tile assigned: {name} = background: {tile.background} foreground: {tile.foreground}")
 
     def visitNumberAssign(self, ctx):
         print(f"handling: {ctx.getText()}")  # Debugging
@@ -89,7 +89,9 @@ class MapperInterpreter(MapperVisitor):
 
     def visitDraw(self, ctx):
         tile_name = ctx.IDENTIFIER().getText()
-        print(f"visit draw inter'{tile_name}' at ({self.renderer.pointer_x}, {self.renderer.pointer_y})")
+        print(f"visit draw {tile_name} at ({self.renderer.pointer_x}, {self.renderer.pointer_y})")
+        if (tile_name in self.variables):
+            self.renderer.draw_tile(self.variables[tile_name])
         self.renderer.draw_tile(tile_name)
 
 
