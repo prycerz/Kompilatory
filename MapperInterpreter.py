@@ -34,7 +34,7 @@ class MapperInterpreter(MapperVisitor):
         if not expr_ctx:
             print("Error: ctx.expr() is None!")
             return None
-        value = expr_ctx.getText()
+        value = int(expr_ctx.getText())
         print(f"Evaluated value: {value}")
         self.variables[name] = value
         print(f"Number assigned: {name} = {value}")
@@ -49,12 +49,12 @@ class MapperInterpreter(MapperVisitor):
     def visitIncrement(self, ctx):
         name = ctx.IDENTIFIER().getText()
         print(f"name {name}")
-        value = ctx.expr().getText()# Pobierz wartość po +=
+        value = int(ctx.expr().getText())# Pobierz wartość po +=
         if name not in self.variables:
             raise RuntimeError(f"❌ Błąd: Nieznana zmienna '{name}'!")
 
-        print(f"🔄 Aktualizuję {name}: {self.variables[name]} += {value}")
-        self.variables[name] += value  # Dodaj wartość do zmiennej
+        print(f"🔄 Aktualizuję {name}: {int(self.variables[name])} += {int(value)}")
+        self.variables[name] +=int( value)  # Dodaj wartość do zmiennej
         return self.variables[name]
 
 
@@ -97,12 +97,23 @@ class MapperInterpreter(MapperVisitor):
         message = ctx.STRING().getText()
         print(f"Error: {message}")
 
-    def visitLoop(self, ctx:MapperParser.LoopContext):
-        print("handling loop")
-        condition = ctx.expr()
-        print(f"condition {condition.getText()}")
-        print(condition.IDENTIFIER())
-        result = self.visit(condition)
+    def visitLoop(self, ctx: MapperParser.LoopContext):
+        print("Handling loop")
+
+        # Get condition expression
+        condition_expr = ctx.expr()
+        print(f"Loop condition: {condition_expr.getText()}")
+
+        # Evaluate condition
+        while self.visit(condition_expr):  # Keep looping while condition is true
+            print("Loop body execution...")
+
+            # Visit each statement inside the loop
+            for stmt in ctx.statement():
+                print(f"Executing statement: {stmt.getText()}")
+                self.visit(stmt)  # Execute statement
+
+        print("Exiting loop")
     def visitConditional(self, ctx:MapperParser.ConditionalContext):
         print(f"Handling if statement: {ctx.getText()}")  # Debugging output
 
