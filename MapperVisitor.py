@@ -49,6 +49,11 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#percentagePair.
+    def visitPercentagePair(self, ctx:MapperParser.PercentagePairContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#move.
     def visitMove(self, ctx:MapperParser.MoveContext):
         return self.visitChildren(ctx)

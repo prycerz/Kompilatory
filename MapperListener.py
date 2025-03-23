@@ -80,6 +80,15 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#percentagePair.
+    def enterPercentagePair(self, ctx:MapperParser.PercentagePairContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#percentagePair.
+    def exitPercentagePair(self, ctx:MapperParser.PercentagePairContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#move.
     def enterMove(self, ctx:MapperParser.MoveContext):
         pass

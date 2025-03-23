@@ -1,6 +1,8 @@
 import sys
 from antlr4 import *
 from vtk.numpy_interface.algorithms import condition
+
+from Blend import Blend
 from Tile import Tile
 from MapperLexer import MapperLexer
 from MapperParser import MapperParser
@@ -91,11 +93,25 @@ class MapperInterpreter(MapperVisitor):
         print(f"Pointer moved {direction} by {value}. New position: ({self.renderer.pointer_x}, {self.renderer.pointer_y})")
 
     def visitDraw(self, ctx):
-        tile_name = ctx.IDENTIFIER().getText()
-        print(f"visit draw {tile_name} at ({self.renderer.pointer_x}, {self.renderer.pointer_y})")
-        if tile_name in self.variables:
-            self.renderer.draw_tile(self.variables[tile_name])
-        self.renderer.draw_tile(tile_name)
+        if ctx.IDENTIFIER():
+            tile_name = ctx.IDENTIFIER().getText()
+            print(f"visit draw {tile_name} at ({self.renderer.pointer_x}, {self.renderer.pointer_y})")
+            if tile_name in self.variables:
+                self.renderer.draw_tile(self.variables[tile_name])
+            self.renderer.draw_tile(tile_name)
+        elif ctx.INT():  # Rysowanie z promieniem
+            radius = int(ctx.INT().getText())
+            percentages = []
+            for pair in ctx.percentagePair():
+                percent = int(pair.INT().getText())
+                tile_type = pair.IDENTIFIER().getText()
+                percentages.append((percent, tile_type))
+
+            print(f"Drawing radius {radius} with: {percentages}")
+            blend = Blend(radius,percentages)
+            self.renderer.draw_tile(blend)
+        else:
+            print("ERROR: Invalid draw command!")
 
 
     def visitErrorHandling(self, ctx):

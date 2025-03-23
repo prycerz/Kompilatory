@@ -1,3 +1,1 @@
-tile zlaczone = grass
-zlaczone += tree
-draw zlaczone
+draw radius 6 50% grass 30% tree 20 %rock

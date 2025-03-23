@@ -1,4 +1,7 @@
 import pygame
+from Cython import pointer
+
+from Blend import Blend
 from Tile import Tile
 # Ustawienia ekranu
 TILE_SIZE = 32
@@ -55,7 +58,11 @@ class MapperRenderer:
 
 		elif isinstance(tile,Tile):
 			self.map_data[self.pointer_y][self.pointer_x] = tile.background + (tile.foreground if tile.foreground else "")
-
+		elif isinstance(tile, Blend):
+			"""
+			TODO: narysować wypełnione koło
+			"""
+			self.render()
 		self.render()  # Force an update on screen
 
 	def render(self):
