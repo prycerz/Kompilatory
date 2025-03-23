@@ -49,12 +49,15 @@ class MapperInterpreter(MapperVisitor):
     def visitIncrement(self, ctx):
         name = ctx.IDENTIFIER().getText()
         print(f"name {name}")
-        value = int(ctx.expr().getText())# Pobierz wartość po +=
+        value = ctx.expr().getText()# Pobierz wartość po +=
         if name not in self.variables:
             raise RuntimeError(f"❌ Błąd: Nieznana zmienna '{name}'!")
-
-        print(f"🔄 Aktualizuję {name}: {int(self.variables[name])} += {int(value)}")
-        self.variables[name] +=int( value)  # Dodaj wartość do zmiennej
+        if isinstance(self.variables[name],int):
+            print(f"🔄 Aktualizuję {name}: {int(self.variables[name])} += {int(value)}")
+            self.variables[name] +=int( value)  # Dodaj wartość do zmiennej
+        print(self.variables[name])
+        if isinstance(self.variables[name],Tile):
+            self.variables[name].foreground = value
         return self.variables[name]
 
 
@@ -90,7 +93,7 @@ class MapperInterpreter(MapperVisitor):
     def visitDraw(self, ctx):
         tile_name = ctx.IDENTIFIER().getText()
         print(f"visit draw {tile_name} at ({self.renderer.pointer_x}, {self.renderer.pointer_y})")
-        if (tile_name in self.variables):
+        if tile_name in self.variables:
             self.renderer.draw_tile(self.variables[tile_name])
         self.renderer.draw_tile(tile_name)
 

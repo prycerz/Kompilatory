@@ -1,18 +1,3 @@
-number i = 0
-if (i<3)
-{
-    pointer up 5
-}
-pointer right 3
-draw grass
-pointer down 2
-draw tree
-
-
-while(i<10)
-{
-    i+=1
-    pointer down 2
-    pointer right 2
-    draw grass
-}
+tile zlaczone = grass
+zlaczone += tree
+draw zlaczone
