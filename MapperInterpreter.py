@@ -1,5 +1,7 @@
 import sys
 from antlr4 import *
+from vtk.numpy_interface.algorithms import condition
+
 from MapperLexer import MapperLexer
 from MapperParser import MapperParser
 from MapperVisitor import MapperVisitor
@@ -95,6 +97,64 @@ class MapperInterpreter(MapperVisitor):
         message = ctx.STRING().getText()
         print(f"Error: {message}")
 
+    def visitLoop(self, ctx:MapperParser.LoopContext):
+        print("handling loop")
+        condition = ctx.expr()
+        print(f"condition {condition.getText()}")
+        print(condition.IDENTIFIER())
+        result = self.visit(condition)
+    def visitConditional(self, ctx:MapperParser.ConditionalContext):
+        print(f"Handling if statement: {ctx.getText()}")  # Debugging output
+
+        # Extract and evaluate the condition
+        condition_value = self.visit(ctx.expr())  # Should return True/False
+        print(f"Condition evaluated to: {condition_value}")
+
+        if condition_value:
+            print("Executing if branch...")
+            statements = ctx.statement()  # Get statements inside the block
+            print(f"Statements inside if: {len(statements)}")
+
+            for statement_ctx in statements:
+                print(f"Visiting statement: {statement_ctx.getText()}")
+                self.visit(statement_ctx)
+
+        print("Exiting if statement")
+
+    def visitExpr(self, ctx):
+        print(f"Visiting expr: {ctx.getText()}")
+        print(f"Child count: {ctx.getChildCount()}")
+
+        for i in range(ctx.getChildCount()):
+            print(f"Child {i}: {ctx.getChild(i).getText()}")
+
+        if ctx.getChildCount() == 1:  # Single value (number or identifier)
+            value = ctx.getChild(0).getText()
+
+            # Check if it's a number
+            if value.isdigit():
+                return int(value)  # Convert to int
+            elif value in self.variables:  # Check if it's a variable
+                return int (self.variables[value])  # Return stored value
+            else:
+                raise Exception(f"Undefined variable: {value}")  # Handle unknown var
+
+        elif ctx.getChildCount() == 3:  # Binary expressions (e.g., i < 3)
+            left = self.visit(ctx.getChild(0))  # Evaluate left operand
+            op = ctx.getChild(1).getText()  # Operator
+            right = self.visit(ctx.getChild(2))  # Evaluate right operand
+
+            print(f"Evaluating: {left} {op} {right}")
+
+            if op == "<":
+                return left < right
+            elif op == ">":
+                return left > right
+            elif op == "==":
+                return left == right
+            # Add other operators as needed
+
+        return None
 
 
 # Uruchomienie interpretera
