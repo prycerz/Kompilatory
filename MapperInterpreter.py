@@ -13,16 +13,24 @@ class MapperInterpreter(MapperVisitor):
         self.variables = {}  # Przechowuje zmienne
         self.renderer = MapperRenderer()
         
-    def visitTileAssign(self, ctx):
-        name = ctx.IDENTIFIER(0).getText()
-        background = ctx.IDENTIFIER(1).getText()
-        
-        if ctx.IDENTIFIER(2):  # Jeśli jest drugi obiekt (np. "trawa = grass + tree")
-            foreground = ctx.IDENTIFIER(2).getText()
-            tile = Tile(background, foreground)
-        else:
-            tile = Tile(background)
+    # Idenfitfies the type of object
+    backgroundObjects = ['grass', 'soil', 'sand', 'water', 'rocks']
+    foregroundObjects = ['tree', 'bush', 'stones', 'mountain', 'cabin', 'church']
 
+    def visitTileAssign(self, ctx):
+        # Name of tile
+        name = ctx.IDENTIFIER(0).getText()
+
+        # Assign background and foreground objects
+        counter = 1
+        args = []
+        # add all arguments to the list
+        while(ctx.IDENTIFIER(counter)):
+            args.append(ctx.IDENTIFIER(counter).getText())
+            counter += 1
+
+        tile = Tile(args)
+        
         self.variables[name] = tile
         print(f"Tile assigned: {name} = background: {tile.background} foreground: {tile.foreground}")
 
@@ -59,7 +67,7 @@ class MapperInterpreter(MapperVisitor):
             self.variables[name] +=int( value)  # Dodaj wartość do zmiennej
         print(self.variables[name])
         if isinstance(self.variables[name],Tile):
-            self.variables[name].foreground = value
+            self.variables[name].add_obj(value)
         return self.variables[name]
 
 
@@ -79,9 +87,12 @@ class MapperInterpreter(MapperVisitor):
             return self.visitIncrement(ctx.increment())
         else:
             print("❌ Unknown assignment type!")
+
     def visitMove(self, ctx):
         direction = ctx.getChild(1).getText()
-        value = int(ctx.getChild(2).getText())
+        value_expr = ctx.getChild(2)
+        value = self.visit(value_expr)
+
         if direction == 'up':
             self.renderer.move_pointer(0, -value)
         elif direction == 'down':
@@ -94,11 +105,20 @@ class MapperInterpreter(MapperVisitor):
 
     def visitDraw(self, ctx):
         if ctx.IDENTIFIER():
-            tile_name = ctx.IDENTIFIER().getText()
-            print(f"visit draw {tile_name} at ({self.renderer.pointer_x}, {self.renderer.pointer_y})")
-            if tile_name in self.variables:
-                self.renderer.draw_tile(self.variables[tile_name])
-            self.renderer.draw_tile(tile_name)
+            args = []
+            counter = 0
+            while(ctx.IDENTIFIER(counter)):
+                args.append(ctx.IDENTIFIER(counter).getText())
+                counter += 1
+                
+            for arg in args:
+                if(arg in self.variables):
+                    self.renderer.draw_tile(self.variables[arg])
+                    return
+
+            self.renderer.draw_tile(Tile(args=args))
+
+
         elif ctx.INT():  # Rysowanie z promieniem
             radius = int(ctx.INT().getText())
             percentages = []

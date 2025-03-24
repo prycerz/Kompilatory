@@ -1,4 +1,13 @@
 class Tile:
-    def __init__(self, background, foreground = None):
-        self.background=background
-        self.foreground=foreground
+    def __init__(self, args=[]):
+        self.background = 'grass'
+        self.foreground = None
+
+        for arg in args:
+            self.add_obj(arg)
+    
+    def add_obj(self, obj):
+        if obj in ['grass', 'soil', 'sand', 'water', 'rocks']:
+            self.background = obj
+        elif obj in ['tree', 'bush', 'stones', 'mountains', 'cabin', 'church']:
+            self.foreground = obj
