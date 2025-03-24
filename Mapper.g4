@@ -13,19 +13,19 @@ statement   : assignment
             ;
 
 // Przypisania zmiennych
-increment : IDENTIFIER '+=' expr; // problem bo chyba to dziala dla kazdej zmiennej nie tylko number    2432
-tileAssign  : 'tile' IDENTIFIER '=' IDENTIFIER ('+' IDENTIFIER)?;
+increment : IDENTIFIER '+=' expr; // problem bo chyba to dziala dla kazdej zmiennej nie tylko number
+tileAssign  : 'tile' IDENTIFIER '=' IDENTIFIER ('+' IDENTIFIER)*; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
 numberAssign : 'number' IDENTIFIER '=' expr;
 boolAssign   : 'bool' IDENTIFIER '=' expr;
-assignment  : tileAssign | numberAssign | boolAssign|increment;
+assignment  : tileAssign | numberAssign | boolAssign | increment;
 
 // Rysowanie płytek
-draw        : 'draw' IDENTIFIER
+draw        : 'draw' IDENTIFIER ('+' IDENTIFIER)*
             | 'draw' 'radius' INT percentagePair+;
 percentagePair : INT '%' IDENTIFIER;
 
 // Poruszanie wskaźnikiem
-move        : 'pointer' ('up' INT | 'down' INT | 'left' INT | 'right' INT);
+move        : 'pointer' ('up' expr | 'down' expr | 'left' expr | 'right' expr);
 
 // Pętla while
 loop        : 'while' '(' expr ')' '{' statement* '}';
