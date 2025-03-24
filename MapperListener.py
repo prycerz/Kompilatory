@@ -26,6 +26,15 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#increment.
+    def enterIncrement(self, ctx:MapperParser.IncrementContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#increment.
+    def exitIncrement(self, ctx:MapperParser.IncrementContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#tileAssign.
     def enterTileAssign(self, ctx:MapperParser.TileAssignContext):
         pass
@@ -68,6 +77,15 @@ class MapperListener(ParseTreeListener):
 
     # Exit a parse tree produced by MapperParser#draw.
     def exitDraw(self, ctx:MapperParser.DrawContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#percentagePair.
+    def enterPercentagePair(self, ctx:MapperParser.PercentagePairContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#percentagePair.
+    def exitPercentagePair(self, ctx:MapperParser.PercentagePairContext):
         pass
 
 
