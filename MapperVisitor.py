@@ -29,6 +29,11 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#assignment.
+    def visitAssignment(self, ctx:MapperParser.AssignmentContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#numberAssign.
     def visitNumberAssign(self, ctx:MapperParser.NumberAssignContext):
         return self.visitChildren(ctx)
@@ -39,8 +44,18 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#assignment.
-    def visitAssignment(self, ctx:MapperParser.AssignmentContext):
+    # Visit a parse tree produced by MapperParser#blendAssign.
+    def visitBlendAssign(self, ctx:MapperParser.BlendAssignContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#figure.
+    def visitFigure(self, ctx:MapperParser.FigureContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#blendOption.
+    def visitBlendOption(self, ctx:MapperParser.BlendOptionContext):
         return self.visitChildren(ctx)
 
 

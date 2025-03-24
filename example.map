@@ -1,16 +1,7 @@
-number x = 5
-while(x > 1){
-    x+=-1
-    pointer right 1
-    pointer down 1
-    draw sand + mountains
-}
-
-number y = 0
-tile churchongrass = tree
-churchongrass += sand
-while(y < 4){
-    pointer right y
-    draw churchongrass
-    y+=1
-} 
+blend somename = rectangle 4 5 sand 80% grass 20%
+draw somename
+pointer down 5
+pointer right 10
+tile sandmountain = sand + mountains
+blend circleblend = circle 6 sandmountain 50% grass 50%
+draw circleblend

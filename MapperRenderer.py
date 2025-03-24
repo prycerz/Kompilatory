@@ -46,23 +46,24 @@ class MapperRenderer:
 		# if isinstance(tile, str):
 		# 	self.map_data[self.pointer_y][self.pointer_x] = tile
 		if isinstance(tile, Tile):
-			self.map_data[self.pointer_y][self.pointer_x] = tile.background + (("+"+tile.foreground) if tile.foreground else "")
+			self.map_data[self.pointer_y][self.pointer_x] = tile.__str__()
 		elif isinstance(tile, Blend):
-			"""
-			TODO: narysować wypełnione koło
-			"""
-			self.render()
+			for x, y in tile.figure.tiles_to_visit():
+				self.map_data[self.pointer_y + y][self.pointer_x + x] = tile.random_tile()
+				self.render()  # Force an update on screen
+
 		self.render()  # Force an update on screen
 
 	def render(self):
 		self.screen.fill((0, 0, 0))  # Clear screen
 
+
+		print('rendering')
+
 		for y, row in enumerate(self.map_data):
 			for x, tile_name in enumerate(row):
 				objectsArray = tile_name.split('+')
 				for obj in objectsArray:
-					if(obj is not 'water'):
-						print(obj)
 					if(obj in self.BACKGROUND_TILE_IMAGES):
 						image = self.BACKGROUND_TILE_IMAGES[obj]
 						self.screen.blit(image, (x * TILE_SIZE, y * TILE_SIZE))

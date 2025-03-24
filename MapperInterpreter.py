@@ -4,6 +4,7 @@ from vtk.numpy_interface.algorithms import condition
 
 from Blend import Blend
 from Tile import Tile
+from Figure import Figure
 from MapperLexer import MapperLexer
 from MapperParser import MapperParser
 from MapperVisitor import MapperVisitor
@@ -24,6 +25,7 @@ class MapperInterpreter(MapperVisitor):
         # Assign background and foreground objects
         counter = 1
         args = []
+  
         # add all arguments to the list
         while(ctx.IDENTIFIER(counter)):
             args.append(ctx.IDENTIFIER(counter).getText())
@@ -34,6 +36,37 @@ class MapperInterpreter(MapperVisitor):
         self.variables[name] = tile
         print(f"Tile assigned: {name} = background: {tile.background} foreground: {tile.foreground}")
 
+
+    def visitBlendAssign(self, ctx):
+
+        print('visted blend assign')
+        blend_name = ctx.IDENTIFIER().getText()  # Get the blend name
+        blend_options = []  # List to store the blend options
+
+        print(f"figuretext: {ctx.figure().getText()}")  # Debugging
+
+        if ctx.figure().getText().startswith('circle'): 
+            radius = int(ctx.figure().INT(0).getText())
+            figure = Figure('circle', {'radius': radius})
+
+        elif ctx.figure().getText().startswith('rectangle'):
+            width = int(ctx.figure().INT(0).getText())
+            height = int(ctx.figure().INT(1).getText())
+            figure = Figure('rectangle', {'width': width, 'height': height})
+        else:
+            raise RuntimeError("❌ Błąd: Nieznany typ figury!")
+
+        # Iterate through the blend options (ctx.blendOption())
+        for option_ctx in ctx.blendOption():
+            tile = option_ctx.IDENTIFIER().getText()  # Get the tile type (e.g., sand, grass)
+            percentage = int(option_ctx.INT().getText())  # Get the percentage value
+            if(tile in self.variables and isinstance(self.variables[tile], Tile)):
+                blend_options.append((self.variables[tile], percentage))
+            else:
+                blend_options.append((Tile([tile]), percentage))  # Store the tile and its percentage
+
+        self.variables[blend_name] = Blend(figure, blend_options)  # Store the blend in variables
+    
     def visitNumberAssign(self, ctx):
         print(f"handling: {ctx.getText()}")  # Debugging
 
@@ -83,8 +116,11 @@ class MapperInterpreter(MapperVisitor):
             print("✅ Boolean assignment detected!")
             return self.visitBoolAssign(ctx.boolAssign())
         elif ctx.increment():
-            print("incrementing")
+            print("✅ Increament assignment detected!")
             return self.visitIncrement(ctx.increment())
+        elif ctx.blendAssign():
+            print("✅ Blend assignment detected!")
+            return self.visitBlendAssign(ctx.blendAssign())
         else:
             print("❌ Unknown assignment type!")
 
@@ -104,6 +140,7 @@ class MapperInterpreter(MapperVisitor):
         print(f"Pointer moved {direction} by {value}. New position: ({self.renderer.pointer_x}, {self.renderer.pointer_y})")
 
     def visitDraw(self, ctx):
+        # if it is not Tile or Blend, make a Tile from given arguments (tree, bush, sand, etc.) 
         if ctx.IDENTIFIER():
             args = []
             counter = 0
@@ -111,6 +148,7 @@ class MapperInterpreter(MapperVisitor):
                 args.append(ctx.IDENTIFIER(counter).getText())
                 counter += 1
                 
+            
             for arg in args:
                 if(arg in self.variables):
                     self.renderer.draw_tile(self.variables[arg])

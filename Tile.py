@@ -11,3 +11,6 @@ class Tile:
             self.background = obj
         elif obj in ['tree', 'bush', 'stones', 'mountains', 'cabin', 'church']:
             self.foreground = obj
+
+    def __str__(self):
+        return self.background + (("+"+self.foreground) if self.foreground else "")

@@ -13,11 +13,17 @@ statement   : assignment
             ;
 
 // Przypisania zmiennych
-increment : IDENTIFIER '+=' expr; // problem bo chyba to dziala dla kazdej zmiennej nie tylko number
-tileAssign  : 'tile' IDENTIFIER '=' IDENTIFIER ('+' IDENTIFIER)*; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
+increment    : IDENTIFIER '+=' expr; // problem bo chyba to dziala dla kazdej zmiennej nie tylko number
+tileAssign   : 'tile' IDENTIFIER '=' IDENTIFIER ('+' IDENTIFIER)*; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
+assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign;
 numberAssign : 'number' IDENTIFIER '=' expr;
 boolAssign   : 'bool' IDENTIFIER '=' expr;
-assignment  : tileAssign | numberAssign | boolAssign | increment;
+
+
+blendAssign  : 'blend' IDENTIFIER '=' figure blendOption+; 
+figure       : ('circle' INT) | ('rectangle' INT INT);
+blendOption  : IDENTIFIER INT '%';
+
 
 // Rysowanie płytek
 draw        : 'draw' IDENTIFIER ('+' IDENTIFIER)*

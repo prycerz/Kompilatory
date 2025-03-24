@@ -44,6 +44,15 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#assignment.
+    def enterAssignment(self, ctx:MapperParser.AssignmentContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#assignment.
+    def exitAssignment(self, ctx:MapperParser.AssignmentContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#numberAssign.
     def enterNumberAssign(self, ctx:MapperParser.NumberAssignContext):
         pass
@@ -62,12 +71,30 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#assignment.
-    def enterAssignment(self, ctx:MapperParser.AssignmentContext):
+    # Enter a parse tree produced by MapperParser#blendAssign.
+    def enterBlendAssign(self, ctx:MapperParser.BlendAssignContext):
         pass
 
-    # Exit a parse tree produced by MapperParser#assignment.
-    def exitAssignment(self, ctx:MapperParser.AssignmentContext):
+    # Exit a parse tree produced by MapperParser#blendAssign.
+    def exitBlendAssign(self, ctx:MapperParser.BlendAssignContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#figure.
+    def enterFigure(self, ctx:MapperParser.FigureContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#figure.
+    def exitFigure(self, ctx:MapperParser.FigureContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#blendOption.
+    def enterBlendOption(self, ctx:MapperParser.BlendOptionContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#blendOption.
+    def exitBlendOption(self, ctx:MapperParser.BlendOptionContext):
         pass
 
 
