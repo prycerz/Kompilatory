@@ -61,6 +61,8 @@ class MapperRenderer:
 			for x, tile_name in enumerate(row):
 				objectsArray = tile_name.split('+')
 				for obj in objectsArray:
+					if(obj is not 'water'):
+						print(obj)
 					if(obj in self.BACKGROUND_TILE_IMAGES):
 						image = self.BACKGROUND_TILE_IMAGES[obj]
 						self.screen.blit(image, (x * TILE_SIZE, y * TILE_SIZE))

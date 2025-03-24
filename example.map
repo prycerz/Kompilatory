@@ -7,9 +7,10 @@ while(x > 1){
 }
 
 number y = 0
-tile rockcabin = church + rocks
+tile churchongrass = tree
+churchongrass += sand
 while(y < 4){
     pointer right y
-    draw rockcabin
+    draw churchongrass
     y+=1
 } 

@@ -67,7 +67,7 @@ class MapperInterpreter(MapperVisitor):
             self.variables[name] +=int( value)  # Dodaj wartość do zmiennej
         print(self.variables[name])
         if isinstance(self.variables[name],Tile):
-            self.variables[name].foreground = value
+            self.variables[name].add_obj(value)
         return self.variables[name]
 
 
