@@ -24,3 +24,9 @@ pointer left 7
 pointer up 3
 blend lake = circle 2 water 100%
 draw lake
+
+for(i=0; i<10; i+=1){
+    pointer up 2;
+    draw gory;
+  
+}
