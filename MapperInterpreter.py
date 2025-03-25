@@ -176,6 +176,32 @@ class MapperInterpreter(MapperVisitor):
         message = ctx.STRING().getText()
         print(f"Error: {message}")
 
+    def visitForLoop(self, ctx: MapperParser.LoopContext):
+        print("Handling for loop")
+
+        # 1. Inicjalizacja zmiennej (np. number i = 0)
+        self.visit(ctx.numberAssign())  # Wykonaj przypisanie do zmiennej
+
+        # 2. Sprawdzenie warunku pętli (np. i < 10)
+        condition_expr = ctx.expr()
+        print(f"For loop condition: {condition_expr.getText()}")
+
+        # 3. Pętla for - Wykonuj dopóki warunek jest prawdziwy
+        while self.visit(condition_expr):  # Dopóki warunek jest prawdziwy
+            print("Executing loop body...")
+
+            # 4. Wykonaj instrukcje w ciele pętli
+            for stmt in ctx.statement():
+                print(f"Executing statement: {stmt.getText()}")
+                self.visit(stmt)  # Wykonaj każdą instrukcję w pętli
+
+            # 5. Inkrementacja zmiennej (np. i += 1)
+            self.visit(ctx.increment())
+
+        print("Exiting for loop")
+
+    
+#aaa
     def visitLoop(self, ctx: MapperParser.LoopContext):
         print("Handling loop")
 

@@ -5,3 +5,10 @@ pointer right 10
 tile sandmountain = sand + mountains
 blend circleblend = circle 6 sandmountain 50% grass 50%
 draw circleblend
+pointer up 10
+
+for (numer z = 5; z<10; z++) {
+    draw grass;
+    i += 1;
+}
+

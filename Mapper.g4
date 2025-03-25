@@ -33,8 +33,10 @@ percentagePair : INT '%' IDENTIFIER;
 // Poruszanie wskaźnikiem
 move        : 'pointer' ('up' expr | 'down' expr | 'left' expr | 'right' expr);
 
-// Pętla while
-loop        : 'while' '(' expr ')' '{' statement* '}';
+// Pętle
+loop        : 'while' '(' expr ')' '{' statement* '}'
+| 'for' '(' numberAssign ';' expr ';' increment ')' '{' statement* '}';
+
 
 // Instrukcja warunkowa
 conditional : 'if' '(' expr ')' '{' statement* '}' ('else' '{' statement* '}')?;
