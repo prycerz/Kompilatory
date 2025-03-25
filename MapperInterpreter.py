@@ -176,6 +176,23 @@ class MapperInterpreter(MapperVisitor):
         message = ctx.STRING().getText()
         print(f"Error: {message}")
 
+    def visitWhileLoop(self, ctx):
+        print("Handling while loop")
+        # Get condition expression
+        condition_expr = ctx.expr()
+        print(f"Loop condition: {condition_expr.getText()}")
+
+        # Evaluate condition
+        while self.visit(condition_expr):  # Keep looping while condition is true
+            print("Loop body execution...")
+
+            # Visit each statement inside the loop
+            for stmt in ctx.statement():
+                print(f"Executing statement: {stmt.getText()}")
+                self.visit(stmt)  # Execute statement
+
+        print("Exiting loop")
+
     def visitForLoop(self, ctx: MapperParser.LoopContext):
         print("Handling for loop")
 
@@ -201,10 +218,8 @@ class MapperInterpreter(MapperVisitor):
         print("Exiting for loop")
 
     
-#aaa
-    def visitLoop(self, ctx: MapperParser.LoopContext):
-        print("Handling loop")
-
+    def visitWhileLoop(self, ctx):
+        print("Handling while loop")
         # Get condition expression
         condition_expr = ctx.expr()
         print(f"Loop condition: {condition_expr.getText()}")
@@ -217,8 +232,45 @@ class MapperInterpreter(MapperVisitor):
             for stmt in ctx.statement():
                 print(f"Executing statement: {stmt.getText()}")
                 self.visit(stmt)  # Execute statement
-
         print("Exiting loop")
+
+    def visitForLoop(self, ctx):
+        print("Handling for loop")
+        number_assign = ctx.numberAssign()
+        self.visit(number_assign)  # Execute the number assignment statement
+        print(f"Initialized: {number_assign.getText()}")
+
+        # Get condition expression
+        condition_expr = ctx.expr()
+        print(f"Loop condition: {condition_expr.getText()}")
+
+        # Get increment expression
+        increment_expr = ctx.increment()
+        print(f"Increment expression: {increment_expr.getText()}")
+
+        # Loop execution
+        while self.visit(condition_expr):  # Loop condition
+            print("Loop body execution...")
+
+            # Visit each statement inside the loop
+            for stmt in ctx.statement():
+                print(f"Executing statement: {stmt.getText()}")
+                self.visit(stmt)  # Execute statement
+            
+            # Evaluate the increment
+            self.visit(increment_expr)
+            print(f"Increment executed: {increment_expr.getText()}")
+            
+        print("Exiting for loop")
+
+    def visitLoop(self, ctx):
+        if(ctx.forLoop()):
+            return self.visitForLoop(ctx.forLoop())
+        elif(ctx.whileLoop()):
+            return self.visitWhileLoop(ctx.whileLoop())
+
+
+
     def visitConditional(self, ctx:MapperParser.ConditionalContext):
         print(f"Handling if statement: {ctx.getText()}")  # Debugging output
 
@@ -268,7 +320,6 @@ class MapperInterpreter(MapperVisitor):
                 return left > right
             elif op == "==":
                 return left == right
-            # Add other operators as needed
 
         return None
 
@@ -285,4 +336,4 @@ if __name__ == "__main__":
     interpreter.visit(tree)
 
     print("Starting Pygame loop...")
-    interpreter.renderer.run()  # 🚀 Keep the window open!
+    interpreter.renderer.run() 

@@ -33,7 +33,7 @@ class MapperRenderer:
 
 
 		self.clock = pygame.time.Clock()
-		self.pointer_x, self.pointer_y = 5, 5  # Startowa pozycja wskaźnika
+		self.pointer_x, self.pointer_y = 10, 10  # Startowa pozycja wskaźnika
 		self.map_data = [["water"] * MAP_WIDTH for _ in range(MAP_HEIGHT)]  # Mapa początkowo zalana wodą
 
 

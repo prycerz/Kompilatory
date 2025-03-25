@@ -79,6 +79,16 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#whileLoop.
+    def visitWhileLoop(self, ctx:MapperParser.WhileLoopContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#forLoop.
+    def visitForLoop(self, ctx:MapperParser.ForLoopContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#conditional.
     def visitConditional(self, ctx:MapperParser.ConditionalContext):
         return self.visitChildren(ctx)

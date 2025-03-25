@@ -134,6 +134,24 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#whileLoop.
+    def enterWhileLoop(self, ctx:MapperParser.WhileLoopContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#whileLoop.
+    def exitWhileLoop(self, ctx:MapperParser.WhileLoopContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#forLoop.
+    def enterForLoop(self, ctx:MapperParser.ForLoopContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#forLoop.
+    def exitForLoop(self, ctx:MapperParser.ForLoopContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#conditional.
     def enterConditional(self, ctx:MapperParser.ConditionalContext):
         pass
