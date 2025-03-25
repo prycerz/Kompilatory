@@ -1,14 +1,26 @@
-blend somename = rectangle 4 5 sand 80% grass 20%
-draw somename
-pointer down 5
-pointer right 10
-tile sandmountain = sand + mountains
-blend circleblend = circle 6 sandmountain 50% grass 50%
-draw circleblend
-pointer up 10
+pointer up 1
+blend wyspa = circle 7 sand 100%
+draw wyspa
 
-for (numer z = 5; z<10; z++) {
-    draw grass;
-    i += 1;
-}
+blend zielenie = circle 6 tree 20% rocks 10% bush 30% grass 60%
+draw zielenie
 
+pointer up 2
+pointer left 2 
+
+blend village = rectangle 5 5 cabin 80%
+draw village
+
+pointer down 2
+pointer right 2
+draw church
+
+pointer right 5
+tile rockmountain = rocks + mountains
+blend gory = circle 1 rockmountain 80%
+draw gory
+
+pointer left 7 
+pointer up 3
+blend lake = circle 2 water 100%
+draw lake

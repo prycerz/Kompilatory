@@ -34,9 +34,9 @@ percentagePair : INT '%' IDENTIFIER;
 move        : 'pointer' ('up' expr | 'down' expr | 'left' expr | 'right' expr);
 
 // Pętle
-loop        : 'while' '(' expr ')' '{' statement* '}'
-| 'for' '(' numberAssign ';' expr ';' increment ')' '{' statement* '}';
-
+loop        : whileLoop | forLoop; 
+whileLoop   : 'while' '(' expr ')' '{' statement* '}';
+forLoop     : 'for' '(' numberAssign ';' expr ';' increment ')' '{' statement* '}';
 
 // Instrukcja warunkowa
 conditional : 'if' '(' expr ')' '{' statement* '}' ('else' '{' statement* '}')?;
