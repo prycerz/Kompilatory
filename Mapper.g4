@@ -9,20 +9,27 @@ statement   : assignment
             | move
             | loop
             | conditional
+            | roadPlacement
             | errorHandling
             ;
 
 // Przypisania zmiennych
 increment    : IDENTIFIER '+=' expr; // problem bo chyba to dziala dla kazdej zmiennej nie tylko number
-tileAssign   : 'tile' IDENTIFIER '=' IDENTIFIER ('+' IDENTIFIER)*; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
+
+tileAssign   : 'tile' IDENTIFIER '=' tileSum; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
+tileSum      : IDENTIFIER ('+' IDENTIFIER)*;
+
 assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign;
 numberAssign : 'number' IDENTIFIER '=' expr;
 boolAssign   : 'bool' IDENTIFIER '=' expr;
 
+roadPlacement: roadStart | roadEnd;
+roadStart    : 'road' IDENTIFIER 'start';
+roadEnd      : 'road' IDENTIFIER 'end';
 
 blendAssign  : 'blend' IDENTIFIER '=' figure blendOption+; 
 figure       : ('circle' INT) | ('rectangle' INT INT);
-blendOption  : IDENTIFIER INT '%';
+blendOption  : (IDENTIFIER | tileSum) INT '%';
 
 
 // Rysowanie płytek

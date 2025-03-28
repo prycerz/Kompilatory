@@ -5,8 +5,8 @@ from Blend import Blend
 from Tile import Tile
 # Ustawienia ekranu
 TILE_SIZE = 32
-MAP_WIDTH = 25  # 25x32 = 800px
-MAP_HEIGHT = 18  # 18x32 = 576px
+MAP_WIDTH = 52  # 25x32 = 800px
+MAP_HEIGHT = 25  # 18x32 = 576px
 WINDOW_WIDTH = MAP_WIDTH * TILE_SIZE
 WINDOW_HEIGHT = MAP_HEIGHT * TILE_SIZE
 
@@ -33,8 +33,11 @@ class MapperRenderer:
 
 
 		self.clock = pygame.time.Clock()
-		self.pointer_x, self.pointer_y = 10, 10  # Startowa pozycja wskaźnika
-		self.map_data = [["water"] * MAP_WIDTH for _ in range(MAP_HEIGHT)]  # Mapa początkowo zalana wodą
+		self.pointer_x, self.pointer_y = int(MAP_WIDTH/2), int(MAP_HEIGHT/2)  # Startowa pozycja wskaźnika
+		waterTile = Tile()
+		waterTile.add_obj('water')
+		# fill map_data with waterTile
+		self.map_data = [ [waterTile for _ in range(MAP_WIDTH)] * MAP_WIDTH for _ in range(MAP_HEIGHT)]  # Mapa początkowo zalana wodą
 
 
 	def move_pointer(self, dx, dy):
@@ -46,30 +49,23 @@ class MapperRenderer:
 		# if isinstance(tile, str):
 		# 	self.map_data[self.pointer_y][self.pointer_x] = tile
 		if isinstance(tile, Tile):
-			self.map_data[self.pointer_y][self.pointer_x] = tile.__str__()
+			self.map_data[self.pointer_y][self.pointer_x] = tile
+
 		elif isinstance(tile, Blend):
 			for x, y in tile.figure.tiles_to_visit():
 				self.map_data[self.pointer_y + y][self.pointer_x + x] = tile.random_tile()
-				self.render()  # Force an update on screen
 
 		self.render()  # Force an update on screen
 
 	def render(self):
 		self.screen.fill((0, 0, 0))  # Clear screen
-
-
 		print('rendering')
-
 		for y, row in enumerate(self.map_data):
-			for x, tile_name in enumerate(row):
-				objectsArray = tile_name.split('+')
-				for obj in objectsArray:
-					if(obj in self.BACKGROUND_TILE_IMAGES):
-						image = self.BACKGROUND_TILE_IMAGES[obj]
-						self.screen.blit(image, (x * TILE_SIZE, y * TILE_SIZE))
-
-					elif(obj in self.FOREGROUND_TILE_IMAGES):
-						image = self.FOREGROUND_TILE_IMAGES[obj]
+			for x, tile in enumerate(row):
+				if isinstance(tile, Tile):
+					self.screen.blit(self.BACKGROUND_TILE_IMAGES[tile.background], (x * TILE_SIZE, y * TILE_SIZE))
+					if tile.foreground:
+						image = self.FOREGROUND_TILE_IMAGES[tile.foreground]
 						scaled_image = pygame.transform.scale(image, (TILE_SIZE, TILE_SIZE))
 						self.screen.blit(scaled_image, (x * TILE_SIZE, y * TILE_SIZE))
 

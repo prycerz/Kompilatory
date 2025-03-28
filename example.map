@@ -1,26 +1,10 @@
-pointer up 1
-blend wyspa = circle 7 sand 100%
-draw wyspa
-
-blend zielenie = circle 6 tree 20% rocks 10% bush 30% grass 60%
-draw zielenie
-
-pointer up 2
-pointer left 2 
-
-blend village = rectangle 5 5 cabin 80%
-draw village
-
+tile sandWithStones = stones + grass
 pointer down 2
-pointer right 2
-draw church
+blend mountainsBlend = circle 4 rocks + mountains 70% sandWithStones 30%
+draw mountainsBlend
 
-pointer right 5
-tile rockmountain = rocks + mountains
-blend gory = circle 1 rockmountain 80%
-draw gory
+pointer up 10
+draw sandWithStones
+pointer left 5
+draw sand + water + bush 
 
-pointer left 7 
-pointer up 3
-blend lake = circle 2 water 100%
-draw lake

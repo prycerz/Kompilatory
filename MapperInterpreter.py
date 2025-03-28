@@ -13,29 +13,30 @@ class MapperInterpreter(MapperVisitor):
     def __init__(self):
         self.variables = {}  # Przechowuje zmienne
         self.renderer = MapperRenderer()
+        self.roads = {}
         
     # Idenfitfies the type of object
     backgroundObjects = ['grass', 'soil', 'sand', 'water', 'rocks']
     foregroundObjects = ['tree', 'bush', 'stones', 'mountain', 'cabin', 'church']
 
+
+    # this handles tile assignment: 
+    # ex. grass + tree + bush + sand = Tile(background = sand, foreground = bush)
+    def visitTileSum(self, ctx):
+        print("Visiting tile sum...")
+        tile = Tile()
+        for arg in ctx.IDENTIFIER():
+            tile.add_obj(arg.getText())
+        return tile
+    
+
     def visitTileAssign(self, ctx):
         # Name of tile
-        name = ctx.IDENTIFIER(0).getText()
-
-        # Assign background and foreground objects
-        counter = 1
-        args = []
-  
-        # add all arguments to the list
-        while(ctx.IDENTIFIER(counter)):
-            args.append(ctx.IDENTIFIER(counter).getText())
-            counter += 1
-
-        tile = Tile(args)
+        print('lkasjdflkka')
+        name = ctx.IDENTIFIER().getText()
+        tile = self.visitTileSum(ctx.tileSum())  # Get the tile type (e.g., sand, grass)
         
         self.variables[name] = tile
-        print(f"Tile assigned: {name} = background: {tile.background} foreground: {tile.foreground}")
-
 
     def visitBlendAssign(self, ctx):
 
@@ -58,12 +59,26 @@ class MapperInterpreter(MapperVisitor):
 
         # Iterate through the blend options (ctx.blendOption())
         for option_ctx in ctx.blendOption():
-            tile = option_ctx.IDENTIFIER().getText()  # Get the tile type (e.g., sand, grass)
-            percentage = int(option_ctx.INT().getText())  # Get the percentage value
-            if(tile in self.variables and isinstance(self.variables[tile], Tile)):
-                blend_options.append((self.variables[tile], percentage))
+            # allows syntax: blend blendName = circle 10 grass + true 20%
+            if(option_ctx.tileSum()):
+                tile = self.visitTileSum(option_ctx.tileSum())
+
+            # allows syntax: 
+            # tile grassBush = grass + bush
+            # blend blendName = circle 10 grassBush 20%
+            # and 
+            # blend blendName = circle 10 grass 20%
+            elif (option_ctx.IDENTIFIER()):
+                identifier = option_ctx.IDENTIFIER().getText()
+                if(identifier in self.variables and isinstance(self.variables[identifier], Tile)):
+                    tile = self.variables[identifier]
+                else:
+                    tile = Tile([identifier])
             else:
-                blend_options.append((Tile([tile]), percentage))  # Store the tile and its percentage
+                raise RuntimeError("❌ Błąd: Nieznany typ opcji blendu!")
+            
+            percentage = int(option_ctx.INT().getText())
+            blend_options.append((tile, percentage))
 
         self.variables[blend_name] = Blend(figure, blend_options)  # Store the blend in variables
     
@@ -270,6 +285,21 @@ class MapperInterpreter(MapperVisitor):
             return self.visitWhileLoop(ctx.whileLoop())
 
 
+    def visitRoadStart(self, ctx):
+        # roadIdentifier = ctx.IDENTIFIER().getText()
+        # startPosition = self.renderer.pointer_x, self.renderer.pointer_y
+        # self.variables[roadIdentifier]  =  # Store the road start position
+
+        return
+    
+    def visitRoadEnd(self, ctx):
+        return
+
+    def visitRoadPlacement(self, ctx):
+        if(ctx.roadStart()):
+            return self.visitRoadStart(ctx.roadStart())
+        elif(ctx.roadEnd()):
+            return self.visitRoadEnd(ctx.roadEnd())
 
     def visitConditional(self, ctx:MapperParser.ConditionalContext):
         print(f"Handling if statement: {ctx.getText()}")  # Debugging output

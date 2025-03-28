@@ -18,7 +18,7 @@ class Blend:
         # Returns a random tile based on the percentages
         # Example: percentages = [('grass', 50), ('water', 50)]
         # It returns 'grass' with a 50% chance and 'water' with a 50% chance
-        tiles = [tile.__str__() for tile, percentage in self.percentages]
+        tiles = [tile for tile, percentage in self.percentages]
         weights = [percentage for tile, percentage in self.percentages]
         
         return random.choices(tiles, weights)[0]
