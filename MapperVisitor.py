@@ -29,6 +29,11 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#tileSum.
+    def visitTileSum(self, ctx:MapperParser.TileSumContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#assignment.
     def visitAssignment(self, ctx:MapperParser.AssignmentContext):
         return self.visitChildren(ctx)
@@ -41,6 +46,21 @@ class MapperVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MapperParser#boolAssign.
     def visitBoolAssign(self, ctx:MapperParser.BoolAssignContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#roadPlacement.
+    def visitRoadPlacement(self, ctx:MapperParser.RoadPlacementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#roadStart.
+    def visitRoadStart(self, ctx:MapperParser.RoadStartContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#roadEnd.
+    def visitRoadEnd(self, ctx:MapperParser.RoadEndContext):
         return self.visitChildren(ctx)
 
 

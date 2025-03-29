@@ -44,6 +44,15 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#tileSum.
+    def enterTileSum(self, ctx:MapperParser.TileSumContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#tileSum.
+    def exitTileSum(self, ctx:MapperParser.TileSumContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#assignment.
     def enterAssignment(self, ctx:MapperParser.AssignmentContext):
         pass
@@ -68,6 +77,33 @@ class MapperListener(ParseTreeListener):
 
     # Exit a parse tree produced by MapperParser#boolAssign.
     def exitBoolAssign(self, ctx:MapperParser.BoolAssignContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#roadPlacement.
+    def enterRoadPlacement(self, ctx:MapperParser.RoadPlacementContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#roadPlacement.
+    def exitRoadPlacement(self, ctx:MapperParser.RoadPlacementContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#roadStart.
+    def enterRoadStart(self, ctx:MapperParser.RoadStartContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#roadStart.
+    def exitRoadStart(self, ctx:MapperParser.RoadStartContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#roadEnd.
+    def enterRoadEnd(self, ctx:MapperParser.RoadEndContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#roadEnd.
+    def exitRoadEnd(self, ctx:MapperParser.RoadEndContext):
         pass
 
 
