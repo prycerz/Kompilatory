@@ -11,8 +11,18 @@ statement   : assignment
             | conditional
             | roadPlacement
             | errorHandling
+            | functionDecl
+            | functionCall
             ;
 
+//funkcje
+functionDecl : 'function' IDENTIFIER '(' paramList? ')' '{' statement* '}';
+
+paramList    : IDENTIFIER (',' IDENTIFIER)*;
+
+functionCall : IDENTIFIER '(' exprList? ')';
+
+exprList     : expr (',' expr)*;
 // Przypisania zmiennych
 increment    : IDENTIFIER '+=' expr; // problem bo chyba to dziala dla kazdej zmiennej nie tylko number
 

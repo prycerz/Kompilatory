@@ -19,6 +19,26 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#functionDecl.
+    def visitFunctionDecl(self, ctx:MapperParser.FunctionDeclContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#paramList.
+    def visitParamList(self, ctx:MapperParser.ParamListContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#functionCall.
+    def visitFunctionCall(self, ctx:MapperParser.FunctionCallContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#exprList.
+    def visitExprList(self, ctx:MapperParser.ExprListContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#increment.
     def visitIncrement(self, ctx:MapperParser.IncrementContext):
         return self.visitChildren(ctx)

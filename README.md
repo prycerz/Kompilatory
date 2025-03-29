@@ -9,7 +9,7 @@ $ antlr4 -Dlanguage=Python3 -visitor Mapper.g4
 
 ### Jeśli nie masz aliasu, użyj pełnej ścieżki:
 ```bash
-$ java -jar C:\antlr\antlr-4.13.1-complete.jar -Dlanguage=Python3 -visitor Mapper.g4
+$ java -jar C:\antlr\antlr-4.13.2-complete.jar -Dlanguage=Python3 -visitor Mapper.g4
 ```
 
 ### Uruchamianie skryptu Python - wybór jednej z opcji:

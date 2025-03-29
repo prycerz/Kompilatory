@@ -12,6 +12,7 @@ from MapperRenderer import MapperRenderer
 class MapperInterpreter(MapperVisitor):
     def __init__(self):
         self.variables = {}  # Przechowuje zmienne
+        self.functions = {}  # Przechowuje funkcje
         self.renderer = MapperRenderer()
         self.roads = {}
         
@@ -280,41 +281,86 @@ class MapperInterpreter(MapperVisitor):
 
         print("Exiting if statement")
 
+    def visitFunctionDecl(self, ctx):
+        function_name = ctx.IDENTIFIER().getText()
+        param_list = [param.getText() for param in ctx.paramList().IDENTIFIER()] if ctx.paramList() else []
+        statements = ctx.statement()  # List of statements in the function body
+
+        # Store the function definition
+        self.functions[function_name] = {
+            'params': param_list,
+            'statements': statements
+        }
+        print(f"Function '{function_name}' declared with parameters {param_list}")
+
+    def visitFunctionCall(self, ctx):
+        function_name = ctx.IDENTIFIER().getText()
+        expr_list = [self.visit(expr) for expr in ctx.exprList().expr()] if ctx.exprList() else []
+
+        if function_name == "print":
+            print(*expr_list)
+            return None
+
+        if function_name not in self.functions:
+            raise RuntimeError(f"❌ Błąd: Funkcja '{function_name}' nie jest zadeklarowana!")
+
+        function = self.functions[function_name]
+        params = function['params']
+        statements = function['statements']
+
+        if len(expr_list) != len(params):
+            raise RuntimeError(f"❌ Błąd: Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
+
+        local_vars = dict(zip(params, expr_list))
+        original_vars = self.variables
+        self.variables = original_vars.copy()
+        self.variables.update(local_vars)
+
+        result = None
+        for stmt in statements:
+            result = self.visit(stmt)
+
+        self.variables = original_vars
+        return result
     def visitExpr(self, ctx):
         print(f"Visiting expr: {ctx.getText()}")
-        print(f"Child count: {ctx.getChildCount()}")
 
-        for i in range(ctx.getChildCount()):
-            print(f"Child {i}: {ctx.getChild(i).getText()}")
-
-        if ctx.getChildCount() == 1:  # Single value (number or identifier)
+        # Single value (number, boolean, or identifier)
+        if ctx.getChildCount() == 1:
             value = ctx.getChild(0).getText()
-
-            # Check if it's a number
             if value.isdigit():
-                return int(value)  # Convert to int
-            elif value in self.variables:  # Check if it's a variable
-                return int (self.variables[value])  # Return stored value
+                return int(value)
+            elif value in ('true', 'false'):
+                return value == 'true'
+            elif value in self.variables:
+                return self.variables[value]
             else:
-                raise Exception(f"Undefined variable: {value}")  # Handle unknown var
+                raise Exception(f"Undefined variable or value: {value}")
 
-        elif ctx.getChildCount() == 3:  # Binary expressions (e.g., i < 3)
-            left = self.visit(ctx.getChild(0))  # Evaluate left operand
-            op = ctx.getChild(1).getText()  # Operator
-            right = self.visit(ctx.getChild(2))  # Evaluate right operand
+        # Binary operation
+        elif ctx.getChildCount() == 3:
+            left = self.visit(ctx.expr(0))
+            op = ctx.getChild(1).getText()
+            right = self.visit(ctx.expr(1))
 
-            print(f"Evaluating: {left} {op} {right}")
+            if op == "+": return left + right
+            elif op == "-": return left - right
+            elif op == "*": return left * right
+            elif op == "/":
+                if right == 0: raise Exception("❌ Błąd: Dzielenie przez zero!")
+                return left / right
+            elif op == "<": return left < right
+            elif op == ">": return left > right
+            elif op == "==": return left == right
+            elif op == "!=": return left != right
+            elif op == "<=": return left <= right
+            elif op == ">=": return left >= right
 
-            if op == "<":
-                return left < right
-            elif op == ">":
-                return left > right
-            elif op == "==":
-                return left == right
+        # Parenthesized expression
+        elif ctx.getChildCount() == 3 and ctx.getChild(0).getText() == '(':
+            return self.visit(ctx.expr(0))
 
-        return None
-
-
+        raise Exception(f"Invalid expression: {ctx.getText()}")
 # Uruchomienie interpretera
 if __name__ == "__main__":
     input_stream = FileStream(sys.argv[1])

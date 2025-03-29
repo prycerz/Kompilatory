@@ -1,10 +1,16 @@
-tile sandWithStones = stones + grass
-pointer down 2
-blend mountainsBlend = circle 4 rocks + mountains 70% sandWithStones 30%
-draw mountainsBlend
+function drawSpiral(count, size) {
+    if (count < 7) {
+        draw tree
+        pointer right size
+        drawSpiral(count + 1, size)
+        blend mountainsBlend = circle 4 rocks + mountains 70% sandWithStones 30%
+        draw mountainsBlend
+        drawSpiral(count + 1, size)
+        pointer left size
+        drawSpiral(count + 1, size)
+        pointer up size
+    }
+}
 
-pointer up 10
-draw sandWithStones
-pointer left 5
-draw sand + water + bush 
+drawSpiral(3, 2)
 
