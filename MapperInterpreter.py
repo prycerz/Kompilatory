@@ -32,7 +32,7 @@ class MapperInterpreter(MapperVisitor):
 
     def visitTileAssign(self, ctx):
         # Name of tile
-        print('lkasjdflkka')
+        print('tile assign')
         name = ctx.IDENTIFIER().getText()
         tile = self.visitTileSum(ctx.tileSum())  # Get the tile type (e.g., sand, grass)
         
@@ -59,7 +59,7 @@ class MapperInterpreter(MapperVisitor):
 
         # Iterate through the blend options (ctx.blendOption())
         for option_ctx in ctx.blendOption():
-            # allows syntax: blend blendName = circle 10 grass + true 20%
+            # allows syntax: blend blendName = circle 10 grass + tree 20%
             if(option_ctx.tileSum()):
                 tile = self.visitTileSum(option_ctx.tileSum())
 
@@ -191,46 +191,7 @@ class MapperInterpreter(MapperVisitor):
         message = ctx.STRING().getText()
         print(f"Error: {message}")
 
-    def visitWhileLoop(self, ctx):
-        print("Handling while loop")
-        # Get condition expression
-        condition_expr = ctx.expr()
-        print(f"Loop condition: {condition_expr.getText()}")
 
-        # Evaluate condition
-        while self.visit(condition_expr):  # Keep looping while condition is true
-            print("Loop body execution...")
-
-            # Visit each statement inside the loop
-            for stmt in ctx.statement():
-                print(f"Executing statement: {stmt.getText()}")
-                self.visit(stmt)  # Execute statement
-
-        print("Exiting loop")
-
-    def visitForLoop(self, ctx: MapperParser.LoopContext):
-        print("Handling for loop")
-
-        # 1. Inicjalizacja zmiennej (np. number i = 0)
-        self.visit(ctx.numberAssign())  # Wykonaj przypisanie do zmiennej
-
-        # 2. Sprawdzenie warunku pętli (np. i < 10)
-        condition_expr = ctx.expr()
-        print(f"For loop condition: {condition_expr.getText()}")
-
-        # 3. Pętla for - Wykonuj dopóki warunek jest prawdziwy
-        while self.visit(condition_expr):  # Dopóki warunek jest prawdziwy
-            print("Executing loop body...")
-
-            # 4. Wykonaj instrukcje w ciele pętli
-            for stmt in ctx.statement():
-                print(f"Executing statement: {stmt.getText()}")
-                self.visit(stmt)  # Wykonaj każdą instrukcję w pętli
-
-            # 5. Inkrementacja zmiennej (np. i += 1)
-            self.visit(ctx.increment())
-
-        print("Exiting for loop")
 
     
     def visitWhileLoop(self, ctx):
