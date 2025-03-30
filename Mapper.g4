@@ -30,8 +30,9 @@ increment    : IDENTIFIER '+=' expr; // problem bo chyba to dziala dla kazdej zm
 tileAssign   : 'tile' IDENTIFIER '=' tileSum; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
 tileSum      : IDENTIFIER ('+' IDENTIFIER)*;
 
-assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign;
+assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign|varAssign;
 numberAssign : 'number' IDENTIFIER '=' expr;
+varAssign    : IDENTIFIER '=' expr;
 boolAssign   : 'bool' IDENTIFIER '=' expr;
 
 roadPlacement: roadStart | roadEnd;

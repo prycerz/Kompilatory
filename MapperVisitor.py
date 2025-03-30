@@ -69,6 +69,11 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#varAssign.
+    def visitVarAssign(self, ctx:MapperParser.VarAssignContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#boolAssign.
     def visitBoolAssign(self, ctx:MapperParser.BoolAssignContext):
         return self.visitChildren(ctx)

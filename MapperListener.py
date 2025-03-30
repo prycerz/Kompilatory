@@ -116,6 +116,15 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#varAssign.
+    def enterVarAssign(self, ctx:MapperParser.VarAssignContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#varAssign.
+    def exitVarAssign(self, ctx:MapperParser.VarAssignContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#boolAssign.
     def enterBoolAssign(self, ctx:MapperParser.BoolAssignContext):
         pass

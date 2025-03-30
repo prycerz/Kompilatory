@@ -85,7 +85,20 @@ class MapperInterpreter(MapperVisitor):
             blend_options.append((tile, percentage))
 
         self.variables[blend_name] = Blend(figure, blend_options)  # Store the blend in variables
-    
+    def visitVarAssign(self, ctx:MapperParser.VarAssignContext):
+        print("handling var assignment")
+        name = ctx.IDENTIFIER().getText()
+        if name not in self.variables:
+            raise Exception(f"❌ Błąd: Zmienna '{name}' nie została zadeklarowana!")
+        op = ctx.getChild(1).getText()
+        expr = ctx.expr()
+        print(f"{name} {op} {expr}")
+        expr_value = self.visit(expr)
+        print(f"expr v{expr_value}")
+
+        self.variables[name] = expr_value
+
+
     def visitNumberAssign(self, ctx):
         print(f"handling: {ctx.getText()}")  # Debugging
         name = ctx.IDENTIFIER().getText()  # Get variable name
@@ -142,6 +155,8 @@ class MapperInterpreter(MapperVisitor):
         elif ctx.blendAssign():
             print("✅ Blend assignment detected!")
             return self.visitBlendAssign(ctx.blendAssign())
+        elif ctx.varAssign():
+            return self.visitVarAssign(ctx.varAssign())
         else:
             print("❌ Unknown assignment type!")
 
