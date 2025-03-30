@@ -63,13 +63,15 @@ conditional : 'if' '(' expr ')' '{' statement* '}' ('else' '{' statement* '}')?;
 errorHandling : 'Yapping' '(' STRING ')';
 
 // Wyrażenia arytmetyczne i logiczne
-expr        : expr ('+'|'-') expr
-            | expr ('*'|'/') expr
-            | expr ('=='|'!='|'>'|'<'|'>='|'<=') expr
-            | '(' expr ')'
-            | IDENTIFIER
-            | INT
-            | BOOL;
+expr        : expr ('=='|'!='|'>'|'<'|'>='|'<=') expr  # ExprComp
+| expr ('*'|'/') expr                      # ExprMulDiv
+            | expr ('+'|'-') expr                      # ExprAddSub
+
+            | '(' expr ')'                             # ExprParens
+            | IDENTIFIER                               # ExprVar
+            | INT                                      # ExprInt
+            | BOOL                                     # ExprBool;
+
 
 
 

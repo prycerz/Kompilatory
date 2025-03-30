@@ -28,8 +28,6 @@ class MapperVisitor(ParseTreeVisitor):
     def visitType(self, ctx:MapperParser.TypeContext):
         return self.visitChildren(ctx)
 
-    def visitIdentifier(self, ctx):
-        return self.variables[ctx.IDENTIFIER()]
 
     # Visit a parse tree produced by MapperParser#functionDecl.
     def visitFunctionDecl(self, ctx:MapperParser.FunctionDeclContext):
@@ -146,8 +144,38 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#expr.
-    def visitExpr(self, ctx:MapperParser.ExprContext):
+    # Visit a parse tree produced by MapperParser#ExprVar.
+    def visitExprVar(self, ctx:MapperParser.ExprVarContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprAddSub.
+    def visitExprAddSub(self, ctx:MapperParser.ExprAddSubContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprMulDiv.
+    def visitExprMulDiv(self, ctx:MapperParser.ExprMulDivContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprComp.
+    def visitExprComp(self, ctx:MapperParser.ExprCompContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprParens.
+    def visitExprParens(self, ctx:MapperParser.ExprParensContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprInt.
+    def visitExprInt(self, ctx:MapperParser.ExprIntContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprBool.
+    def visitExprBool(self, ctx:MapperParser.ExprBoolContext):
         return self.visitChildren(ctx)
 
 

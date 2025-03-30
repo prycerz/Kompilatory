@@ -36,12 +36,12 @@ def serializedATN():
         1,27,1,27,1,27,1,27,1,27,1,27,3,27,292,8,27,1,27,1,27,1,27,1,27,
         1,27,1,27,1,27,1,27,1,27,5,27,303,8,27,10,27,12,27,306,9,27,1,27,
         0,1,54,28,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,
-        40,42,44,46,48,50,52,54,0,4,1,0,1,3,2,0,12,12,33,33,1,0,34,35,1,
-        0,36,41,320,0,59,1,0,0,0,2,73,1,0,0,0,4,75,1,0,0,0,6,78,1,0,0,0,
-        8,80,1,0,0,0,10,103,1,0,0,0,12,110,1,0,0,0,14,118,1,0,0,0,16,122,
-        1,0,0,0,18,127,1,0,0,0,20,140,1,0,0,0,22,142,1,0,0,0,24,147,1,0,
-        0,0,26,154,1,0,0,0,28,156,1,0,0,0,30,160,1,0,0,0,32,164,1,0,0,0,
-        34,178,1,0,0,0,36,182,1,0,0,0,38,204,1,0,0,0,40,206,1,0,0,0,42,210,
+        40,42,44,46,48,50,52,54,0,4,1,0,1,3,1,0,33,38,1,0,39,40,2,0,12,12,
+        41,41,320,0,59,1,0,0,0,2,73,1,0,0,0,4,75,1,0,0,0,6,78,1,0,0,0,8,
+        80,1,0,0,0,10,103,1,0,0,0,12,110,1,0,0,0,14,118,1,0,0,0,16,122,1,
+        0,0,0,18,127,1,0,0,0,20,140,1,0,0,0,22,142,1,0,0,0,24,147,1,0,0,
+        0,26,154,1,0,0,0,28,156,1,0,0,0,30,160,1,0,0,0,32,164,1,0,0,0,34,
+        178,1,0,0,0,36,182,1,0,0,0,38,204,1,0,0,0,40,206,1,0,0,0,42,210,
         1,0,0,0,44,223,1,0,0,0,46,225,1,0,0,0,48,238,1,0,0,0,50,255,1,0,
         0,0,52,278,1,0,0,0,54,291,1,0,0,0,56,58,3,2,1,0,57,56,1,0,0,0,58,
         61,1,0,0,0,59,57,1,0,0,0,59,60,1,0,0,0,60,62,1,0,0,0,61,59,1,0,0,
@@ -135,8 +135,8 @@ class MapperParser ( Parser ):
                      "'bool'", "'road'", "'start'", "'end'", "'circle'", 
                      "'rectangle'", "'%'", "'draw'", "'radius'", "'pointer'", 
                      "'up'", "'down'", "'left'", "'right'", "'while'", "'for'", 
-                     "';'", "'if'", "'else'", "'Yapping'", "'-'", "'*'", 
-                     "'/'", "'=='", "'!='", "'>'", "'<'", "'>='", "'<='" ]
+                     "';'", "'if'", "'else'", "'Yapping'", "'=='", "'!='", 
+                     "'>'", "'<'", "'>='", "'<='", "'*'", "'/'", "'-'" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
@@ -2171,6 +2171,45 @@ class MapperParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+
+        def getRuleIndex(self):
+            return MapperParser.RULE_expr
+
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+    class ExprVarContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def IDENTIFIER(self):
+            return self.getToken(MapperParser.IDENTIFIER, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprVar" ):
+                listener.enterExprVar(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprVar" ):
+                listener.exitExprVar(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprVar" ):
+                return visitor.visitExprVar(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprAddSubContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
         def expr(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(MapperParser.ExprContext)
@@ -2178,29 +2217,146 @@ class MapperParser ( Parser ):
                 return self.getTypedRuleContext(MapperParser.ExprContext,i)
 
 
-        def IDENTIFIER(self):
-            return self.getToken(MapperParser.IDENTIFIER, 0)
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprAddSub" ):
+                listener.enterExprAddSub(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprAddSub" ):
+                listener.exitExprAddSub(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprAddSub" ):
+                return visitor.visitExprAddSub(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprMulDivContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MapperParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(MapperParser.ExprContext,i)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprMulDiv" ):
+                listener.enterExprMulDiv(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprMulDiv" ):
+                listener.exitExprMulDiv(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprMulDiv" ):
+                return visitor.visitExprMulDiv(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprCompContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MapperParser.ExprContext)
+            else:
+                return self.getTypedRuleContext(MapperParser.ExprContext,i)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprComp" ):
+                listener.enterExprComp(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprComp" ):
+                listener.exitExprComp(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprComp" ):
+                return visitor.visitExprComp(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprParensContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def expr(self):
+            return self.getTypedRuleContext(MapperParser.ExprContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprParens" ):
+                listener.enterExprParens(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprParens" ):
+                listener.exitExprParens(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprParens" ):
+                return visitor.visitExprParens(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprIntContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
 
         def INT(self):
             return self.getToken(MapperParser.INT, 0)
 
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprInt" ):
+                listener.enterExprInt(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprInt" ):
+                listener.exitExprInt(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprInt" ):
+                return visitor.visitExprInt(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprBoolContext(ExprContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
         def BOOL(self):
             return self.getToken(MapperParser.BOOL, 0)
 
-        def getRuleIndex(self):
-            return MapperParser.RULE_expr
-
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterExpr" ):
-                listener.enterExpr(self)
+            if hasattr( listener, "enterExprBool" ):
+                listener.enterExprBool(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitExpr" ):
-                listener.exitExpr(self)
+            if hasattr( listener, "exitExprBool" ):
+                listener.exitExprBool(self)
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitExpr" ):
-                return visitor.visitExpr(self)
+            if hasattr( visitor, "visitExprBool" ):
+                return visitor.visitExprBool(self)
             else:
                 return visitor.visitChildren(self)
 
@@ -2220,6 +2376,10 @@ class MapperParser ( Parser ):
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [5]:
+                localctx = MapperParser.ExprParensContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+
                 self.state = 284
                 self.match(MapperParser.T__4)
                 self.state = 285
@@ -2228,14 +2388,23 @@ class MapperParser ( Parser ):
                 self.match(MapperParser.T__6)
                 pass
             elif token in [42]:
+                localctx = MapperParser.ExprVarContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 288
                 self.match(MapperParser.IDENTIFIER)
                 pass
             elif token in [43]:
+                localctx = MapperParser.ExprIntContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 289
                 self.match(MapperParser.INT)
                 pass
             elif token in [44]:
+                localctx = MapperParser.ExprBoolContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
                 self.state = 290
                 self.match(MapperParser.BOOL)
                 pass
@@ -2255,7 +2424,7 @@ class MapperParser ( Parser ):
                     self._errHandler.sync(self)
                     la_ = self._interp.adaptivePredict(self._input,24,self._ctx)
                     if la_ == 1:
-                        localctx = MapperParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = MapperParser.ExprCompContext(self, MapperParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 293
                         if not self.precpred(self._ctx, 7):
@@ -2263,7 +2432,7 @@ class MapperParser ( Parser ):
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 7)")
                         self.state = 294
                         _la = self._input.LA(1)
-                        if not(_la==12 or _la==33):
+                        if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 541165879296) != 0)):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
@@ -2273,7 +2442,7 @@ class MapperParser ( Parser ):
                         pass
 
                     elif la_ == 2:
-                        localctx = MapperParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = MapperParser.ExprMulDivContext(self, MapperParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 296
                         if not self.precpred(self._ctx, 6):
@@ -2281,7 +2450,7 @@ class MapperParser ( Parser ):
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 6)")
                         self.state = 297
                         _la = self._input.LA(1)
-                        if not(_la==34 or _la==35):
+                        if not(_la==39 or _la==40):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
@@ -2291,7 +2460,7 @@ class MapperParser ( Parser ):
                         pass
 
                     elif la_ == 3:
-                        localctx = MapperParser.ExprContext(self, _parentctx, _parentState)
+                        localctx = MapperParser.ExprAddSubContext(self, MapperParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
                         self.state = 299
                         if not self.precpred(self._ctx, 5):
@@ -2299,7 +2468,7 @@ class MapperParser ( Parser ):
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
                         self.state = 300
                         _la = self._input.LA(1)
-                        if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 4329327034368) != 0)):
+                        if not(_la==12 or _la==41):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)

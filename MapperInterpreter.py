@@ -1,4 +1,6 @@
 import sys
+
+from PyQt5.QtCore import right
 from antlr4 import *
 from hamcrest import instance_of
 from vtk.numpy_interface.algorithms import condition
@@ -94,7 +96,7 @@ class MapperInterpreter(MapperVisitor):
             print("Error: ctx.expr() is None!")
             return None
 
-        value = self.visitExpr(expr)
+        value = self.visit(expr)
 
 
         print(f"Evaluated value: {value}")
@@ -351,51 +353,56 @@ class MapperInterpreter(MapperVisitor):
         self.variables = original_vars
         return result
 
+    def visitExprComp(self, ctx):
+        print("Processing comparison expression")
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        op = ctx.children[1].getText()
+        # ... comparison logic ...
 
-    def visitExpr(self, ctx):
-        print(f"Visiting expr: {ctx.getText()}")
-        print(f"Child count: {ctx.getChildCount()}")
+    def visitExprAddSub(self, ctx):
+        print("Processing addition/subtraction expression")
+        left = self.visit(ctx.expr(0))  # Evaluate left expression
+        right = self.visit(ctx.expr(1))  # Evaluate right expression
+        op = ctx.children[1].getText()  # Get the operator ('+' or '-')
 
-        for i in range(ctx.getChildCount()):
-            print(f"Child {i}: {ctx.getChild(i).getText()}")
+        # Perform the actual operation
+        if op == '+':
+            return left + right
+        elif op == '-':
+            return left - right
+        else:
+            raise RuntimeError(f"Unknown operator: {op}")
 
-        if ctx.getChildCount() == 1:  # Single value (number or identifier)
-            value = ctx.getChild(0).getText()
+    def visitExprMulDiv(self, ctx):
+        print("Processing multiplication/division expression")
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        op = ctx.children[1].getText()
+        if op == '*':
+            return left * right
+        elif op == '/':
+            return left / right
+        else:
+            raise RuntimeError(f"Unknown operator: {op}")
+    def visitExprParens(self, ctx):
+        print("Processing parenthesized expression")
+        return self.visit(ctx.expr())
 
-            # Check if it's a number
-            if value.isdigit():
-                return int(value)  # Convert to int
-            elif value in self.variables:  # Check if it's a variable
-                return int (self.variables[value])  # Return stored value
-            else:
-                raise Exception(f"Undefined variable: {value}")  # Handle unknown var
+    def visitExprVar(self, ctx):
+        var_name = ctx.IDENTIFIER().getText()
+        print(f"Processing variable reference: {var_name}: value: {self.variables.get(var_name)}")
+        return self.variables.get(var_name)
 
-        elif ctx.getChildCount() == 3:  # Binary expressions (e.g., i < 3)
-            left = self.visit(ctx.getChild(0))  # Evaluate left operand
-            op = ctx.getChild(1).getText()  # Operator
-            right = self.visit(ctx.getChild(2))  # Evaluate right operand
+    def visitExprInt(self, ctx):
+        value = int(ctx.INT().getText())
+        print(f"Processing integer literal: {value}")
+        return value
 
-            print(f"Evaluating: {left} {op} {right}")
-            if op == "+":
-                return left + right
-            elif op == "-":
-                return left - right
-            elif op == "*":
-                return left * right
-            elif op == "/":
-                if right == 0: raise Exception("❌ Błąd: Dzielenie przez zero!")
-                return left / right
-            elif op == "<":
-                return left < right
-            elif op == ">":
-                return left > right
-            elif op == "==":
-                return left == right
-
-        return None
-
-
-
+    def visitExprBool(self, ctx):
+        value = ctx.BOOL().getText().lower() == 'true'
+        print(f"Processing boolean literal: {value}")
+        return value
 # Uruchomienie interpretera
 if __name__ == "__main__":
     input_stream = FileStream(sys.argv[1])

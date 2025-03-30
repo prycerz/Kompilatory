@@ -251,12 +251,66 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#expr.
-    def enterExpr(self, ctx:MapperParser.ExprContext):
+    # Enter a parse tree produced by MapperParser#ExprVar.
+    def enterExprVar(self, ctx:MapperParser.ExprVarContext):
         pass
 
-    # Exit a parse tree produced by MapperParser#expr.
-    def exitExpr(self, ctx:MapperParser.ExprContext):
+    # Exit a parse tree produced by MapperParser#ExprVar.
+    def exitExprVar(self, ctx:MapperParser.ExprVarContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprAddSub.
+    def enterExprAddSub(self, ctx:MapperParser.ExprAddSubContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprAddSub.
+    def exitExprAddSub(self, ctx:MapperParser.ExprAddSubContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprMulDiv.
+    def enterExprMulDiv(self, ctx:MapperParser.ExprMulDivContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprMulDiv.
+    def exitExprMulDiv(self, ctx:MapperParser.ExprMulDivContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprComp.
+    def enterExprComp(self, ctx:MapperParser.ExprCompContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprComp.
+    def exitExprComp(self, ctx:MapperParser.ExprCompContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprParens.
+    def enterExprParens(self, ctx:MapperParser.ExprParensContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprParens.
+    def exitExprParens(self, ctx:MapperParser.ExprParensContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprInt.
+    def enterExprInt(self, ctx:MapperParser.ExprIntContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprInt.
+    def exitExprInt(self, ctx:MapperParser.ExprIntContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprBool.
+    def enterExprBool(self, ctx:MapperParser.ExprBoolContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprBool.
+    def exitExprBool(self, ctx:MapperParser.ExprBoolContext):
         pass
 
 
