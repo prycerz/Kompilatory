@@ -6,6 +6,8 @@ from hamcrest import instance_of
 from vtk.numpy_interface.algorithms import condition
 
 from Blend import Blend
+from Road import Road
+from Road import Position
 from Tile import Tile
 from Figure import Figure
 from MapperLexer import MapperLexer
@@ -175,9 +177,13 @@ class MapperInterpreter(MapperVisitor):
             self.renderer.move_pointer(value, 0)
         print(f"Pointer moved {direction} by {value}. New position: ({self.renderer.pointer_x}, {self.renderer.pointer_y})")
 
+
     def visitDraw(self, ctx):
-        # if it is not Tile or Blend, make a Tile from given arguments (tree, bush, sand, etc.) 
+
+        print("drawing..")
+        # if it is not Tile or Blend, make a Tile from given arguments (tree, bush, sand, etc.)
         if ctx.IDENTIFIER():
+            print("ctx")
             args = []
             counter = 0
             while(ctx.IDENTIFIER(counter)):
@@ -186,9 +192,14 @@ class MapperInterpreter(MapperVisitor):
                 
             
             for arg in args:
+                if self.variables.get(arg) is not None and instance_of(Road):
+                    road = self.variables.get(arg)
+                    road.add_road_layer(self.renderer)
+                    break
                 if(arg in self.variables):
                     self.renderer.draw_tile(self.variables[arg])
                     return
+
 
             self.renderer.draw_tile(Tile(args=args))
 
@@ -267,15 +278,7 @@ class MapperInterpreter(MapperVisitor):
             return self.visitWhileLoop(ctx.whileLoop())
 
 
-    def visitRoadStart(self, ctx):
-        # roadIdentifier = ctx.IDENTIFIER().getText()
-        # startPosition = self.renderer.pointer_x, self.renderer.pointer_y
-        # self.variables[roadIdentifier]  =  # Store the road start position
 
-        return
-    
-    def visitRoadEnd(self, ctx):
-        return
 
     def visitRoadPlacement(self, ctx):
         if(ctx.roadStart()):
@@ -418,6 +421,31 @@ class MapperInterpreter(MapperVisitor):
         value = ctx.BOOL().getText().lower() == 'true'
         print(f"Processing boolean literal: {value}")
         return value
+
+
+
+    # Visit a parse tree produced by MapperParser#roadStart.
+    def visitRoadStart(self, ctx: MapperParser.RoadStartContext):
+        name = ctx.IDENTIFIER().getText()
+        if name in self.variables.keys():
+            print("this must be a new road")
+        else:
+            print(f"tworze droge {name}")
+            self.variables[name] = Road(Position(self.renderer.pointer_x , self.renderer.pointer_y))
+
+    # Visit a parse tree produced by MapperParser#roadEnd.
+    def visitRoadEnd(self, ctx: MapperParser.RoadEndContext):
+        name = ctx.IDENTIFIER().getText()
+        print(name)
+        if name not in self.variables.keys():
+            print("the road you are refering to doesnt exist")
+        else:
+            self.variables[name].end(Position(self.renderer.pointer_x, self.renderer.pointer_y))
+
+
+
+
+
 # Uruchomienie interpretera
 if __name__ == "__main__":
     input_stream = FileStream(sys.argv[1])

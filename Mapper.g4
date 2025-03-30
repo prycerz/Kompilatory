@@ -45,6 +45,7 @@ blendOption  : (IDENTIFIER | tileSum) INT '%';
 
 
 // Rysowanie płytek
+drawRoad    : 'drawRoad' IDENTIFIER;
 draw        : 'draw' IDENTIFIER ('+' IDENTIFIER)*
             | 'draw' 'radius' INT percentagePair+;
 percentagePair : INT '%' IDENTIFIER;

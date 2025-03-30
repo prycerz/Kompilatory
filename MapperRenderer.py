@@ -29,6 +29,16 @@ class MapperRenderer:
 			"bush": pygame.image.load('assets/foreground/bush.png').convert_alpha(),
 			"mountains": pygame.image.load('assets/foreground/mountains.png').convert_alpha(),
 			"church": pygame.image.load('assets/foreground/church.png').convert_alpha(),
+			"tree": pygame.image.load('assets/foreground/tree.png').convert_alpha(),
+			"cross": pygame.image.load('assets/road/cross.png').convert_alpha(),
+			"downRight": pygame.image.load('assets/road/downRight.png').convert_alpha(),
+			"nobottom": pygame.image.load('assets/road/nobottom.png').convert_alpha(),
+			"upLeft": pygame.image.load('assets/road/upLeft.png').convert_alpha(),
+			"vertical": pygame.image.load('assets/road/vertical.png').convert_alpha(),
+			"downLeft": pygame.image.load('assets/road/downLeft.png').convert_alpha(),
+			"horizontal": pygame.image.load('assets/road/horizontal.png').convert_alpha(),
+			"noleft": pygame.image.load('assets/road/noleft.png').convert_alpha(),
+			"upRight": pygame.image.load('assets/road/upRight.png').convert_alpha()
 		}
 
 

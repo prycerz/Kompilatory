@@ -188,6 +188,15 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#drawRoad.
+    def enterDrawRoad(self, ctx:MapperParser.DrawRoadContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#drawRoad.
+    def exitDrawRoad(self, ctx:MapperParser.DrawRoadContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#draw.
     def enterDraw(self, ctx:MapperParser.DrawContext):
         pass

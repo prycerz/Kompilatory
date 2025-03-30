@@ -109,6 +109,11 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#drawRoad.
+    def visitDrawRoad(self, ctx:MapperParser.DrawRoadContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#draw.
     def visitDraw(self, ctx:MapperParser.DrawContext):
         return self.visitChildren(ctx)
