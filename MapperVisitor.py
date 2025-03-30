@@ -19,13 +19,18 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#functionDecl.
-    def visitFunctionDecl(self, ctx:MapperParser.FunctionDeclContext):
+    # Visit a parse tree produced by MapperParser#param.
+    def visitParam(self, ctx:MapperParser.ParamContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#paramList.
-    def visitParamList(self, ctx:MapperParser.ParamListContext):
+    # Visit a parse tree produced by MapperParser#type.
+    def visitType(self, ctx:MapperParser.TypeContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#functionDecl.
+    def visitFunctionDecl(self, ctx:MapperParser.FunctionDeclContext):
         return self.visitChildren(ctx)
 
 

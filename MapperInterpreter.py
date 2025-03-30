@@ -1,5 +1,6 @@
 import sys
 from antlr4 import *
+from hamcrest import instance_of
 from vtk.numpy_interface.algorithms import condition
 
 from Blend import Blend
@@ -85,19 +86,27 @@ class MapperInterpreter(MapperVisitor):
     
     def visitNumberAssign(self, ctx):
         print(f"handling: {ctx.getText()}")  # Debugging
-
         name = ctx.IDENTIFIER().getText()  # Get variable name
 
         # Debugging: check if expr() exists
-        expr_ctx = ctx.expr()
-        if not expr_ctx:
+        expr = ctx.expr()
+        if not expr:
             print("Error: ctx.expr() is None!")
             return None
-        value = int(expr_ctx.getText())
+
+        value = self.resolve_if_variable_number(expr)
+
+
         print(f"Evaluated value: {value}")
         self.variables[name] = value
         print(f"Number assigned: {name} = {value}")
-
+    def resolve_if_variable_number(self, expr):
+        if expr.getText() in self.variables:
+            value = self.variables[expr.getText()]
+            print(f'b value {value}')
+        else:
+            value = int(expr.getText())
+        return value
     def visitBoolAssign(self, ctx):
         name = ctx.IDENTIFIER().getText()
         value = self.visit(ctx.expr())  # Parsowanie wyrażenia logicznego
@@ -108,7 +117,7 @@ class MapperInterpreter(MapperVisitor):
     def visitIncrement(self, ctx):
         name = ctx.IDENTIFIER().getText()
         print(f"name {name}")
-        value = ctx.expr().getText()# Pobierz wartość po +=
+        value = self.resolve_if_variable_number(ctx.expr())# Pobierz wartość po +=
         if name not in self.variables:
             raise RuntimeError(f"❌ Błąd: Nieznana zmienna '{name}'!")
         if isinstance(self.variables[name],int):
@@ -282,18 +291,33 @@ class MapperInterpreter(MapperVisitor):
         print("Exiting if statement")
 
     def visitFunctionDecl(self, ctx):
+        print("fun decl")
         function_name = ctx.IDENTIFIER().getText()
-        param_list = [param.getText() for param in ctx.paramList().IDENTIFIER()] if ctx.paramList() else []
+        print(function_name)
+
+        params = []
+
         statements = ctx.statement()  # List of statements in the function body
+        print(f"dir: {dir(ctx)}")
+
+        for param in ctx.param():
+            print(param.type_().getText())
+            print(param.IDENTIFIER())
+            # Store both TYPE and IDENTIFIER for each parameter
+            param_type = param.type_() # assuming TYPE is defined as 'number', 'tile', etc.
+            param_identifier = param.IDENTIFIER().getText()
+            params.append({'type': param_type, 'identifier': param_identifier})
 
         # Store the function definition
         self.functions[function_name] = {
-            'params': param_list,
+            'params': params,
             'statements': statements
         }
-        print(f"Function '{function_name}' declared with parameters {param_list}")
+
+        print(f"Function '{function_name}' declared with parameters {params}")
 
     def visitFunctionCall(self, ctx):
+        print("fun call")
         function_name = ctx.IDENTIFIER().getText()
         expr_list = [self.visit(expr) for expr in ctx.exprList().expr()] if ctx.exprList() else []
 
@@ -309,9 +333,19 @@ class MapperInterpreter(MapperVisitor):
         statements = function['statements']
 
         if len(expr_list) != len(params):
-            raise RuntimeError(f"❌ Błąd: Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
+            raise RuntimeError(
+                f"❌ Błąd: Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
 
-        local_vars = dict(zip(params, expr_list))
+        # Here we ensure that each parameter is paired with its corresponding argument
+        local_vars = {}
+        for param, expr in zip(params, expr_list):
+            print(f"expr: {expr}")
+            param_identifier = param['identifier']
+            param_type = param['type']
+            # You may want to add type-checking here if needed, e.g. ensure the type matches
+
+            local_vars[param_identifier] = expr
+
         original_vars = self.variables
         self.variables = original_vars.copy()
         self.variables.update(local_vars)
@@ -322,45 +356,52 @@ class MapperInterpreter(MapperVisitor):
 
         self.variables = original_vars
         return result
+
+
     def visitExpr(self, ctx):
         print(f"Visiting expr: {ctx.getText()}")
+        print(f"Child count: {ctx.getChildCount()}")
 
-        # Single value (number, boolean, or identifier)
-        if ctx.getChildCount() == 1:
+        for i in range(ctx.getChildCount()):
+            print(f"Child {i}: {ctx.getChild(i).getText()}")
+
+        if ctx.getChildCount() == 1:  # Single value (number or identifier)
             value = ctx.getChild(0).getText()
+
+            # Check if it's a number
             if value.isdigit():
-                return int(value)
-            elif value in ('true', 'false'):
-                return value == 'true'
-            elif value in self.variables:
-                return self.variables[value]
+                return int(value)  # Convert to int
+            elif value in self.variables:  # Check if it's a variable
+                return int (self.variables[value])  # Return stored value
             else:
-                raise Exception(f"Undefined variable or value: {value}")
+                raise Exception(f"Undefined variable: {value}")  # Handle unknown var
 
-        # Binary operation
-        elif ctx.getChildCount() == 3:
-            left = self.visit(ctx.expr(0))
-            op = ctx.getChild(1).getText()
-            right = self.visit(ctx.expr(1))
+        elif ctx.getChildCount() == 3:  # Binary expressions (e.g., i < 3)
+            left = self.visit(ctx.getChild(0))  # Evaluate left operand
+            op = ctx.getChild(1).getText()  # Operator
+            right = self.visit(ctx.getChild(2))  # Evaluate right operand
 
-            if op == "+": return left + right
-            elif op == "-": return left - right
-            elif op == "*": return left * right
+            print(f"Evaluating: {left} {op} {right}")
+            if op == "+":
+                return left + right
+            elif op == "-":
+                return left - right
+            elif op == "*":
+                return left * right
             elif op == "/":
                 if right == 0: raise Exception("❌ Błąd: Dzielenie przez zero!")
                 return left / right
-            elif op == "<": return left < right
-            elif op == ">": return left > right
-            elif op == "==": return left == right
-            elif op == "!=": return left != right
-            elif op == "<=": return left <= right
-            elif op == ">=": return left >= right
+            elif op == "<":
+                return left < right
+            elif op == ">":
+                return left > right
+            elif op == "==":
+                return left == right
 
-        # Parenthesized expression
-        elif ctx.getChildCount() == 3 and ctx.getChild(0).getText() == '(':
-            return self.visit(ctx.expr(0))
+        return None
 
-        raise Exception(f"Invalid expression: {ctx.getText()}")
+
+
 # Uruchomienie interpretera
 if __name__ == "__main__":
     input_stream = FileStream(sys.argv[1])

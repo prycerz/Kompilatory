@@ -16,12 +16,13 @@ statement   : assignment
             ;
 
 //funkcje
-functionDecl : 'function' IDENTIFIER '(' paramList? ')' '{' statement* '}';
+param     : type IDENTIFIER ;
+type : 'number'|'tile'|'blend';
 
-paramList    : IDENTIFIER (',' IDENTIFIER)*;
+functionDecl : 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement* '}';
+
 
 functionCall : IDENTIFIER '(' exprList? ')';
-
 exprList     : expr (',' expr)*;
 // Przypisania zmiennych
 increment    : IDENTIFIER '+=' expr; // problem bo chyba to dziala dla kazdej zmiennej nie tylko number
@@ -70,8 +71,9 @@ expr        : expr ('+'|'-') expr
             | INT
             | BOOL;
 
-// Tokeny
-IDENTIFIER  : [a-zA-Z_][a-zA-Z0-9_]*;
+
+
+IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]*;
 INT         : [0-9]+;
 BOOL        : 'true' | 'false';
 STRING      : '"' .*? '"';

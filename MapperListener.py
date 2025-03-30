@@ -26,21 +26,30 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#param.
+    def enterParam(self, ctx:MapperParser.ParamContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#param.
+    def exitParam(self, ctx:MapperParser.ParamContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#type.
+    def enterType(self, ctx:MapperParser.TypeContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#type.
+    def exitType(self, ctx:MapperParser.TypeContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#functionDecl.
     def enterFunctionDecl(self, ctx:MapperParser.FunctionDeclContext):
         pass
 
     # Exit a parse tree produced by MapperParser#functionDecl.
     def exitFunctionDecl(self, ctx:MapperParser.FunctionDeclContext):
-        pass
-
-
-    # Enter a parse tree produced by MapperParser#paramList.
-    def enterParamList(self, ctx:MapperParser.ParamListContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#paramList.
-    def exitParamList(self, ctx:MapperParser.ParamListContext):
         pass
 
 
