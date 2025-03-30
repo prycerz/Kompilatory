@@ -1,15 +1,4 @@
-function drawSpiral(number n,number r,number u) {
-    if (n < 5)
-    {
-
-        r += r
-        n+=1
-        draw tree
-        pointer up u
-        pointer right r
-        drawSpiral(n,r,u)
-    }
-
-}
-pointer left 20
-drawSpiral(1, 3, 1)
+number b = 10
+number c = 6
+number a = b+b-c*2
+draw tree

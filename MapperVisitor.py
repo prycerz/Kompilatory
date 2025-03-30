@@ -28,6 +28,8 @@ class MapperVisitor(ParseTreeVisitor):
     def visitType(self, ctx:MapperParser.TypeContext):
         return self.visitChildren(ctx)
 
+    def visitIdentifier(self, ctx):
+        return self.variables[ctx.IDENTIFIER()]
 
     # Visit a parse tree produced by MapperParser#functionDecl.
     def visitFunctionDecl(self, ctx:MapperParser.FunctionDeclContext):

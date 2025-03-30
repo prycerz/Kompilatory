@@ -94,19 +94,13 @@ class MapperInterpreter(MapperVisitor):
             print("Error: ctx.expr() is None!")
             return None
 
-        value = self.resolve_if_variable_number(expr)
+        value = self.visitExpr(expr)
 
 
         print(f"Evaluated value: {value}")
         self.variables[name] = value
         print(f"Number assigned: {name} = {value}")
-    def resolve_if_variable_number(self, expr):
-        if expr.getText() in self.variables:
-            value = self.variables[expr.getText()]
-            print(f'b value {value}')
-        else:
-            value = int(expr.getText())
-        return value
+
     def visitBoolAssign(self, ctx):
         name = ctx.IDENTIFIER().getText()
         value = self.visit(ctx.expr())  # Parsowanie wyrażenia logicznego
