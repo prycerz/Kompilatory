@@ -56,7 +56,8 @@ class MapperRenderer:
 				self.map_data[self.pointer_y + y][self.pointer_x + x] = tile.random_tile()
 
 		self.render()  # Force an update on screen
-
+	def place_road(self, y,x,bend):
+		self.map_data[y][x].add_obj(bend)
 	def render(self):
 		self.screen.fill((0, 0, 0))  # Clear screen
 		print('rendering')

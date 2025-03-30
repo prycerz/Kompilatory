@@ -9,7 +9,7 @@ class Tile:
     def add_obj(self, obj):
         if obj in ['grass', 'soil', 'sand', 'water', 'rocks']:
             self.background = obj
-        elif obj in ['tree', 'bush', 'stones', 'mountains', 'cabin', 'church']:
+        elif obj in ['tree', 'bush', 'stones', 'mountains', 'cabin', 'church','horizontal', 'vertical', 'upRight', 'downRight', 'upLeft', 'downLeft']:
             self.foreground = obj
 
     def __str__(self):

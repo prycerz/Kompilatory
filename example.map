@@ -1,4 +1,4 @@
-number b = 10
-b=(4+b)*2
-
-print(b)
+road a start
+pointer right 10
+pointer up 10
+road a end
