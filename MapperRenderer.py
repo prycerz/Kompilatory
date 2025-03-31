@@ -94,7 +94,7 @@ class MapperRenderer:
 				if isinstance(tile, Tile):
 					self.screen.blit(self.BACKGROUND_TILE_IMAGES[tile.background], (x * TILE_SIZE, y * TILE_SIZE))
 
-
+					tile.get_road_image()
 					if tile.road:
 						road_image = self.ROAD_TILE_IMAGES[tile.road]
 						scaled_road_image = pygame.transform.scale(road_image, (TILE_SIZE, TILE_SIZE))

@@ -56,9 +56,6 @@ class Tile:
         for direction in ['top', 'bottom', 'left', 'right']:
             if(direction in directions):
                 self.road_directions[direction] = True
-        self.get_road_image()
-
-
 
     def __str__(self):
         return self.background + (("+"+self.foreground) if self.foreground else "")
