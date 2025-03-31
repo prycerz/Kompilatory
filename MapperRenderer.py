@@ -78,13 +78,14 @@ class MapperRenderer:
 			self.copy_tile(self.pointer_x, self.pointer_y, tile)
 		elif isinstance(tile, Blend):
 			for x, y in tile.figure.tiles_to_visit():
-				self.copy_tile(self.pointer_x + x, self.pointer_y + y, tile)
+				self.copy_tile(self.pointer_x + x, self.pointer_y + y, tile.random_tile())
 		self.render()  # Force an update on screen
 
 
-	def place_road(self, y, x, directions):
-		self.map_data[y][x].add_road(directions)
+	def place_road(self, y, x):
+		self.map_data[y][x].add_road()
 		self.render()
+
 
 	def render(self):
 		self.screen.fill((0, 0, 0))  # Clear screen
@@ -94,12 +95,11 @@ class MapperRenderer:
 				if isinstance(tile, Tile):
 					self.screen.blit(self.BACKGROUND_TILE_IMAGES[tile.background], (x * TILE_SIZE, y * TILE_SIZE))
 
-					tile.get_road_image()
-					if tile.road:
-						road_image = self.ROAD_TILE_IMAGES[tile.road]
-						scaled_road_image = pygame.transform.scale(road_image, (TILE_SIZE, TILE_SIZE))
-						self.screen.blit(scaled_road_image, (x * TILE_SIZE, y * TILE_SIZE))
-					
+					if tile.road and self.determine_road_image(x, y):
+						image = self.ROAD_TILE_IMAGES[self.determine_road_image(x, y)]
+						scaled_image = pygame.transform.scale(image, (TILE_SIZE, TILE_SIZE))
+						self.screen.blit(scaled_image, (x * TILE_SIZE, y * TILE_SIZE))
+
 					elif tile.foreground:
 						image = self.FOREGROUND_TILE_IMAGES[tile.foreground]
 						scaled_image = pygame.transform.scale(image, (TILE_SIZE, TILE_SIZE))
@@ -107,6 +107,50 @@ class MapperRenderer:
 				
 					
 		pygame.display.flip()  # Update display
+
+
+	def determine_road_image(self, x, y):
+		# Check surrounding tiles to determine road image
+		top = False
+		bottom = False
+		left = False
+		right = False
+		
+		# Check each direction (make sure to handle map boundaries in your actual code)
+		if self.map_data[y-1][x].road: top = True
+		if self.map_data[y+1][x].road: bottom = True
+		if self.map_data[y][x-1].road: left = True
+		if self.map_data[y][x+1].road: right = True
+
+		# 4 directions (cross)
+		if top and bottom and left and right:
+			return "cross"
+		# 3 directions
+		elif top and bottom and left:
+			return "noR"
+		elif top and bottom and right:
+			return "noL"
+		elif top and left and right:
+			return "noB"
+		elif bottom and left and right:
+			return "noT"
+		# 2 directions - straight
+		elif top and bottom:
+			return "vertical"
+		elif left and right:
+			return "horizontal"
+		# 2 directions - corners
+		elif top and left:
+			return "tl"
+		elif top and right:
+			return "tr"
+		elif bottom and left:
+			return "bl"
+		elif bottom and right:
+			return "br"
+		else: 
+			return False
+
 
 	def run(self):
 		running = True
