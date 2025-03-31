@@ -87,6 +87,7 @@ class MapperInterpreter(MapperVisitor):
             blend_options.append((tile, percentage))
 
         self.variables[blend_name] = Blend(figure, blend_options)  # Store the blend in variables
+    
     def visitVarAssign(self, ctx:MapperParser.VarAssignContext):
         print("handling var assignment")
         name = ctx.IDENTIFIER().getText()
@@ -190,12 +191,7 @@ class MapperInterpreter(MapperVisitor):
                 args.append(ctx.IDENTIFIER(counter).getText())
                 counter += 1
                 
-            
             for arg in args:
-                if self.variables.get(arg) is not None and instance_of(Road):
-                    road = self.variables.get(arg)
-                    road.add_road_layer(self.renderer)
-                    break
                 if(arg in self.variables):
                     self.renderer.draw_tile(self.variables[arg])
                     return
@@ -276,9 +272,6 @@ class MapperInterpreter(MapperVisitor):
             return self.visitForLoop(ctx.forLoop())
         elif(ctx.whileLoop()):
             return self.visitWhileLoop(ctx.whileLoop())
-
-
-
 
     def visitRoadPlacement(self, ctx):
         if(ctx.roadStart()):
@@ -430,17 +423,17 @@ class MapperInterpreter(MapperVisitor):
         if name in self.variables.keys():
             print("this must be a new road")
         else:
-            print(f"tworze droge {name}")
+            print(f"Starting road: {name}")
             self.variables[name] = Road(Position(self.renderer.pointer_x , self.renderer.pointer_y))
 
     # Visit a parse tree produced by MapperParser#roadEnd.
     def visitRoadEnd(self, ctx: MapperParser.RoadEndContext):
         name = ctx.IDENTIFIER().getText()
-        print(name)
+        print(f"Ending road {name}")
         if name not in self.variables.keys():
             print("the road you are refering to doesnt exist")
         else:
-            self.variables[name].end(Position(self.renderer.pointer_x, self.renderer.pointer_y))
+            self.variables[name].end(Position(self.renderer.pointer_x, self.renderer.pointer_y), self.renderer)
 
 
 

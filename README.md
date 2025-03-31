@@ -85,3 +85,57 @@ blend lake = circle 2 water 100%
 draw lake
 ```
 ![Rezultat](./assets/readme/blend_tile.png)
+
+### Rysowanie dróg 
+**Road** - ustawia się miejsce początkowe i końcowe i algorytm generuje losową ścieżkę łączącą te dwa punkty
+```
+road roadA start
+pointer down 10
+pointer left 10
+road roadA end
+```
+
+Jeżeli na jakiejś płytce znajduje się więcej niż jedna drogi, zostają one połączone w jedną
+
+```
+blend island_sand = circle 10 sand 100%
+draw island_sand
+
+blend island_green = circle 9 tree+grass 10% bush+grass 15% grass+stones 10% grass 65%
+draw island_green
+
+pointer up 4
+pointer right 3
+blend lake = circle 3 water 100%
+draw lake
+
+pointer left 8
+
+blend rocks_terrain = circle 2 rocks 80% rocks+stones 20%
+blend mountains = circle 1 rocks+mountains 80% rocks 20%
+draw rocks_terrain
+draw mountains
+
+pointer right 1
+road mountain_village start
+pointer right 6
+pointer down 7
+
+blend village = rectangle 4 4 cabin 90% church 10%
+draw village
+
+road mountain_village end
+
+blend forest = circle 2 grass+bush 30% tree 70%
+road village_forest start
+
+pointer left 8
+draw forest
+
+pointer right 2
+road village_forest end
+```
+
+![Rezultat](./assets/readme/roads.png)
+
+
