@@ -277,9 +277,6 @@ class MapperInterpreter(MapperVisitor):
         elif(ctx.whileLoop()):
             return self.visitWhileLoop(ctx.whileLoop())
 
-
-
-
     def visitRoadPlacement(self, ctx):
         if(ctx.roadStart()):
             return self.visitRoadStart(ctx.roadStart())
