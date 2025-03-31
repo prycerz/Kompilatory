@@ -87,6 +87,7 @@ class MapperInterpreter(MapperVisitor):
             blend_options.append((tile, percentage))
 
         self.variables[blend_name] = Blend(figure, blend_options)  # Store the blend in variables
+    
     def visitVarAssign(self, ctx:MapperParser.VarAssignContext):
         print("handling var assignment")
         name = ctx.IDENTIFIER().getText()
@@ -190,12 +191,7 @@ class MapperInterpreter(MapperVisitor):
                 args.append(ctx.IDENTIFIER(counter).getText())
                 counter += 1
                 
-            
             for arg in args:
-                if self.variables.get(arg) is not None and instance_of(Road):
-                    road = self.variables.get(arg)
-                    road.add_road_layer(self.renderer)
-                    break
                 if(arg in self.variables):
                     self.renderer.draw_tile(self.variables[arg])
                     return
