@@ -430,17 +430,17 @@ class MapperInterpreter(MapperVisitor):
         if name in self.variables.keys():
             print("this must be a new road")
         else:
-            print(f"tworze droge {name}")
+            print(f"Starting road: {name}")
             self.variables[name] = Road(Position(self.renderer.pointer_x , self.renderer.pointer_y))
 
     # Visit a parse tree produced by MapperParser#roadEnd.
     def visitRoadEnd(self, ctx: MapperParser.RoadEndContext):
         name = ctx.IDENTIFIER().getText()
-        print(name)
+        print(f"Ending road {name}")
         if name not in self.variables.keys():
             print("the road you are refering to doesnt exist")
         else:
-            self.variables[name].end(Position(self.renderer.pointer_x, self.renderer.pointer_y))
+            self.variables[name].end(Position(self.renderer.pointer_x, self.renderer.pointer_y), self.renderer)
 
 
 

@@ -1,4 +1,7 @@
+draw grass
 road a start
 pointer right 10
 pointer up 10
 road a end
+
+render
