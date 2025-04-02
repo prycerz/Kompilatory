@@ -3,13 +3,7 @@ class Tile:
         self.background = 'grass'
         self.foreground = None
         self.road = None
-        # ROAD
-        self.road_directions = {
-            'top': False,
-            'bottom': False,
-            'left': False,
-            'right': False
-        }
+        self.road_directions = set()
 
         for arg in args:
             self.add_obj(arg)
@@ -22,12 +16,14 @@ class Tile:
             self.background = obj
         elif obj in ['tree', 'bush', 'stones', 'mountains', 'cabin', 'church']:
             self.foreground = obj
-
     
         # if(self.road): print(f"Road image: {self.road}")
 
     def add_road(self):
         self.road = True
+        
+    def add_road_directions(self, direction):
+        self.road_directions.add(direction)
 
     def __str__(self):
         return self.background + (("+"+self.foreground) if self.foreground else "")

@@ -41,6 +41,8 @@ class Road:
                 print("Too many steps, breaking.")
                 break
             
+            prevPos = Position(currPos.x, currPos.y)
+
             step += 1
             print(f"\nSTEP {step}: At ({currPos.x},{currPos.y})")
 
@@ -48,7 +50,7 @@ class Road:
 
             if(np.random.rand() < abs(diff_vector.x) / (abs(diff_vector.x) + abs(diff_vector.y))):
                 # then move x
-                move_x = diff_vector.x // abs(diff_vector.x)  # Ensure not dividing by zero
+                move_x = diff_vector.x // abs(diff_vector.x)
                 currPos.x += move_x
                 print(f"Move x: {move_x}")
             else:
@@ -56,22 +58,23 @@ class Road:
                 currPos.y += move_y
                 print(f"Move y: {move_y}")
 
+
             renderer.place_road(currPos.y, currPos.x)
 
-            # # Determine FROM direction (previous movement)
-            # if currPos.x > prevPos.x:
-            #     renderer.place_road(prevPos.y, prevPos.x, "right")
-            #     renderer.place_road(currPos.y, currPos.x, "left")
-            #     print("Move right")
-            # elif currPos.x < prevPos.x:
-            #     renderer.place_road(prevPos.y, prevPos.x, "left")
-            #     renderer.place_road(currPos.y, currPos.x, "right")
-            #     print("Move left")
-            # elif currPos.y < prevPos.y:
-            #     renderer.place_road(prevPos.y, prevPos.x, 'top')
-            #     renderer.place_road(currPos.y, currPos.x, "bottom")
-            #     print("Move up")
-            # elif currPos.y > prevPos.y:
-            #     renderer.place_road(prevPos.y, prevPos.x, "bottom")
-            #     renderer.place_road(currPos.y, currPos.x, "top")
-            #     print("Move down")
+            # check if moved left
+            if(prevPos.x > currPos.x):
+                renderer.add_road_directions(prevPos.y, prevPos.x, "left")
+                renderer.add_road_directions(currPos.y, currPos.x, "right")
+            # check if moved right
+            elif(prevPos.x < currPos.x):
+                renderer.add_road_directions(prevPos.y, prevPos.x, "right")
+                renderer.add_road_directions(currPos.y, currPos.x, "left")
+            # check if moved up
+            elif(prevPos.y > currPos.y):
+                renderer.add_road_directions(prevPos.y, prevPos.x, "top")
+                renderer.add_road_directions(currPos.y, currPos.x, "bottom")
+            # check if moved down
+            elif(prevPos.y < currPos.y):
+                renderer.add_road_directions(prevPos.y, prevPos.x, "bottom")
+                renderer.add_road_directions(currPos.y, currPos.x, "top")
+            

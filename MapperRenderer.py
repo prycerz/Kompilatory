@@ -81,11 +81,12 @@ class MapperRenderer:
 				self.copy_tile(self.pointer_x + x, self.pointer_y + y, tile.random_tile())
 		self.render()  # Force an update on screen
 
-
 	def place_road(self, y, x):
 		self.map_data[y][x].add_road()
 		self.render()
 
+	def add_road_directions(self, y, x, direction):
+		self.map_data[y][x].add_road_directions(direction)
 
 	def render(self):
 		self.screen.fill((0, 0, 0))  # Clear screen
@@ -111,17 +112,12 @@ class MapperRenderer:
 
 	def determine_road_image(self, x, y):
 		# Check surrounding tiles to determine road image
-		top = False
-		bottom = False
-		left = False
-		right = False
+		tile_road_directions = self.map_data[y][x].road_directions
+		top = "top" in tile_road_directions
+		bottom = "bottom" in tile_road_directions
+		left = "left" in tile_road_directions
+		right = "right" in tile_road_directions
 		
-		# Check each direction (make sure to handle map boundaries in your actual code)
-		if self.map_data[y-1][x].road: top = True
-		if self.map_data[y+1][x].road: bottom = True
-		if self.map_data[y][x-1].road: left = True
-		if self.map_data[y][x+1].road: right = True
-
 		# 4 directions (cross)
 		if top and bottom and left and right:
 			return "cross"
