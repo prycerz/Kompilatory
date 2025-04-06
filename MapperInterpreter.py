@@ -397,7 +397,7 @@ class MapperInterpreter(MapperVisitor):
         left = self.visit(ctx.expr(0))
         right = self.visit(ctx.expr(1))
         op = ctx.getChild(1).getText()
-
+#test
         if op == '==':
             return left == right
         elif op == '!=':
