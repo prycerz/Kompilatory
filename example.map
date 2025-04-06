@@ -1,9 +1,27 @@
-draw grass
-number i = 16
-while(i <= 3)
-{
-    pointer right 1
-    pointer down 1
-    draw grass
-    i--
-}
+pointer up 1
+blend wyspa = circle 7 sand 100%
+draw wyspa
+
+blend zielenie = circle -6 rocks 10% bush 30% grass 60%
+draw zielenie
+
+pointer up 2
+pointer left 2 
+
+blend village = rectangle 5 5 cabin 80% grass 20%
+draw village
+
+pointer down 2
+pointer right 2
+draw church
+
+pointer right 5
+tile rockmountain = rocks + mountains
+blend gory = circle 1 rockmountain 80% grass 20%
+draw gory
+
+pointer left 7 
+pointer up 3
+blend lake = circle 2 water 100%
+draw lake
+

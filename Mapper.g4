@@ -12,7 +12,9 @@ statement   : assignment
             | roadPlacement
             | functionDecl
             | functionCall
+            | errorStatement
             ;
+errorStatement : ERROR expr DOT;
 
 //funkcje
 param     : type IDENTIFIER ;
@@ -86,3 +88,5 @@ INT         : [0-9]+;
 BOOL        : 'true' | 'false';
 STRING      : '"' .*? '"';
 WS          : [ \t\r\n]+ -> skip;
+DOT         :'.';
+ERROR       :'YAPPING';
