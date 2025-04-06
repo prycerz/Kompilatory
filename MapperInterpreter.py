@@ -128,18 +128,43 @@ class MapperInterpreter(MapperVisitor):
 
     def visitIncrement(self, ctx):
         name = ctx.IDENTIFIER().getText()
-        print(f"name {name}")
-        value = self.resolve_if_variable_number(ctx.expr())# Pobierz wartość po +=
+        print(f"🆔 name: {name}")
         if name not in self.variables:
             raise RuntimeError(f"❌ Błąd: Nieznana zmienna '{name}'!")
-        if isinstance(self.variables[name],int):
-            print(f"🔄 Aktualizuję {name}: {int(self.variables[name])} += {int(value)}")
-            self.variables[name] +=int( value)  # Dodaj wartość do zmiennej
-        print(self.variables[name])
-        if isinstance(self.variables[name],Tile):
-            self.variables[name].add_obj(value)
-        return self.variables[name]
+        current_value = self.variables[name]
+        op = ctx.getChild(1).getText()  # '+=' | '-=' | '++' | '--'
+        if op in ('+=', '-='):
+            value = self.resolve_if_variable_number(ctx.expr())
+            if isinstance(current_value, int):
+                delta = int(value)
+                if op == '+=':
+                    print(f"🔄 {name} = {current_value} + {delta}")
+                    self.variables[name] += delta
+                else:
+                    print(f"🔄 {name} = {current_value} - {delta}")
+                    self.variables[name] -= delta
 
+            elif isinstance(current_value, Tile):
+                if op == '+=':
+                    print(f"🧱 Dodaję do Tile: {name}.add_obj({value})")
+                    self.variables[name].add_obj(value)
+                else:
+                    raise RuntimeError(f"❌ Tile nie obsługuje '-=': {name}")
+            else:
+                raise RuntimeError(f"❌ Nieobsługiwany typ dla {op}: {type(current_value).__name__}")
+
+        # Obsługa ++ i --
+        elif op in ('++', '--'):
+            if not isinstance(current_value, int):
+                raise RuntimeError(f"❌ Operator '{op}' działa tylko na liczbach całkowitych")
+            if op == '++':
+                print("++")
+                self.variables[name] += 1
+            else:
+                self.variables[name] -= 1
+            print(f"🔢 {name} po '{op}': {self.variables[name]}")
+
+        return self.variables[name]
 
     def visitAssignment(self, ctx):
         print("⚠️ Visiting assignment...")  # Debug
@@ -225,7 +250,7 @@ class MapperInterpreter(MapperVisitor):
     def visitWhileLoop(self, ctx):
         print("Handling while loop")
         # Get condition expression
-        condition_expr = ctx.expr()
+        condition_expr = ctx.exprComp()
         print(f"Loop condition: {condition_expr.getText()}")
 
         # Evaluate condition
@@ -245,7 +270,7 @@ class MapperInterpreter(MapperVisitor):
         print(f"Initialized: {number_assign.getText()}")
 
         # Get condition expression
-        condition_expr = ctx.expr()
+        condition_expr = ctx.exprComp()
         print(f"Loop condition: {condition_expr.getText()}")
 
         # Get increment expression
@@ -260,10 +285,10 @@ class MapperInterpreter(MapperVisitor):
             for stmt in ctx.statement():
                 print(f"Executing statement: {stmt.getText()}")
                 self.visit(stmt)  # Execute statement
-            
+            print("trying to enter increment logic")
             # Evaluate the increment
             self.visit(increment_expr)
-            print(f"Increment executed: {increment_expr.getText()}")
+            print(f"Increment executed?: {increment_expr.getText()}")
             
         print("Exiting for loop")
 
@@ -369,7 +394,24 @@ class MapperInterpreter(MapperVisitor):
         left = self.visit(ctx.expr(0))
         right = self.visit(ctx.expr(1))
         op = ctx.children[1].getText()
-        # ... comparison logic ...
+        left = self.visit(ctx.expr(0))
+        right = self.visit(ctx.expr(1))
+        op = ctx.getChild(1).getText()
+
+        if op == '==':
+            return left == right
+        elif op == '!=':
+            return left != right
+        elif op == '<':
+            return left < right
+        elif op == '>':
+            return left > right
+        elif op == '<=':
+            return left <= right
+        elif op == '>=':
+            return left >= right
+        else:
+            raise Exception(f"Unknown comparison operator: {op}")
 
     def visitExprAddSub(self, ctx):
         print("Processing addition/subtraction expression")

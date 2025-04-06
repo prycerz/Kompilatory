@@ -10,7 +10,6 @@ statement   : assignment
             | loop
             | conditional
             | roadPlacement
-            | errorHandling
             | functionDecl
             | functionCall
             ;
@@ -24,8 +23,15 @@ functionDecl : 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement
 
 functionCall : IDENTIFIER '(' exprList? ')';
 exprList     : expr (',' expr)*;
+
+
 // Przypisania zmiennych
-increment    : IDENTIFIER '+=' expr; // problem bo chyba to dziala dla kazdej zmiennej nie tylko number
+increment
+    : IDENTIFIER '++'
+    | IDENTIFIER '--'
+    | IDENTIFIER '+=' expr
+    | IDENTIFIER '-=' expr
+    ;
 
 tileAssign   : 'tile' IDENTIFIER '=' tileSum; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
 tileSum      : IDENTIFIER ('+' IDENTIFIER)*;
@@ -55,27 +61,25 @@ move        : 'pointer' ('up' expr | 'down' expr | 'left' expr | 'right' expr);
 
 // Pętle
 loop        : whileLoop | forLoop; 
-whileLoop   : 'while' '(' expr ')' '{' statement* '}';
+whileLoop   : 'while' '(' exprComp ')' '{' statement* '}';
 forLoop     : 'for' '(' numberAssign ';' expr ';' increment ')' '{' statement* '}';
 
-// Instrukcja warunkowa
-conditional : 'if' '(' expr ')' '{' statement* '}' ('else' '{' statement* '}')?;
 
-// Obsługa błędów
-errorHandling : 'Yapping' '(' STRING ')';
+// Instrukcja warunkowa
+conditional : 'if' '(' exprComp ')' '{' statement* '}' ('else' '{' statement* '}')?;
+
+
 
 // Wyrażenia arytmetyczne i logiczne
-expr        : expr ('=='|'!='|'>'|'<'|'>='|'<=') expr  # ExprComp
-| expr ('*'|'/') expr                      # ExprMulDiv
+expr
+            : expr ('*'|'/') expr                      # ExprMulDiv
             | expr ('+'|'-') expr                      # ExprAddSub
-
             | '(' expr ')'                             # ExprParens
             | IDENTIFIER                               # ExprVar
             | INT                                      # ExprInt
             | BOOL                                     # ExprBool;
 
-
-
+exprComp    : expr ('=='|'!='|'>'|'<'|'>='|'<=') expr;
 
 IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]*;
 INT         : [0-9]+;

@@ -260,15 +260,6 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#errorHandling.
-    def enterErrorHandling(self, ctx:MapperParser.ErrorHandlingContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#errorHandling.
-    def exitErrorHandling(self, ctx:MapperParser.ErrorHandlingContext):
-        pass
-
-
     # Enter a parse tree produced by MapperParser#ExprVar.
     def enterExprVar(self, ctx:MapperParser.ExprVarContext):
         pass
@@ -296,15 +287,6 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#ExprComp.
-    def enterExprComp(self, ctx:MapperParser.ExprCompContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#ExprComp.
-    def exitExprComp(self, ctx:MapperParser.ExprCompContext):
-        pass
-
-
     # Enter a parse tree produced by MapperParser#ExprParens.
     def enterExprParens(self, ctx:MapperParser.ExprParensContext):
         pass
@@ -329,6 +311,15 @@ class MapperListener(ParseTreeListener):
 
     # Exit a parse tree produced by MapperParser#ExprBool.
     def exitExprBool(self, ctx:MapperParser.ExprBoolContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#exprComp.
+    def enterExprComp(self, ctx:MapperParser.ExprCompContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#exprComp.
+    def exitExprComp(self, ctx:MapperParser.ExprCompContext):
         pass
 
 
