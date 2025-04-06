@@ -1,4 +1,9 @@
-road a start
-pointer right 10
-pointer up 10
-road a end
+draw grass
+number i = 16
+while(i <= 3)
+{
+    pointer right 1
+    pointer down 1
+    draw grass
+    i--
+}

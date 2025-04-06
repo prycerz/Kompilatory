@@ -149,11 +149,6 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#errorHandling.
-    def visitErrorHandling(self, ctx:MapperParser.ErrorHandlingContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by MapperParser#ExprVar.
     def visitExprVar(self, ctx:MapperParser.ExprVarContext):
         return self.visitChildren(ctx)
@@ -169,11 +164,6 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#ExprComp.
-    def visitExprComp(self, ctx:MapperParser.ExprCompContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by MapperParser#ExprParens.
     def visitExprParens(self, ctx:MapperParser.ExprParensContext):
         return self.visitChildren(ctx)
@@ -186,6 +176,11 @@ class MapperVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MapperParser#ExprBool.
     def visitExprBool(self, ctx:MapperParser.ExprBoolContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#exprComp.
+    def visitExprComp(self, ctx:MapperParser.ExprCompContext):
         return self.visitChildren(ctx)
 
 
