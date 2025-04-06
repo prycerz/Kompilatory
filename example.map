@@ -21,7 +21,7 @@ road mountain_village start
 pointer right 6
 pointer down 7
 
-blend village = rectangle 4 4 cabin 90% church 10%
+blend village = rectangle -4 4 cabin 90% church 10%
 draw village
 
 road mountain_village end
