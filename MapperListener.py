@@ -26,6 +26,15 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#errorStatement.
+    def enterErrorStatement(self, ctx:MapperParser.ErrorStatementContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#errorStatement.
+    def exitErrorStatement(self, ctx:MapperParser.ErrorStatementContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#param.
     def enterParam(self, ctx:MapperParser.ParamContext):
         pass

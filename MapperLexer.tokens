@@ -47,6 +47,8 @@ INT=46
 BOOL=47
 STRING=48
 WS=49
+DOT=50
+ERROR=51
 'number'=1
 'tile'=2
 'blend'=3
@@ -91,3 +93,5 @@ WS=49
 '<'=42
 '>='=43
 '<='=44
+'.'=50
+'YAPPING'=51

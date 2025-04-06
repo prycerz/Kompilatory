@@ -1,5 +1,5 @@
 import sys
-
+from ErrorListener import MapperErrorListener
 from PyQt5.QtCore import right
 from antlr4 import *
 from hamcrest import instance_of
@@ -487,6 +487,11 @@ if __name__ == "__main__":
     lexer = MapperLexer(input_stream)
     token_stream = CommonTokenStream(lexer)
     parser = MapperParser(token_stream)
+
+  # Dodanie ErrorListenera
+    parser.removeErrorListeners()  # Usuń domyślne listenery
+    parser.addErrorListener(MapperErrorListener())  # Dodaj niestandardowy listener
+
     tree = parser.program()
     
     interpreter = MapperInterpreter()
