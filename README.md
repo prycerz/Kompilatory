@@ -50,7 +50,7 @@ draw drugaplytka
 **Blend** - tworzy zbiór płytek w podanym kształcie, w podanych proporcjach
 ```
 blend mojblend = circle 10 sand 50% grass 50%
-draw blend
+draw mojblend
 ```
 ![Rezultat](./assets/readme/blend.png)
 
