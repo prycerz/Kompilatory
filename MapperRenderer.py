@@ -78,7 +78,7 @@ class MapperRenderer:
 			self.copy_tile(self.pointer_x, self.pointer_y, tile)
 		elif isinstance(tile, Blend):
 			for x, y in tile.figure.tiles_to_visit():
-				self.copy_tile(self.pointer_x + x, self.pointer_y + y, tile)
+				self.copy_tile(self.pointer_x + x, self.pointer_y + y, tile.random_tile())
 		self.render()  # Force an update on screen
 
 
