@@ -22,11 +22,11 @@ class MapperInterpreter(MapperVisitor):
     DEBUG = False  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
     SHOW_ERRORS = False  # Flaga błędów - True włącza rzucanie wyjątków, False je ignoruje
 
-    def __init__(self,var_types):
+    def __init__(self,var_types,renderer=None):
         self.var_types = var_types
         self.variables = {} # Przechowuje zmienne
         self.functions = {}  # Przechowuje funkcje
-        self.renderer = MapperRenderer()
+        self.renderer = renderer or MapperRenderer()
         self.roads = {}
     def raiseError(self, ctx, msg):
         token = ctx.IDENTIFIER().getSymbol()
@@ -514,6 +514,7 @@ if __name__ == "__main__":
 
         parser.removeErrorListeners()
         parser.addErrorListener(MapperErrorListener())
+
 
         tree = parser.program()
 

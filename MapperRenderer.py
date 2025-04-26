@@ -5,8 +5,8 @@ from Blend import Blend
 from Tile import Tile
 # Ustawienia ekranu
 TILE_SIZE = 32
-MAP_WIDTH = 52  # 25x32 = 800px
-MAP_HEIGHT = 25  # 18x32 = 576px
+MAP_WIDTH = 40  # 40 * 32 = 1280px
+MAP_HEIGHT = 25  # 25 * 32 = 804px
 WINDOW_WIDTH = MAP_WIDTH * TILE_SIZE
 WINDOW_HEIGHT = MAP_HEIGHT * TILE_SIZE
 
@@ -49,10 +49,7 @@ class MapperRenderer:
 		self.clock = pygame.time.Clock()
 		self.pointer_x, self.pointer_y = int(MAP_WIDTH/2), int(MAP_HEIGHT/2)  # Startowa pozycja wskaźnika
 		# fill map_data with waterTile
-		self.map_data = [[Tile() for _ in range(MAP_WIDTH)] for _ in range(MAP_HEIGHT)]
-		for row in self.map_data:
-			for tile in row:
-				tile.add_obj('water')
+		self.reset_map()
 
 
 	def move_pointer(self, dx, dy):
@@ -107,6 +104,15 @@ class MapperRenderer:
 				
 					
 		pygame.display.flip()  # Update display
+
+
+	def reset_map(self):
+		self.map_data = [[Tile() for _ in range(MAP_WIDTH)] for _ in range(MAP_HEIGHT)]
+		for row in self.map_data:
+			for tile in row:
+				tile.add_obj('water')
+		self.pointer_x, self.pointer_y = int(MAP_WIDTH/2), int(MAP_HEIGHT/2)
+		self.render()
 
 	def run(self):
 		running = True
