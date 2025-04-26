@@ -4,10 +4,17 @@ if "." in __name__:
     from .MapperParser import MapperParser
 else:
     from MapperParser import MapperParser
-
+from Tile import Tile
+from Blend import Blend
 # This class defines a complete listener for a parse tree produced by MapperParser.
 class MapperListener(ParseTreeListener):
-
+    def __init__(self):
+        self.var_types = {}
+    def raiseError(self, ctx, msg):
+        token = ctx.IDENTIFIER().getSymbol()
+        line = token.line
+        column = token.column
+        raise RuntimeError(f"line: {line}, column: {column} {msg}")
     # Enter a parse tree produced by MapperParser#program.
     def enterProgram(self, ctx:MapperParser.ProgramContext):
         pass
@@ -91,7 +98,11 @@ class MapperListener(ParseTreeListener):
 
     # Enter a parse tree produced by MapperParser#tileAssign.
     def enterTileAssign(self, ctx:MapperParser.TileAssignContext):
-        pass
+        name = ctx.IDENTIFIER().getText()
+        if name not in self.var_types.keys():
+            self.var_types[name] = Tile
+        else:
+            self.raiseError(ctx, f"redeclaration of tile {name} - raised in listener")
 
     # Exit a parse tree produced by MapperParser#tileAssign.
     def exitTileAssign(self, ctx:MapperParser.TileAssignContext):
@@ -118,7 +129,11 @@ class MapperListener(ParseTreeListener):
 
     # Enter a parse tree produced by MapperParser#numberAssign.
     def enterNumberAssign(self, ctx:MapperParser.NumberAssignContext):
-        pass
+        name = ctx.IDENTIFIER().getText()
+        if name not in self.var_types.keys():
+            self.var_types[name] = int
+        else:
+            self.raiseError(ctx, f"redeclaration of {name} number - raised in listener")
 
     # Exit a parse tree produced by MapperParser#numberAssign.
     def exitNumberAssign(self, ctx:MapperParser.NumberAssignContext):
@@ -136,7 +151,12 @@ class MapperListener(ParseTreeListener):
 
     # Enter a parse tree produced by MapperParser#boolAssign.
     def enterBoolAssign(self, ctx:MapperParser.BoolAssignContext):
-        pass
+        name = ctx.IDENTIFIER().getText()
+        print(name)
+        if name not in self.var_types.keys():
+            self.var_types[name] = bool
+        else:
+            self.raiseError(ctx,f"redeclaration of {name} boolean - raised in listener")
 
     # Exit a parse tree produced by MapperParser#boolAssign.
     def exitBoolAssign(self, ctx:MapperParser.BoolAssignContext):
@@ -172,7 +192,11 @@ class MapperListener(ParseTreeListener):
 
     # Enter a parse tree produced by MapperParser#blendAssign.
     def enterBlendAssign(self, ctx:MapperParser.BlendAssignContext):
-        pass
+        name = ctx.IDENTIFIER().getText()
+        if name not in self.var_types.keys():
+            self.var_types[name] = Blend
+        else:
+            self.raiseError(ctx, f"redeclaration of blend {name} - raised in listener")
 
     # Exit a parse tree produced by MapperParser#blendAssign.
     def exitBlendAssign(self, ctx:MapperParser.BlendAssignContext):

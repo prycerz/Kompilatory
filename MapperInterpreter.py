@@ -1,4 +1,7 @@
 import sys
+
+from pygments.lexer import include
+
 from ErrorListener import MapperErrorListener
 from PyQt5.QtCore import right
 from antlr4 import *
@@ -6,6 +9,7 @@ from hamcrest import instance_of
 from vtk.numpy_interface.algorithms import condition
 
 from Blend import Blend
+from MapperListener import MapperListener
 from Road import Road
 from Road import Position
 from Tile import Tile
@@ -18,12 +22,17 @@ class MapperInterpreter(MapperVisitor):
     DEBUG = False  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
     SHOW_ERRORS = False  # Flaga błędów - True włącza rzucanie wyjątków, False je ignoruje
 
-    def __init__(self):
-        self.variables = {}  # Przechowuje zmienne
+    def __init__(self,var_types):
+        self.var_types = var_types
+        self.variables = {} # Przechowuje zmienne
         self.functions = {}  # Przechowuje funkcje
         self.renderer = MapperRenderer()
         self.roads = {}
-
+    def raiseError(self, ctx, msg):
+        token = ctx.IDENTIFIER().getSymbol()
+        line = token.line
+        column = token.column
+        raise RuntimeError(f"line: {line}, column: {column} {msg}")
             
     # Metoda pomocnicza do debugowania
     def _debug_print(self, *args, **kwargs):
@@ -49,14 +58,14 @@ class MapperInterpreter(MapperVisitor):
             tile.add_obj(arg.getText())
         return tile
     
-
-    def visitTileAssign(self, ctx):
-        # Name of tile
-        self._debug_print('tile assign')
-        name = ctx.IDENTIFIER().getText()
-        tile = self.visitTileSum(ctx.tileSum())  # Get the tile type (e.g., sand, grass)
-        
-        self.variables[name] = tile
+    #
+    # def visitTileAssign(self, ctx):
+    #     # Name of tile
+    #     self._debug_print('tile assign')
+    #     name = ctx.IDENTIFIER().getText()
+    #     tile = self.visitTileSum(ctx.tileSum())  # Get the tile type (e.g., sand, grass)
+    #
+    #     self.variables[name] = tile
 
     def visitBlendAssign(self, ctx):
 
@@ -105,8 +114,8 @@ class MapperInterpreter(MapperVisitor):
     def visitVarAssign(self, ctx:MapperParser.VarAssignContext):
         self._debug_print("handling var assignment")
         name = ctx.IDENTIFIER().getText()
-        if name not in self.variables:
-            self._raise_error(f"❌ Błąd: Zmienna '{name}' nie została zadeklarowana!")
+        if name not in self.var_types.keys():
+            self.raiseError(ctx, f"assignment of an undeclared variable {name} - raised in visitor")
         op = ctx.getChild(1).getText()
         expr = ctx.expr()
         self._debug_print(f"{name} {op} {expr}")
@@ -130,6 +139,8 @@ class MapperInterpreter(MapperVisitor):
 
 
         self._debug_print(f"Evaluated value: {value}")
+        if name not in self.var_types.keys():
+            self.raiseError(ctx,f"assignment of an undeclared number {name} - raised in visitor")
         self.variables[name] = value
         self._debug_print(f"Number assigned: {name} = {value}")
 
@@ -494,22 +505,28 @@ class MapperInterpreter(MapperVisitor):
 
 
 
-
-# Uruchomienie interpretera
 if __name__ == "__main__":
-    input_stream = FileStream(sys.argv[1])
-    lexer = MapperLexer(input_stream)
-    token_stream = CommonTokenStream(lexer)
-    parser = MapperParser(token_stream)
+    try:
+        input_stream = FileStream(sys.argv[1])
+        lexer = MapperLexer(input_stream)
+        token_stream = CommonTokenStream(lexer)
+        parser = MapperParser(token_stream)
 
-  # Dodanie ErrorListenera
-    parser.removeErrorListeners()  # Usuń domyślne listenery
-    parser.addErrorListener(MapperErrorListener())  # Dodaj niestandardowy listener
+        parser.removeErrorListeners()
+        parser.addErrorListener(MapperErrorListener())
 
-    tree = parser.program()
-    
-    interpreter = MapperInterpreter()
-    interpreter.visit(tree)
+        tree = parser.program()
 
-    print("Starting Pygame loop...")
-    interpreter.renderer.run() 
+        walker = ParseTreeWalker()
+        listener = MapperListener()
+        walker.walk(listener, tree)
+
+        interpreter = MapperInterpreter(listener.var_types)
+        interpreter.visit(tree)
+
+        print("Starting Pygame loop...")
+        interpreter.renderer.run()
+
+    except Exception as e:
+        print(str(e))
+        sys.exit(1)  # exit code 1 (błąd)
