@@ -19,8 +19,18 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#varDecl.
+    def visitVarDecl(self, ctx:MapperParser.VarDeclContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#errorStatement.
     def visitErrorStatement(self, ctx:MapperParser.ErrorStatementContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#printStatement.
+    def visitPrintStatement(self, ctx:MapperParser.PrintStatementContext):
         return self.visitChildren(ctx)
 
 

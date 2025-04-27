@@ -1,7 +1,7 @@
 import sys
 
 from pygments.lexer import include
-
+from antlr4 import ParseTreeListener
 from ErrorListener import MapperErrorListener
 from PyQt5.QtCore import right
 from antlr4 import *
@@ -18,22 +18,50 @@ from MapperLexer import MapperLexer
 from MapperParser import MapperParser
 from MapperVisitor import MapperVisitor
 from MapperRenderer import MapperRenderer
+
+class VariableDeclarationListener(ParseTreeListener):
+    def __init__(self):
+        self.var_types = {}  # Słownik przechowujący zmienne i ich typy
+        self.errors = []     # Lista błędów (redeklaracje)
+
+    def enterVarDecl(self, ctx: MapperParser.VarDeclContext):
+        var_name = ctx.IDENTIFIER().getText()
+        var_type = ctx.type_().getText()
+        
+        if var_name in self.var_types:
+            token = ctx.IDENTIFIER().getSymbol()
+            line = token.line
+            column = token.column
+            self.errors.append(f"line: {line}, column: {column} Redeclaration of variable '{var_name}'")
+        else:
+            self.var_types[var_name] = var_type
 class MapperInterpreter(MapperVisitor):
     DEBUG = False  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
     SHOW_ERRORS = False  # Flaga błędów - True włącza rzucanie wyjątków, False je ignoruje
 
-    def __init__(self,var_types,renderer=None):
-        self.var_types = var_types
-        self.variables = {} # Przechowuje zmienne
-        self.functions = {}  # Przechowuje funkcje
+    def __init__(self, var_types, renderer=None):
+        self.var_types = var_types  # Słownik z typami zmiennych z pierwszego przebiegu
+        self.variables = {}         # Przechowuje wartości zmiennych
+        self.functions = {}         # Przechowuje funkcje
         self.renderer = renderer or MapperRenderer()
         self.roads = {}
+
     def raiseError(self, ctx, msg):
         token = ctx.IDENTIFIER().getSymbol()
         line = token.line
         column = token.column
         raise RuntimeError(f"line: {line}, column: {column} {msg}")
-            
+    
+    def visitPrintStatement(self, ctx: MapperParser.PrintStatementContext):
+        self._debug_print("Handling print statement")
+        if ctx.exprList():
+            expr_values = [self.visit(expr) for expr in ctx.exprList().expr()]
+            print(*expr_values)  # Wypisz wszystkie wartości, oddzielone spacjami
+            self._debug_print(f"Printed: {expr_values}")
+        else:
+            print()  # Pusty print dla print;
+            self._debug_print("Printed empty line")
+
     # Metoda pomocnicza do debugowania
     def _debug_print(self, *args, **kwargs):
         if self.DEBUG:
@@ -114,39 +142,35 @@ class MapperInterpreter(MapperVisitor):
     def visitVarAssign(self, ctx:MapperParser.VarAssignContext):
         self._debug_print("handling var assignment")
         name = ctx.IDENTIFIER().getText()
-        if name not in self.var_types.keys():
-            self.raiseError(ctx, f"assignment of an undeclared variable {name} - raised in visitor")
+        if name not in self.var_types:
+            self.raiseError(ctx, f"Assignment of undeclared variable '{name}'")
         op = ctx.getChild(1).getText()
         expr = ctx.expr()
         self._debug_print(f"{name} {op} {expr}")
         expr_value = self.visit(expr)
         self._debug_print(f"expr v{expr_value}")
-
         self.variables[name] = expr_value
 
 
     def visitNumberAssign(self, ctx):
-        self._debug_print(f"handling: {ctx.getText()}")  # Debugging
-        name = ctx.IDENTIFIER().getText()  # Get variable name
-
-        # Debugging: check if expr() exists
+        self._debug_print(f"handling: {ctx.getText()}")
+        name = ctx.IDENTIFIER().getText()
+        if name not in self.var_types:
+            self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
         expr = ctx.expr()
         if not expr:
             self._debug_print("Error: ctx.expr() is None!")
             return None
-
         value = self.visit(expr)
-
-
         self._debug_print(f"Evaluated value: {value}")
-        if name not in self.var_types.keys():
-            self.raiseError(ctx,f"assignment of an undeclared number {name} - raised in visitor")
         self.variables[name] = value
         self._debug_print(f"Number assigned: {name} = {value}")
 
     def visitBoolAssign(self, ctx):
         name = ctx.IDENTIFIER().getText()
-        value = self.visit(ctx.expr())  # Parsowanie wyrażenia logicznego
+        if name not in self.var_types:
+            self.raiseError(ctx, f"Assignment of undeclared boolean '{name}'")
+        value = self.visit(ctx.expr())
         self.variables[name] = value
         self._debug_print(f"Boolean assigned: {name} = {value}")
         return value
@@ -154,10 +178,12 @@ class MapperInterpreter(MapperVisitor):
     def visitIncrement(self, ctx):
         name = ctx.IDENTIFIER().getText()
         self._debug_print(f"🆔 name: {name}")
+        if name not in self.var_types:
+            self.raiseError(ctx, f"Use of undeclared variable '{name}'")
         if name not in self.variables:
-            self._raise_error(f"❌ Błąd: Nieznana zmienna '{name}'!")
+            self._raise_error(f"❌ Błąd: Zmienna '{name}' nie została zainicjalizowana!")
         current_value = self.variables[name]
-        op = ctx.getChild(1).getText()  # '+=' | '-=' | '++' | '--'
+        op = ctx.getChild(1).getText()
         if op in ('+=', '-='):
             value = self.resolve_if_variable_number(ctx.expr())
             if isinstance(current_value, int):
@@ -168,7 +194,6 @@ class MapperInterpreter(MapperVisitor):
                 else:
                     self._debug_print(f"🔄 {name} = {current_value} - {delta}")
                     self.variables[name] -= delta
-
             elif isinstance(current_value, Tile):
                 if op == '+=':
                     self._debug_print(f"🧱 Dodaję do Tile: {name}.add_obj({value})")
@@ -177,8 +202,6 @@ class MapperInterpreter(MapperVisitor):
                     self._raise_error(f"❌ Tile nie obsługuje '-=': {name}")
             else:
                 self._raise_error(f"❌ Nieobsługiwany typ dla {op}: {type(current_value).__name__}")
-
-        # Obsługa ++ i --
         elif op in ('++', '--'):
             if not isinstance(current_value, int):
                 self._raise_error(f"❌ Operator '{op}' działa tylko na liczbach całkowitych")
@@ -188,7 +211,6 @@ class MapperInterpreter(MapperVisitor):
             else:
                 self.variables[name] -= 1
             self._debug_print(f"🔢 {name} po '{op}': {self.variables[name]}")
-
         return self.variables[name]
 
     def visitAssignment(self, ctx):
@@ -470,6 +492,8 @@ class MapperInterpreter(MapperVisitor):
     def visitExprVar(self, ctx):
         var_name = ctx.IDENTIFIER().getText()
         self._debug_print(f"Processing variable reference: {var_name}: value: {self.variables.get(var_name)}")
+        if var_name not in self.var_types:
+            self.raiseError(ctx, f"Use of undeclared variable '{var_name}'")
         return self.variables.get(var_name)
 
     def visitExprInt(self, ctx):
@@ -507,6 +531,7 @@ class MapperInterpreter(MapperVisitor):
 
 if __name__ == "__main__":
     try:
+        import sys
         input_stream = FileStream(sys.argv[1])
         lexer = MapperLexer(input_stream)
         token_stream = CommonTokenStream(lexer)
@@ -515,19 +540,27 @@ if __name__ == "__main__":
         parser.removeErrorListeners()
         parser.addErrorListener(MapperErrorListener())
 
-
         tree = parser.program()
 
+        # Pierwszy przebieg: rejestracja zmiennych
+        var_listener = VariableDeclarationListener()
         walker = ParseTreeWalker()
-        listener = MapperListener()
-        walker.walk(listener, tree)
+        walker.walk(var_listener, tree)
+        print("Registered variables:", var_listener.var_types)  # Debugowanie
 
-        interpreter = MapperInterpreter(listener.var_types)
+        # Sprawdzenie błędów redeklaracji
+        if var_listener.errors:
+            for error in var_listener.errors:
+                print(error)
+            sys.exit(1)
+
+        # Drugi przebieg: interpretacja programu
+        interpreter = MapperInterpreter(var_listener.var_types)
         interpreter.visit(tree)
 
         print("Starting Pygame loop...")
         interpreter.renderer.run()
 
     except Exception as e:
-        print(str(e))
-        sys.exit(1)  # exit code 1 (błąd)
+        print(f"Error: {str(e)}")
+        sys.exit(1)
