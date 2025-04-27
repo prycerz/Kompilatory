@@ -40,6 +40,18 @@ public class MapperBaseListener implements MapperListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterVarDecl(MapperParser.VarDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVarDecl(MapperParser.VarDeclContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterErrorStatement(MapperParser.ErrorStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -47,6 +59,18 @@ public class MapperBaseListener implements MapperListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitErrorStatement(MapperParser.ErrorStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterPrintStatement(MapperParser.PrintStatementContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitPrintStatement(MapperParser.PrintStatementContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

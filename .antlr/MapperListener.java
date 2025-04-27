@@ -27,6 +27,16 @@ public interface MapperListener extends ParseTreeListener {
 	 */
 	void exitStatement(MapperParser.StatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MapperParser#varDecl}.
+	 * @param ctx the parse tree
+	 */
+	void enterVarDecl(MapperParser.VarDeclContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MapperParser#varDecl}.
+	 * @param ctx the parse tree
+	 */
+	void exitVarDecl(MapperParser.VarDeclContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MapperParser#errorStatement}.
 	 * @param ctx the parse tree
 	 */
@@ -36,6 +46,16 @@ public interface MapperListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitErrorStatement(MapperParser.ErrorStatementContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MapperParser#printStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterPrintStatement(MapperParser.PrintStatementContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MapperParser#printStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitPrintStatement(MapperParser.PrintStatementContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MapperParser#param}.
 	 * @param ctx the parse tree

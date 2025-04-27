@@ -130,6 +130,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_program; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterProgram(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitProgram(this);
+		}
 	}
 
 	public final ProgramContext program() throws RecognitionException {
@@ -207,6 +215,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_statement; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitStatement(this);
+		}
 	}
 
 	public final StatementContext statement() throws RecognitionException {
@@ -316,6 +332,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_varDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterVarDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitVarDecl(this);
+		}
 	}
 
 	public final VarDeclContext varDecl() throws RecognitionException {
@@ -354,6 +378,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_errorStatement; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterErrorStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitErrorStatement(this);
+		}
 	}
 
 	public final ErrorStatementContext errorStatement() throws RecognitionException {
@@ -390,6 +422,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_printStatement; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterPrintStatement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitPrintStatement(this);
+		}
 	}
 
 	public final PrintStatementContext printStatement() throws RecognitionException {
@@ -436,6 +476,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_param; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterParam(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitParam(this);
+		}
 	}
 
 	public final ParamContext param() throws RecognitionException {
@@ -467,6 +515,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_type; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterType(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitType(this);
+		}
 	}
 
 	public final TypeContext type() throws RecognitionException {
@@ -518,6 +574,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_functionDecl; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterFunctionDecl(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitFunctionDecl(this);
+		}
 	}
 
 	public final FunctionDeclContext functionDecl() throws RecognitionException {
@@ -602,6 +666,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_functionCall; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterFunctionCall(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitFunctionCall(this);
+		}
 	}
 
 	public final FunctionCallContext functionCall() throws RecognitionException {
@@ -652,6 +724,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_exprList; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterExprList(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitExprList(this);
+		}
 	}
 
 	public final ExprListContext exprList() throws RecognitionException {
@@ -702,6 +782,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_increment; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterIncrement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitIncrement(this);
+		}
 	}
 
 	public final IncrementContext increment() throws RecognitionException {
@@ -774,6 +862,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_tileAssign; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterTileAssign(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitTileAssign(this);
+		}
 	}
 
 	public final TileAssignContext tileAssign() throws RecognitionException {
@@ -813,6 +909,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_tileSum; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterTileSum(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitTileSum(this);
+		}
 	}
 
 	public final TileSumContext tileSum() throws RecognitionException {
@@ -877,6 +981,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_assignment; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterAssignment(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitAssignment(this);
+		}
 	}
 
 	public final AssignmentContext assignment() throws RecognitionException {
@@ -951,6 +1063,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_numberAssign; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterNumberAssign(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitNumberAssign(this);
+		}
 	}
 
 	public final NumberAssignContext numberAssign() throws RecognitionException {
@@ -990,6 +1110,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_varAssign; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterVarAssign(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitVarAssign(this);
+		}
 	}
 
 	public final VarAssignContext varAssign() throws RecognitionException {
@@ -1027,6 +1155,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_boolAssign; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterBoolAssign(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitBoolAssign(this);
+		}
 	}
 
 	public final BoolAssignContext boolAssign() throws RecognitionException {
@@ -1068,6 +1204,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_roadPlacement; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterRoadPlacement(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitRoadPlacement(this);
+		}
 	}
 
 	public final RoadPlacementContext roadPlacement() throws RecognitionException {
@@ -1111,6 +1255,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_roadStart; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterRoadStart(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitRoadStart(this);
+		}
 	}
 
 	public final RoadStartContext roadStart() throws RecognitionException {
@@ -1145,6 +1297,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_roadEnd; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterRoadEnd(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitRoadEnd(this);
+		}
 	}
 
 	public final RoadEndContext roadEnd() throws RecognitionException {
@@ -1188,6 +1348,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_blendAssign; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterBlendAssign(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitBlendAssign(this);
+		}
 	}
 
 	public final BlendAssignContext blendAssign() throws RecognitionException {
@@ -1248,6 +1416,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_figure; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterFigure(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitFigure(this);
+		}
 	}
 
 	public final FigureContext figure() throws RecognitionException {
@@ -1307,6 +1483,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_blendOption; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterBlendOption(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitBlendOption(this);
+		}
 	}
 
 	public final BlendOptionContext blendOption() throws RecognitionException {
@@ -1355,6 +1539,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_drawRoad; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterDrawRoad(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitDrawRoad(this);
+		}
 	}
 
 	public final DrawRoadContext drawRoad() throws RecognitionException {
@@ -1397,6 +1589,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_draw; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterDraw(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitDraw(this);
+		}
 	}
 
 	public final DrawContext draw() throws RecognitionException {
@@ -1478,6 +1678,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_percentagePair; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterPercentagePair(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitPercentagePair(this);
+		}
 	}
 
 	public final PercentagePairContext percentagePair() throws RecognitionException {
@@ -1514,6 +1722,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_move; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterMove(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitMove(this);
+		}
 	}
 
 	public final MoveContext move() throws RecognitionException {
@@ -1587,6 +1803,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_loop; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterLoop(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitLoop(this);
+		}
 	}
 
 	public final LoopContext loop() throws RecognitionException {
@@ -1640,6 +1864,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_whileLoop; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterWhileLoop(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitWhileLoop(this);
+		}
 	}
 
 	public final WhileLoopContext whileLoop() throws RecognitionException {
@@ -1709,6 +1941,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_forLoop; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterForLoop(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitForLoop(this);
+		}
 	}
 
 	public final ForLoopContext forLoop() throws RecognitionException {
@@ -1780,6 +2020,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_conditional; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterConditional(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitConditional(this);
+		}
 	}
 
 	public final ConditionalContext conditional() throws RecognitionException {
@@ -1872,6 +2120,14 @@ public class MapperParser extends Parser {
 	public static class ExprVarContext extends ExprContext {
 		public TerminalNode IDENTIFIER() { return getToken(MapperParser.IDENTIFIER, 0); }
 		public ExprVarContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterExprVar(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitExprVar(this);
+		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExprAddSubContext extends ExprContext {
@@ -1882,6 +2138,14 @@ public class MapperParser extends Parser {
 			return getRuleContext(ExprContext.class,i);
 		}
 		public ExprAddSubContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterExprAddSub(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitExprAddSub(this);
+		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExprMulDivContext extends ExprContext {
@@ -1892,6 +2156,14 @@ public class MapperParser extends Parser {
 			return getRuleContext(ExprContext.class,i);
 		}
 		public ExprMulDivContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterExprMulDiv(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitExprMulDiv(this);
+		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExprParensContext extends ExprContext {
@@ -1899,16 +2171,40 @@ public class MapperParser extends Parser {
 			return getRuleContext(ExprContext.class,0);
 		}
 		public ExprParensContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterExprParens(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitExprParens(this);
+		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExprIntContext extends ExprContext {
 		public TerminalNode INT() { return getToken(MapperParser.INT, 0); }
 		public ExprIntContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterExprInt(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitExprInt(this);
+		}
 	}
 	@SuppressWarnings("CheckReturnValue")
 	public static class ExprBoolContext extends ExprContext {
 		public TerminalNode BOOL() { return getToken(MapperParser.BOOL, 0); }
 		public ExprBoolContext(ExprContext ctx) { copyFrom(ctx); }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterExprBool(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitExprBool(this);
+		}
 	}
 
 	public final ExprContext expr() throws RecognitionException {
@@ -2058,6 +2354,14 @@ public class MapperParser extends Parser {
 			super(parent, invokingState);
 		}
 		@Override public int getRuleIndex() { return RULE_exprComp; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).enterExprComp(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof MapperListener ) ((MapperListener)listener).exitExprComp(this);
+		}
 	}
 
 	public final ExprCompContext exprComp() throws RecognitionException {
