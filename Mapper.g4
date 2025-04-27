@@ -13,8 +13,14 @@ statement   : assignment
             | functionDecl
             | functionCall
             | errorStatement
+            | varDecl
+            | printStatement
             ;
+
+// Deklaracja zmiennej
+varDecl    : type IDENTIFIER ';';  // np. number x; tile y;
 errorStatement : ERROR expr DOT;
+printStatement : 'print' exprList? ';';  // np. print x; print x, y, 42;
 
 //funkcje
 param     : type IDENTIFIER ;
