@@ -67,6 +67,10 @@ class VariableDeclarationListener(ParseTreeListener):
             var_name = ctx.blendAssign().IDENTIFIER().getText()
             var_type = 'blend'
 
+        # elif ctx.roadStart():
+        #     var_name = ctx.blendAssign().IDENTIFIER().getText()
+        #     var_type = 'road'
+
         elif ctx.noValueAssign():
             var_name = ctx.noValueAssign().IDENTIFIER().getText()
             var_type = ctx.noValueAssign().type_().getText()
@@ -151,14 +155,14 @@ class MapperInterpreter(MapperVisitor):
             tile.add_obj(arg.getText())
         return tile
     
-    #
-    # def visitTileAssign(self, ctx):
-    #     # Name of tile
-    #     self._debug_print('tile assign')
-    #     name = ctx.IDENTIFIER().getText()
-    #     tile = self.visitTileSum(ctx.tileSum())  # Get the tile type (e.g., sand, grass)
-    #
-    #     self.variables[name] = tile
+
+    def visitTileAssign(self, ctx):
+        # Name of tile
+        self._debug_print('tile assign')
+        name = ctx.IDENTIFIER().getText()
+        tile = self.visitTileSum(ctx.tileSum())  # Get the tile type (e.g., sand, grass)
+
+        self.scopes[-1][name] = tile
 
     def visitBlendAssign(self, ctx):
 
