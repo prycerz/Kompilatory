@@ -189,10 +189,17 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print(f"Number assigned: {name} = {value}")
 
     def visitBoolAssign(self, ctx):
+        print('visiting bool assign')
         name = ctx.IDENTIFIER().getText()
         if name not in self.var_types:
             self.raiseError(ctx, f"Assignment of undeclared boolean '{name}'")
-        value = self.visit(ctx.expr())
+
+        if ctx.expr():
+            value = bool(self.visit(ctx.expr()))
+        elif ctx.exprComp():
+            value = self.visit(ctx.exprComp())
+
+
         self.variables[name] = value
         self._debug_print(f"Boolean assigned: {name} = {value}")
         return value
@@ -398,19 +405,33 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print(f"Handling if statement: {ctx.getText()}")  # Debugging output
 
         # Extract and evaluate the condition
-        condition_value = self.visit(ctx.expr())  # Should return True/False
-        self._debug_print(f"Condition evaluated to: {condition_value}")
+        if ctx.exprComp():
+            condition_value = self.visit(ctx.exprComp())  # Should return True/False
+            self._debug_print(f"Condition evaluated to: {condition_value}")
+        elif ctx.expr():
+            condition_value = bool(self.visit(ctx.expr()))
+
 
         if condition_value:
-            self._debug_print("Executing if branch...")
-            statements = ctx.statement()  # Get statements inside the block
-            self._debug_print(f"Statements inside if: {len(statements)}")
+            self.visitIfConditionStatements(ctx.ifConditionStatements())
+        else:
+            if ctx.elseConditionStatements():
+                self.visitElseConditionStatements(ctx.elseConditionStatements())
 
-            for statement_ctx in statements:
-                self._debug_print(f"Visiting statement: {statement_ctx.getText()}")
-                self.visit(statement_ctx)
+    def visitIfConditionStatements(self, ctx:MapperParser.IfConditionStatementsContext):
+        self._debug_print("Handling if condition statement")
+        # Visit each statement inside the if block
+        for stmt in ctx.statement():
+            self._debug_print(f"Executing statement: {stmt.getText()}")
+            self.visit(stmt)
 
-        self._debug_print("Exiting if statement")
+    def visitElseConditionStatements(self, ctx:MapperParser.ElseConditionStatementsContext): 
+        self._debug_print("Handling else condition statement")
+        # Visit each statement inside the else block
+        for stmt in ctx.statement():
+            self._debug_print(f"Executing statement: {stmt.getText()}")
+            self.visit(stmt)
+
 
     def visitFunctionDecl(self, ctx):
         self._debug_print("fun decl")
@@ -492,7 +513,6 @@ class MapperInterpreter(MapperVisitor):
         left = self.visit(ctx.expr(0))
         right = self.visit(ctx.expr(1))
         op = ctx.getChild(1).getText()
-#test
         if op == '==':
             return left == right
         elif op == '!=':
@@ -550,6 +570,7 @@ class MapperInterpreter(MapperVisitor):
         return value
 
     def visitExprBool(self, ctx):
+        self._debug_print("looking at bool in expr")
         value = ctx.BOOL().getText().lower() == 'true'
         self._debug_print(f"Processing boolean literal: {value}")
         return value

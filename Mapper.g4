@@ -47,7 +47,7 @@ noValueAssign: type IDENTIFIER;
 
 tileAssign   : 'tile' IDENTIFIER '=' tileSum; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
 numberAssign : 'number' IDENTIFIER '=' expr;
-boolAssign   : 'bool' IDENTIFIER '=' expr;
+boolAssign   : 'bool' IDENTIFIER '=' (expr | exprComp);
 blendAssign  : 'blend' IDENTIFIER '=' figure blendOption+; 
 roadStart    : 'road' IDENTIFIER 'start';
 
@@ -75,8 +75,10 @@ forLoop     : 'for' '(' numberAssign ';' expr ';' increment ')' '{' statement* '
 
 
 // Instrukcja warunkowa
-conditional : 'if' '(' exprComp ')' '{' statement* '}' ('else' '{' statement* '}')?;
+conditional : 'if' '(' (exprComp  | expr) ')' '{' ifConditionStatements '}' ('else' '{' elseConditionStatements '}')?;
 
+ifConditionStatements : statement*;
+elseConditionStatements : statement*;
 
 
 // Wyrażenia arytmetyczne i logiczne
@@ -84,15 +86,15 @@ expr
             : expr ('*'|'/') expr                      # ExprMulDiv
             | expr ('+'|'-') expr                      # ExprAddSub
             | '(' expr ')'                             # ExprParens
-            | IDENTIFIER                               # ExprVar
             | INT                                      # ExprInt
-            | BOOL                                     # ExprBool;
+            | BOOL                                     # ExprBool
+            | IDENTIFIER                               # ExprVar;
 
 exprComp    : expr ('=='|'!='|'>'|'<'|'>='|'<=') expr;
 
-IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]*;
 INT         : [0-9]+;
 BOOL        : 'true' | 'false';
+IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]*;
 STRING      : '"' .*? '"';
 WS          : [ \t\r\n]+ -> skip;
 DOT         :'.';

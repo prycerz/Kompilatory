@@ -10,127 +10,131 @@ else:
 
 def serializedATN():
     return [
-        4,1,52,344,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
+        4,1,52,356,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
         6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,
         2,14,7,14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,
         7,20,2,21,7,21,2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,
-        2,27,7,27,2,28,7,28,2,29,7,29,2,30,7,30,2,31,7,31,2,32,7,32,1,0,
-        5,0,68,8,0,10,0,12,0,71,9,0,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
-        1,1,1,1,1,1,1,1,3,1,86,8,1,1,2,1,2,1,2,1,2,1,3,1,3,3,3,94,8,3,1,
-        4,1,4,1,4,1,5,1,5,1,6,1,6,1,6,1,6,1,6,1,6,5,6,107,8,6,10,6,12,6,
-        110,9,6,3,6,112,8,6,1,6,1,6,1,6,5,6,117,8,6,10,6,12,6,120,9,6,1,
-        6,1,6,1,7,1,7,1,7,3,7,127,8,7,1,7,1,7,1,8,1,8,1,8,5,8,134,8,8,10,
-        8,12,8,137,9,8,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,3,9,149,8,
-        9,1,10,1,10,1,10,5,10,154,8,10,10,10,12,10,157,9,10,1,11,1,11,1,
-        11,1,11,1,12,1,12,1,12,1,12,1,12,1,12,1,12,3,12,170,8,12,1,13,1,
-        13,1,13,1,14,1,14,1,14,1,14,1,14,1,15,1,15,1,15,1,15,1,15,1,16,1,
-        16,1,16,1,16,1,16,1,17,1,17,1,17,1,17,1,17,4,17,195,8,17,11,17,12,
-        17,196,1,18,1,18,1,18,1,18,1,19,1,19,3,19,205,8,19,1,20,1,20,1,20,
-        1,20,1,21,1,21,1,21,1,21,1,21,3,21,216,8,21,1,22,1,22,3,22,220,8,
-        22,1,22,1,22,1,22,1,23,1,23,1,23,1,24,1,24,1,24,1,24,5,24,232,8,
-        24,10,24,12,24,235,9,24,1,24,1,24,1,24,1,24,4,24,241,8,24,11,24,
-        12,24,242,3,24,245,8,24,1,25,1,25,1,25,1,25,1,26,1,26,1,26,1,26,
-        1,26,1,26,1,26,1,26,1,26,3,26,260,8,26,1,27,1,27,3,27,264,8,27,1,
-        28,1,28,1,28,1,28,1,28,1,28,5,28,272,8,28,10,28,12,28,275,9,28,1,
-        28,1,28,1,29,1,29,1,29,1,29,1,29,1,29,1,29,1,29,1,29,1,29,5,29,289,
-        8,29,10,29,12,29,292,9,29,1,29,1,29,1,30,1,30,1,30,1,30,1,30,1,30,
-        5,30,302,8,30,10,30,12,30,305,9,30,1,30,1,30,1,30,1,30,5,30,311,
-        8,30,10,30,12,30,314,9,30,1,30,3,30,317,8,30,1,31,1,31,1,31,1,31,
-        1,31,1,31,1,31,1,31,3,31,327,8,31,1,31,1,31,1,31,1,31,1,31,1,31,
-        5,31,335,8,31,10,31,12,31,338,9,31,1,32,1,32,1,32,1,32,1,32,0,1,
-        62,33,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,
-        42,44,46,48,50,52,54,56,58,60,62,64,0,4,1,0,2,4,1,0,37,38,2,0,15,
-        15,39,39,1,0,40,45,358,0,69,1,0,0,0,2,85,1,0,0,0,4,87,1,0,0,0,6,
-        91,1,0,0,0,8,95,1,0,0,0,10,98,1,0,0,0,12,100,1,0,0,0,14,123,1,0,
-        0,0,16,130,1,0,0,0,18,148,1,0,0,0,20,150,1,0,0,0,22,158,1,0,0,0,
-        24,169,1,0,0,0,26,171,1,0,0,0,28,174,1,0,0,0,30,179,1,0,0,0,32,184,
-        1,0,0,0,34,189,1,0,0,0,36,198,1,0,0,0,38,204,1,0,0,0,40,206,1,0,
-        0,0,42,215,1,0,0,0,44,219,1,0,0,0,46,224,1,0,0,0,48,244,1,0,0,0,
-        50,246,1,0,0,0,52,250,1,0,0,0,54,263,1,0,0,0,56,265,1,0,0,0,58,278,
-        1,0,0,0,60,295,1,0,0,0,62,326,1,0,0,0,64,339,1,0,0,0,66,68,3,2,1,
-        0,67,66,1,0,0,0,68,71,1,0,0,0,69,67,1,0,0,0,69,70,1,0,0,0,70,72,
-        1,0,0,0,71,69,1,0,0,0,72,73,5,0,0,1,73,1,1,0,0,0,74,86,3,6,3,0,75,
-        86,3,22,11,0,76,86,3,24,12,0,77,86,3,48,24,0,78,86,3,52,26,0,79,
-        86,3,54,27,0,80,86,3,60,30,0,81,86,3,38,19,0,82,86,3,12,6,0,83,86,
-        3,14,7,0,84,86,3,4,2,0,85,74,1,0,0,0,85,75,1,0,0,0,85,76,1,0,0,0,
-        85,77,1,0,0,0,85,78,1,0,0,0,85,79,1,0,0,0,85,80,1,0,0,0,85,81,1,
-        0,0,0,85,82,1,0,0,0,85,83,1,0,0,0,85,84,1,0,0,0,86,3,1,0,0,0,87,
-        88,5,52,0,0,88,89,3,62,31,0,89,90,5,51,0,0,90,5,1,0,0,0,91,93,5,
-        1,0,0,92,94,3,16,8,0,93,92,1,0,0,0,93,94,1,0,0,0,94,7,1,0,0,0,95,
-        96,3,10,5,0,96,97,5,46,0,0,97,9,1,0,0,0,98,99,7,0,0,0,99,11,1,0,
-        0,0,100,101,5,5,0,0,101,102,5,46,0,0,102,111,5,6,0,0,103,108,3,8,
-        4,0,104,105,5,7,0,0,105,107,3,8,4,0,106,104,1,0,0,0,107,110,1,0,
-        0,0,108,106,1,0,0,0,108,109,1,0,0,0,109,112,1,0,0,0,110,108,1,0,
-        0,0,111,103,1,0,0,0,111,112,1,0,0,0,112,113,1,0,0,0,113,114,5,8,
-        0,0,114,118,5,9,0,0,115,117,3,2,1,0,116,115,1,0,0,0,117,120,1,0,
-        0,0,118,116,1,0,0,0,118,119,1,0,0,0,119,121,1,0,0,0,120,118,1,0,
-        0,0,121,122,5,10,0,0,122,13,1,0,0,0,123,124,5,46,0,0,124,126,5,6,
-        0,0,125,127,3,16,8,0,126,125,1,0,0,0,126,127,1,0,0,0,127,128,1,0,
-        0,0,128,129,5,8,0,0,129,15,1,0,0,0,130,135,3,62,31,0,131,132,5,7,
-        0,0,132,134,3,62,31,0,133,131,1,0,0,0,134,137,1,0,0,0,135,133,1,
-        0,0,0,135,136,1,0,0,0,136,17,1,0,0,0,137,135,1,0,0,0,138,139,5,46,
-        0,0,139,149,5,11,0,0,140,141,5,46,0,0,141,149,5,12,0,0,142,143,5,
-        46,0,0,143,144,5,13,0,0,144,149,3,62,31,0,145,146,5,46,0,0,146,147,
-        5,14,0,0,147,149,3,62,31,0,148,138,1,0,0,0,148,140,1,0,0,0,148,142,
-        1,0,0,0,148,145,1,0,0,0,149,19,1,0,0,0,150,155,5,46,0,0,151,152,
-        5,15,0,0,152,154,5,46,0,0,153,151,1,0,0,0,154,157,1,0,0,0,155,153,
-        1,0,0,0,155,156,1,0,0,0,156,21,1,0,0,0,157,155,1,0,0,0,158,159,5,
-        46,0,0,159,160,5,16,0,0,160,161,3,62,31,0,161,23,1,0,0,0,162,170,
-        3,28,14,0,163,170,3,30,15,0,164,170,3,32,16,0,165,170,3,18,9,0,166,
-        170,3,34,17,0,167,170,3,26,13,0,168,170,3,22,11,0,169,162,1,0,0,
-        0,169,163,1,0,0,0,169,164,1,0,0,0,169,165,1,0,0,0,169,166,1,0,0,
-        0,169,167,1,0,0,0,169,168,1,0,0,0,170,25,1,0,0,0,171,172,3,10,5,
-        0,172,173,5,46,0,0,173,27,1,0,0,0,174,175,5,3,0,0,175,176,5,46,0,
-        0,176,177,5,16,0,0,177,178,3,20,10,0,178,29,1,0,0,0,179,180,5,2,
-        0,0,180,181,5,46,0,0,181,182,5,16,0,0,182,183,3,62,31,0,183,31,1,
-        0,0,0,184,185,5,17,0,0,185,186,5,46,0,0,186,187,5,16,0,0,187,188,
-        3,62,31,0,188,33,1,0,0,0,189,190,5,4,0,0,190,191,5,46,0,0,191,192,
-        5,16,0,0,192,194,3,42,21,0,193,195,3,44,22,0,194,193,1,0,0,0,195,
-        196,1,0,0,0,196,194,1,0,0,0,196,197,1,0,0,0,197,35,1,0,0,0,198,199,
-        5,18,0,0,199,200,5,46,0,0,200,201,5,19,0,0,201,37,1,0,0,0,202,205,
-        3,36,18,0,203,205,3,40,20,0,204,202,1,0,0,0,204,203,1,0,0,0,205,
-        39,1,0,0,0,206,207,5,18,0,0,207,208,5,46,0,0,208,209,5,20,0,0,209,
-        41,1,0,0,0,210,211,5,21,0,0,211,216,5,47,0,0,212,213,5,22,0,0,213,
-        214,5,47,0,0,214,216,5,47,0,0,215,210,1,0,0,0,215,212,1,0,0,0,216,
-        43,1,0,0,0,217,220,5,46,0,0,218,220,3,20,10,0,219,217,1,0,0,0,219,
-        218,1,0,0,0,220,221,1,0,0,0,221,222,5,47,0,0,222,223,5,23,0,0,223,
-        45,1,0,0,0,224,225,5,24,0,0,225,226,5,46,0,0,226,47,1,0,0,0,227,
-        228,5,25,0,0,228,233,5,46,0,0,229,230,5,15,0,0,230,232,5,46,0,0,
-        231,229,1,0,0,0,232,235,1,0,0,0,233,231,1,0,0,0,233,234,1,0,0,0,
-        234,245,1,0,0,0,235,233,1,0,0,0,236,237,5,25,0,0,237,238,5,26,0,
-        0,238,240,5,47,0,0,239,241,3,50,25,0,240,239,1,0,0,0,241,242,1,0,
-        0,0,242,240,1,0,0,0,242,243,1,0,0,0,243,245,1,0,0,0,244,227,1,0,
-        0,0,244,236,1,0,0,0,245,49,1,0,0,0,246,247,5,47,0,0,247,248,5,23,
-        0,0,248,249,5,46,0,0,249,51,1,0,0,0,250,259,5,27,0,0,251,252,5,28,
-        0,0,252,260,3,62,31,0,253,254,5,29,0,0,254,260,3,62,31,0,255,256,
-        5,30,0,0,256,260,3,62,31,0,257,258,5,31,0,0,258,260,3,62,31,0,259,
-        251,1,0,0,0,259,253,1,0,0,0,259,255,1,0,0,0,259,257,1,0,0,0,260,
-        53,1,0,0,0,261,264,3,56,28,0,262,264,3,58,29,0,263,261,1,0,0,0,263,
-        262,1,0,0,0,264,55,1,0,0,0,265,266,5,32,0,0,266,267,5,6,0,0,267,
-        268,3,64,32,0,268,269,5,8,0,0,269,273,5,9,0,0,270,272,3,2,1,0,271,
-        270,1,0,0,0,272,275,1,0,0,0,273,271,1,0,0,0,273,274,1,0,0,0,274,
-        276,1,0,0,0,275,273,1,0,0,0,276,277,5,10,0,0,277,57,1,0,0,0,278,
-        279,5,33,0,0,279,280,5,6,0,0,280,281,3,30,15,0,281,282,5,34,0,0,
-        282,283,3,62,31,0,283,284,5,34,0,0,284,285,3,18,9,0,285,286,5,8,
-        0,0,286,290,5,9,0,0,287,289,3,2,1,0,288,287,1,0,0,0,289,292,1,0,
-        0,0,290,288,1,0,0,0,290,291,1,0,0,0,291,293,1,0,0,0,292,290,1,0,
-        0,0,293,294,5,10,0,0,294,59,1,0,0,0,295,296,5,35,0,0,296,297,5,6,
-        0,0,297,298,3,64,32,0,298,299,5,8,0,0,299,303,5,9,0,0,300,302,3,
-        2,1,0,301,300,1,0,0,0,302,305,1,0,0,0,303,301,1,0,0,0,303,304,1,
-        0,0,0,304,306,1,0,0,0,305,303,1,0,0,0,306,316,5,10,0,0,307,308,5,
-        36,0,0,308,312,5,9,0,0,309,311,3,2,1,0,310,309,1,0,0,0,311,314,1,
-        0,0,0,312,310,1,0,0,0,312,313,1,0,0,0,313,315,1,0,0,0,314,312,1,
-        0,0,0,315,317,5,10,0,0,316,307,1,0,0,0,316,317,1,0,0,0,317,61,1,
-        0,0,0,318,319,6,31,-1,0,319,320,5,6,0,0,320,321,3,62,31,0,321,322,
-        5,8,0,0,322,327,1,0,0,0,323,327,5,46,0,0,324,327,5,47,0,0,325,327,
-        5,48,0,0,326,318,1,0,0,0,326,323,1,0,0,0,326,324,1,0,0,0,326,325,
-        1,0,0,0,327,336,1,0,0,0,328,329,10,6,0,0,329,330,7,1,0,0,330,335,
-        3,62,31,7,331,332,10,5,0,0,332,333,7,2,0,0,333,335,3,62,31,6,334,
-        328,1,0,0,0,334,331,1,0,0,0,335,338,1,0,0,0,336,334,1,0,0,0,336,
-        337,1,0,0,0,337,63,1,0,0,0,338,336,1,0,0,0,339,340,3,62,31,0,340,
-        341,7,3,0,0,341,342,3,62,31,0,342,65,1,0,0,0,28,69,85,93,108,111,
-        118,126,135,148,155,169,196,204,215,219,233,242,244,259,263,273,
-        290,303,312,316,326,334,336
+        2,27,7,27,2,28,7,28,2,29,7,29,2,30,7,30,2,31,7,31,2,32,7,32,2,33,
+        7,33,2,34,7,34,1,0,5,0,72,8,0,10,0,12,0,75,9,0,1,0,1,0,1,1,1,1,1,
+        1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,3,1,90,8,1,1,2,1,2,1,2,1,2,1,3,
+        1,3,3,3,98,8,3,1,4,1,4,1,4,1,5,1,5,1,6,1,6,1,6,1,6,1,6,1,6,5,6,111,
+        8,6,10,6,12,6,114,9,6,3,6,116,8,6,1,6,1,6,1,6,5,6,121,8,6,10,6,12,
+        6,124,9,6,1,6,1,6,1,7,1,7,1,7,3,7,131,8,7,1,7,1,7,1,8,1,8,1,8,5,
+        8,138,8,8,10,8,12,8,141,9,8,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,1,9,
+        1,9,3,9,153,8,9,1,10,1,10,1,10,5,10,158,8,10,10,10,12,10,161,9,10,
+        1,11,1,11,1,11,1,11,1,12,1,12,1,12,1,12,1,12,1,12,1,12,3,12,174,
+        8,12,1,13,1,13,1,13,1,14,1,14,1,14,1,14,1,14,1,15,1,15,1,15,1,15,
+        1,15,1,16,1,16,1,16,1,16,1,16,3,16,194,8,16,1,17,1,17,1,17,1,17,
+        1,17,4,17,201,8,17,11,17,12,17,202,1,18,1,18,1,18,1,18,1,19,1,19,
+        3,19,211,8,19,1,20,1,20,1,20,1,20,1,21,1,21,1,21,1,21,1,21,3,21,
+        222,8,21,1,22,1,22,3,22,226,8,22,1,22,1,22,1,22,1,23,1,23,1,23,1,
+        24,1,24,1,24,1,24,5,24,238,8,24,10,24,12,24,241,9,24,1,24,1,24,1,
+        24,1,24,4,24,247,8,24,11,24,12,24,248,3,24,251,8,24,1,25,1,25,1,
+        25,1,25,1,26,1,26,1,26,1,26,1,26,1,26,1,26,1,26,1,26,3,26,266,8,
+        26,1,27,1,27,3,27,270,8,27,1,28,1,28,1,28,1,28,1,28,1,28,5,28,278,
+        8,28,10,28,12,28,281,9,28,1,28,1,28,1,29,1,29,1,29,1,29,1,29,1,29,
+        1,29,1,29,1,29,1,29,5,29,295,8,29,10,29,12,29,298,9,29,1,29,1,29,
+        1,30,1,30,1,30,1,30,3,30,306,8,30,1,30,1,30,1,30,1,30,1,30,1,30,
+        1,30,1,30,1,30,3,30,317,8,30,1,31,5,31,320,8,31,10,31,12,31,323,
+        9,31,1,32,5,32,326,8,32,10,32,12,32,329,9,32,1,33,1,33,1,33,1,33,
+        1,33,1,33,1,33,1,33,3,33,339,8,33,1,33,1,33,1,33,1,33,1,33,1,33,
+        5,33,347,8,33,10,33,12,33,350,9,33,1,34,1,34,1,34,1,34,1,34,0,1,
+        66,35,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,
+        42,44,46,48,50,52,54,56,58,60,62,64,66,68,0,4,1,0,2,4,1,0,37,38,
+        2,0,15,15,39,39,1,0,40,45,370,0,73,1,0,0,0,2,89,1,0,0,0,4,91,1,0,
+        0,0,6,95,1,0,0,0,8,99,1,0,0,0,10,102,1,0,0,0,12,104,1,0,0,0,14,127,
+        1,0,0,0,16,134,1,0,0,0,18,152,1,0,0,0,20,154,1,0,0,0,22,162,1,0,
+        0,0,24,173,1,0,0,0,26,175,1,0,0,0,28,178,1,0,0,0,30,183,1,0,0,0,
+        32,188,1,0,0,0,34,195,1,0,0,0,36,204,1,0,0,0,38,210,1,0,0,0,40,212,
+        1,0,0,0,42,221,1,0,0,0,44,225,1,0,0,0,46,230,1,0,0,0,48,250,1,0,
+        0,0,50,252,1,0,0,0,52,256,1,0,0,0,54,269,1,0,0,0,56,271,1,0,0,0,
+        58,284,1,0,0,0,60,301,1,0,0,0,62,321,1,0,0,0,64,327,1,0,0,0,66,338,
+        1,0,0,0,68,351,1,0,0,0,70,72,3,2,1,0,71,70,1,0,0,0,72,75,1,0,0,0,
+        73,71,1,0,0,0,73,74,1,0,0,0,74,76,1,0,0,0,75,73,1,0,0,0,76,77,5,
+        0,0,1,77,1,1,0,0,0,78,90,3,6,3,0,79,90,3,22,11,0,80,90,3,24,12,0,
+        81,90,3,48,24,0,82,90,3,52,26,0,83,90,3,54,27,0,84,90,3,60,30,0,
+        85,90,3,38,19,0,86,90,3,12,6,0,87,90,3,14,7,0,88,90,3,4,2,0,89,78,
+        1,0,0,0,89,79,1,0,0,0,89,80,1,0,0,0,89,81,1,0,0,0,89,82,1,0,0,0,
+        89,83,1,0,0,0,89,84,1,0,0,0,89,85,1,0,0,0,89,86,1,0,0,0,89,87,1,
+        0,0,0,89,88,1,0,0,0,90,3,1,0,0,0,91,92,5,52,0,0,92,93,3,66,33,0,
+        93,94,5,51,0,0,94,5,1,0,0,0,95,97,5,1,0,0,96,98,3,16,8,0,97,96,1,
+        0,0,0,97,98,1,0,0,0,98,7,1,0,0,0,99,100,3,10,5,0,100,101,5,48,0,
+        0,101,9,1,0,0,0,102,103,7,0,0,0,103,11,1,0,0,0,104,105,5,5,0,0,105,
+        106,5,48,0,0,106,115,5,6,0,0,107,112,3,8,4,0,108,109,5,7,0,0,109,
+        111,3,8,4,0,110,108,1,0,0,0,111,114,1,0,0,0,112,110,1,0,0,0,112,
+        113,1,0,0,0,113,116,1,0,0,0,114,112,1,0,0,0,115,107,1,0,0,0,115,
+        116,1,0,0,0,116,117,1,0,0,0,117,118,5,8,0,0,118,122,5,9,0,0,119,
+        121,3,2,1,0,120,119,1,0,0,0,121,124,1,0,0,0,122,120,1,0,0,0,122,
+        123,1,0,0,0,123,125,1,0,0,0,124,122,1,0,0,0,125,126,5,10,0,0,126,
+        13,1,0,0,0,127,128,5,48,0,0,128,130,5,6,0,0,129,131,3,16,8,0,130,
+        129,1,0,0,0,130,131,1,0,0,0,131,132,1,0,0,0,132,133,5,8,0,0,133,
+        15,1,0,0,0,134,139,3,66,33,0,135,136,5,7,0,0,136,138,3,66,33,0,137,
+        135,1,0,0,0,138,141,1,0,0,0,139,137,1,0,0,0,139,140,1,0,0,0,140,
+        17,1,0,0,0,141,139,1,0,0,0,142,143,5,48,0,0,143,153,5,11,0,0,144,
+        145,5,48,0,0,145,153,5,12,0,0,146,147,5,48,0,0,147,148,5,13,0,0,
+        148,153,3,66,33,0,149,150,5,48,0,0,150,151,5,14,0,0,151,153,3,66,
+        33,0,152,142,1,0,0,0,152,144,1,0,0,0,152,146,1,0,0,0,152,149,1,0,
+        0,0,153,19,1,0,0,0,154,159,5,48,0,0,155,156,5,15,0,0,156,158,5,48,
+        0,0,157,155,1,0,0,0,158,161,1,0,0,0,159,157,1,0,0,0,159,160,1,0,
+        0,0,160,21,1,0,0,0,161,159,1,0,0,0,162,163,5,48,0,0,163,164,5,16,
+        0,0,164,165,3,66,33,0,165,23,1,0,0,0,166,174,3,28,14,0,167,174,3,
+        30,15,0,168,174,3,32,16,0,169,174,3,18,9,0,170,174,3,34,17,0,171,
+        174,3,26,13,0,172,174,3,22,11,0,173,166,1,0,0,0,173,167,1,0,0,0,
+        173,168,1,0,0,0,173,169,1,0,0,0,173,170,1,0,0,0,173,171,1,0,0,0,
+        173,172,1,0,0,0,174,25,1,0,0,0,175,176,3,10,5,0,176,177,5,48,0,0,
+        177,27,1,0,0,0,178,179,5,3,0,0,179,180,5,48,0,0,180,181,5,16,0,0,
+        181,182,3,20,10,0,182,29,1,0,0,0,183,184,5,2,0,0,184,185,5,48,0,
+        0,185,186,5,16,0,0,186,187,3,66,33,0,187,31,1,0,0,0,188,189,5,17,
+        0,0,189,190,5,48,0,0,190,193,5,16,0,0,191,194,3,66,33,0,192,194,
+        3,68,34,0,193,191,1,0,0,0,193,192,1,0,0,0,194,33,1,0,0,0,195,196,
+        5,4,0,0,196,197,5,48,0,0,197,198,5,16,0,0,198,200,3,42,21,0,199,
+        201,3,44,22,0,200,199,1,0,0,0,201,202,1,0,0,0,202,200,1,0,0,0,202,
+        203,1,0,0,0,203,35,1,0,0,0,204,205,5,18,0,0,205,206,5,48,0,0,206,
+        207,5,19,0,0,207,37,1,0,0,0,208,211,3,36,18,0,209,211,3,40,20,0,
+        210,208,1,0,0,0,210,209,1,0,0,0,211,39,1,0,0,0,212,213,5,18,0,0,
+        213,214,5,48,0,0,214,215,5,20,0,0,215,41,1,0,0,0,216,217,5,21,0,
+        0,217,222,5,46,0,0,218,219,5,22,0,0,219,220,5,46,0,0,220,222,5,46,
+        0,0,221,216,1,0,0,0,221,218,1,0,0,0,222,43,1,0,0,0,223,226,5,48,
+        0,0,224,226,3,20,10,0,225,223,1,0,0,0,225,224,1,0,0,0,226,227,1,
+        0,0,0,227,228,5,46,0,0,228,229,5,23,0,0,229,45,1,0,0,0,230,231,5,
+        24,0,0,231,232,5,48,0,0,232,47,1,0,0,0,233,234,5,25,0,0,234,239,
+        5,48,0,0,235,236,5,15,0,0,236,238,5,48,0,0,237,235,1,0,0,0,238,241,
+        1,0,0,0,239,237,1,0,0,0,239,240,1,0,0,0,240,251,1,0,0,0,241,239,
+        1,0,0,0,242,243,5,25,0,0,243,244,5,26,0,0,244,246,5,46,0,0,245,247,
+        3,50,25,0,246,245,1,0,0,0,247,248,1,0,0,0,248,246,1,0,0,0,248,249,
+        1,0,0,0,249,251,1,0,0,0,250,233,1,0,0,0,250,242,1,0,0,0,251,49,1,
+        0,0,0,252,253,5,46,0,0,253,254,5,23,0,0,254,255,5,48,0,0,255,51,
+        1,0,0,0,256,265,5,27,0,0,257,258,5,28,0,0,258,266,3,66,33,0,259,
+        260,5,29,0,0,260,266,3,66,33,0,261,262,5,30,0,0,262,266,3,66,33,
+        0,263,264,5,31,0,0,264,266,3,66,33,0,265,257,1,0,0,0,265,259,1,0,
+        0,0,265,261,1,0,0,0,265,263,1,0,0,0,266,53,1,0,0,0,267,270,3,56,
+        28,0,268,270,3,58,29,0,269,267,1,0,0,0,269,268,1,0,0,0,270,55,1,
+        0,0,0,271,272,5,32,0,0,272,273,5,6,0,0,273,274,3,68,34,0,274,275,
+        5,8,0,0,275,279,5,9,0,0,276,278,3,2,1,0,277,276,1,0,0,0,278,281,
+        1,0,0,0,279,277,1,0,0,0,279,280,1,0,0,0,280,282,1,0,0,0,281,279,
+        1,0,0,0,282,283,5,10,0,0,283,57,1,0,0,0,284,285,5,33,0,0,285,286,
+        5,6,0,0,286,287,3,30,15,0,287,288,5,34,0,0,288,289,3,66,33,0,289,
+        290,5,34,0,0,290,291,3,18,9,0,291,292,5,8,0,0,292,296,5,9,0,0,293,
+        295,3,2,1,0,294,293,1,0,0,0,295,298,1,0,0,0,296,294,1,0,0,0,296,
+        297,1,0,0,0,297,299,1,0,0,0,298,296,1,0,0,0,299,300,5,10,0,0,300,
+        59,1,0,0,0,301,302,5,35,0,0,302,305,5,6,0,0,303,306,3,68,34,0,304,
+        306,3,66,33,0,305,303,1,0,0,0,305,304,1,0,0,0,306,307,1,0,0,0,307,
+        308,5,8,0,0,308,309,5,9,0,0,309,310,3,62,31,0,310,316,5,10,0,0,311,
+        312,5,36,0,0,312,313,5,9,0,0,313,314,3,64,32,0,314,315,5,10,0,0,
+        315,317,1,0,0,0,316,311,1,0,0,0,316,317,1,0,0,0,317,61,1,0,0,0,318,
+        320,3,2,1,0,319,318,1,0,0,0,320,323,1,0,0,0,321,319,1,0,0,0,321,
+        322,1,0,0,0,322,63,1,0,0,0,323,321,1,0,0,0,324,326,3,2,1,0,325,324,
+        1,0,0,0,326,329,1,0,0,0,327,325,1,0,0,0,327,328,1,0,0,0,328,65,1,
+        0,0,0,329,327,1,0,0,0,330,331,6,33,-1,0,331,332,5,6,0,0,332,333,
+        3,66,33,0,333,334,5,8,0,0,334,339,1,0,0,0,335,339,5,46,0,0,336,339,
+        5,47,0,0,337,339,5,48,0,0,338,330,1,0,0,0,338,335,1,0,0,0,338,336,
+        1,0,0,0,338,337,1,0,0,0,339,348,1,0,0,0,340,341,10,6,0,0,341,342,
+        7,1,0,0,342,347,3,66,33,7,343,344,10,5,0,0,344,345,7,2,0,0,345,347,
+        3,66,33,6,346,340,1,0,0,0,346,343,1,0,0,0,347,350,1,0,0,0,348,346,
+        1,0,0,0,348,349,1,0,0,0,349,67,1,0,0,0,350,348,1,0,0,0,351,352,3,
+        66,33,0,352,353,7,3,0,0,353,354,3,66,33,0,354,69,1,0,0,0,30,73,89,
+        97,112,115,122,130,139,152,159,173,193,202,210,221,225,239,248,250,
+        265,269,279,296,305,316,321,327,338,346,348
     ]
 
 class MapperParser ( Parser ):
@@ -165,7 +169,7 @@ class MapperParser ( Parser ):
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                      "<INVALID>", "<INVALID>", "IDENTIFIER", "INT", "BOOL", 
+                      "<INVALID>", "<INVALID>", "INT", "BOOL", "IDENTIFIER", 
                       "STRING", "WS", "DOT", "ERROR" ]
 
     RULE_program = 0
@@ -199,8 +203,10 @@ class MapperParser ( Parser ):
     RULE_whileLoop = 28
     RULE_forLoop = 29
     RULE_conditional = 30
-    RULE_expr = 31
-    RULE_exprComp = 32
+    RULE_ifConditionStatements = 31
+    RULE_elseConditionStatements = 32
+    RULE_expr = 33
+    RULE_exprComp = 34
 
     ruleNames =  [ "program", "statement", "errorStatement", "printStatement", 
                    "param", "type", "functionDecl", "functionCall", "exprList", 
@@ -209,7 +215,8 @@ class MapperParser ( Parser ):
                    "blendAssign", "roadStart", "roadPlacement", "roadEnd", 
                    "figure", "blendOption", "drawRoad", "draw", "percentagePair", 
                    "move", "loop", "whileLoop", "forLoop", "conditional", 
-                   "expr", "exprComp" ]
+                   "ifConditionStatements", "elseConditionStatements", "expr", 
+                   "exprComp" ]
 
     EOF = Token.EOF
     T__0=1
@@ -257,9 +264,9 @@ class MapperParser ( Parser ):
     T__42=43
     T__43=44
     T__44=45
-    IDENTIFIER=46
-    INT=47
-    BOOL=48
+    INT=46
+    BOOL=47
+    IDENTIFIER=48
     STRING=49
     WS=50
     DOT=51
@@ -318,17 +325,17 @@ class MapperParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 69
+            self.state = 73
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4574015784353854) != 0):
-                self.state = 66
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016886846) != 0):
+                self.state = 70
                 self.statement()
-                self.state = 71
+                self.state = 75
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
-            self.state = 72
+            self.state = 76
             self.match(MapperParser.EOF)
         except RecognitionException as re:
             localctx.exception = re
@@ -415,72 +422,72 @@ class MapperParser ( Parser ):
         localctx = MapperParser.StatementContext(self, self._ctx, self.state)
         self.enterRule(localctx, 2, self.RULE_statement)
         try:
-            self.state = 85
+            self.state = 89
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,1,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 74
+                self.state = 78
                 self.printStatement()
                 pass
 
             elif la_ == 2:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 75
+                self.state = 79
                 self.reasignment()
                 pass
 
             elif la_ == 3:
                 self.enterOuterAlt(localctx, 3)
-                self.state = 76
+                self.state = 80
                 self.assignment()
                 pass
 
             elif la_ == 4:
                 self.enterOuterAlt(localctx, 4)
-                self.state = 77
+                self.state = 81
                 self.draw()
                 pass
 
             elif la_ == 5:
                 self.enterOuterAlt(localctx, 5)
-                self.state = 78
+                self.state = 82
                 self.move()
                 pass
 
             elif la_ == 6:
                 self.enterOuterAlt(localctx, 6)
-                self.state = 79
+                self.state = 83
                 self.loop()
                 pass
 
             elif la_ == 7:
                 self.enterOuterAlt(localctx, 7)
-                self.state = 80
+                self.state = 84
                 self.conditional()
                 pass
 
             elif la_ == 8:
                 self.enterOuterAlt(localctx, 8)
-                self.state = 81
+                self.state = 85
                 self.roadPlacement()
                 pass
 
             elif la_ == 9:
                 self.enterOuterAlt(localctx, 9)
-                self.state = 82
+                self.state = 86
                 self.functionDecl()
                 pass
 
             elif la_ == 10:
                 self.enterOuterAlt(localctx, 10)
-                self.state = 83
+                self.state = 87
                 self.functionCall()
                 pass
 
             elif la_ == 11:
                 self.enterOuterAlt(localctx, 11)
-                self.state = 84
+                self.state = 88
                 self.errorStatement()
                 pass
 
@@ -537,11 +544,11 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 4, self.RULE_errorStatement)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 87
+            self.state = 91
             self.match(MapperParser.ERROR)
-            self.state = 88
+            self.state = 92
             self.expr(0)
-            self.state = 89
+            self.state = 93
             self.match(MapperParser.DOT)
         except RecognitionException as re:
             localctx.exception = re
@@ -589,13 +596,13 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 6, self.RULE_printStatement)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 91
+            self.state = 95
             self.match(MapperParser.T__0)
-            self.state = 93
+            self.state = 97
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,2,self._ctx)
             if la_ == 1:
-                self.state = 92
+                self.state = 96
                 self.exprList()
 
 
@@ -648,9 +655,9 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 8, self.RULE_param)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 95
+            self.state = 99
             self.type_()
-            self.state = 96
+            self.state = 100
             self.match(MapperParser.IDENTIFIER)
         except RecognitionException as re:
             localctx.exception = re
@@ -696,7 +703,7 @@ class MapperParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 98
+            self.state = 102
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 28) != 0)):
                 self._errHandler.recoverInline(self)
@@ -763,47 +770,47 @@ class MapperParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 100
+            self.state = 104
             self.match(MapperParser.T__4)
-            self.state = 101
+            self.state = 105
             self.match(MapperParser.IDENTIFIER)
-            self.state = 102
+            self.state = 106
             self.match(MapperParser.T__5)
-            self.state = 111
+            self.state = 115
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if (((_la) & ~0x3f) == 0 and ((1 << _la) & 28) != 0):
-                self.state = 103
+                self.state = 107
                 self.param()
-                self.state = 108
+                self.state = 112
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while _la==7:
-                    self.state = 104
+                    self.state = 108
                     self.match(MapperParser.T__6)
-                    self.state = 105
+                    self.state = 109
                     self.param()
-                    self.state = 110
+                    self.state = 114
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
 
 
 
-            self.state = 113
+            self.state = 117
             self.match(MapperParser.T__7)
-            self.state = 114
-            self.match(MapperParser.T__8)
             self.state = 118
+            self.match(MapperParser.T__8)
+            self.state = 122
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4574015784353854) != 0):
-                self.state = 115
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016886846) != 0):
+                self.state = 119
                 self.statement()
-                self.state = 120
+                self.state = 124
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
-            self.state = 121
+            self.state = 125
             self.match(MapperParser.T__9)
         except RecognitionException as re:
             localctx.exception = re
@@ -855,19 +862,19 @@ class MapperParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 123
+            self.state = 127
             self.match(MapperParser.IDENTIFIER)
-            self.state = 124
+            self.state = 128
             self.match(MapperParser.T__5)
-            self.state = 126
+            self.state = 130
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if (((_la) & ~0x3f) == 0 and ((1 << _la) & 492581209243712) != 0):
-                self.state = 125
+                self.state = 129
                 self.exprList()
 
 
-            self.state = 128
+            self.state = 132
             self.match(MapperParser.T__7)
         except RecognitionException as re:
             localctx.exception = re
@@ -919,17 +926,17 @@ class MapperParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 130
+            self.state = 134
             self.expr(0)
-            self.state = 135
+            self.state = 139
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while _la==7:
-                self.state = 131
+                self.state = 135
                 self.match(MapperParser.T__6)
-                self.state = 132
+                self.state = 136
                 self.expr(0)
-                self.state = 137
+                self.state = 141
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
@@ -981,42 +988,42 @@ class MapperParser ( Parser ):
         localctx = MapperParser.IncrementContext(self, self._ctx, self.state)
         self.enterRule(localctx, 18, self.RULE_increment)
         try:
-            self.state = 148
+            self.state = 152
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,8,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 138
+                self.state = 142
                 self.match(MapperParser.IDENTIFIER)
-                self.state = 139
+                self.state = 143
                 self.match(MapperParser.T__10)
                 pass
 
             elif la_ == 2:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 140
+                self.state = 144
                 self.match(MapperParser.IDENTIFIER)
-                self.state = 141
+                self.state = 145
                 self.match(MapperParser.T__11)
                 pass
 
             elif la_ == 3:
                 self.enterOuterAlt(localctx, 3)
-                self.state = 142
+                self.state = 146
                 self.match(MapperParser.IDENTIFIER)
-                self.state = 143
+                self.state = 147
                 self.match(MapperParser.T__12)
-                self.state = 144
+                self.state = 148
                 self.expr(0)
                 pass
 
             elif la_ == 4:
                 self.enterOuterAlt(localctx, 4)
-                self.state = 145
+                self.state = 149
                 self.match(MapperParser.IDENTIFIER)
-                self.state = 146
+                self.state = 150
                 self.match(MapperParser.T__13)
-                self.state = 147
+                self.state = 151
                 self.expr(0)
                 pass
 
@@ -1070,17 +1077,17 @@ class MapperParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 150
+            self.state = 154
             self.match(MapperParser.IDENTIFIER)
-            self.state = 155
+            self.state = 159
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             while _la==15:
-                self.state = 151
+                self.state = 155
                 self.match(MapperParser.T__14)
-                self.state = 152
+                self.state = 156
                 self.match(MapperParser.IDENTIFIER)
-                self.state = 157
+                self.state = 161
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
@@ -1133,11 +1140,11 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 22, self.RULE_reasignment)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 158
+            self.state = 162
             self.match(MapperParser.IDENTIFIER)
-            self.state = 159
+            self.state = 163
             self.match(MapperParser.T__15)
-            self.state = 160
+            self.state = 164
             self.expr(0)
         except RecognitionException as re:
             localctx.exception = re
@@ -1208,48 +1215,48 @@ class MapperParser ( Parser ):
         localctx = MapperParser.AssignmentContext(self, self._ctx, self.state)
         self.enterRule(localctx, 24, self.RULE_assignment)
         try:
-            self.state = 169
+            self.state = 173
             self._errHandler.sync(self)
             la_ = self._interp.adaptivePredict(self._input,10,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 162
+                self.state = 166
                 self.tileAssign()
                 pass
 
             elif la_ == 2:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 163
+                self.state = 167
                 self.numberAssign()
                 pass
 
             elif la_ == 3:
                 self.enterOuterAlt(localctx, 3)
-                self.state = 164
+                self.state = 168
                 self.boolAssign()
                 pass
 
             elif la_ == 4:
                 self.enterOuterAlt(localctx, 4)
-                self.state = 165
+                self.state = 169
                 self.increment()
                 pass
 
             elif la_ == 5:
                 self.enterOuterAlt(localctx, 5)
-                self.state = 166
+                self.state = 170
                 self.blendAssign()
                 pass
 
             elif la_ == 6:
                 self.enterOuterAlt(localctx, 6)
-                self.state = 167
+                self.state = 171
                 self.noValueAssign()
                 pass
 
             elif la_ == 7:
                 self.enterOuterAlt(localctx, 7)
-                self.state = 168
+                self.state = 172
                 self.reasignment()
                 pass
 
@@ -1303,9 +1310,9 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 26, self.RULE_noValueAssign)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 171
+            self.state = 175
             self.type_()
-            self.state = 172
+            self.state = 176
             self.match(MapperParser.IDENTIFIER)
         except RecognitionException as re:
             localctx.exception = re
@@ -1356,13 +1363,13 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 28, self.RULE_tileAssign)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 174
+            self.state = 178
             self.match(MapperParser.T__2)
-            self.state = 175
+            self.state = 179
             self.match(MapperParser.IDENTIFIER)
-            self.state = 176
+            self.state = 180
             self.match(MapperParser.T__15)
-            self.state = 177
+            self.state = 181
             self.tileSum()
         except RecognitionException as re:
             localctx.exception = re
@@ -1413,13 +1420,13 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 30, self.RULE_numberAssign)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 179
+            self.state = 183
             self.match(MapperParser.T__1)
-            self.state = 180
+            self.state = 184
             self.match(MapperParser.IDENTIFIER)
-            self.state = 181
+            self.state = 185
             self.match(MapperParser.T__15)
-            self.state = 182
+            self.state = 186
             self.expr(0)
         except RecognitionException as re:
             localctx.exception = re
@@ -1442,6 +1449,10 @@ class MapperParser ( Parser ):
 
         def expr(self):
             return self.getTypedRuleContext(MapperParser.ExprContext,0)
+
+
+        def exprComp(self):
+            return self.getTypedRuleContext(MapperParser.ExprCompContext,0)
 
 
         def getRuleIndex(self):
@@ -1470,14 +1481,26 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 32, self.RULE_boolAssign)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 184
+            self.state = 188
             self.match(MapperParser.T__16)
-            self.state = 185
+            self.state = 189
             self.match(MapperParser.IDENTIFIER)
-            self.state = 186
+            self.state = 190
             self.match(MapperParser.T__15)
-            self.state = 187
-            self.expr(0)
+            self.state = 193
+            self._errHandler.sync(self)
+            la_ = self._interp.adaptivePredict(self._input,11,self._ctx)
+            if la_ == 1:
+                self.state = 191
+                self.expr(0)
+                pass
+
+            elif la_ == 2:
+                self.state = 192
+                self.exprComp()
+                pass
+
+
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
@@ -1534,27 +1557,27 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 34, self.RULE_blendAssign)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 189
+            self.state = 195
             self.match(MapperParser.T__3)
-            self.state = 190
+            self.state = 196
             self.match(MapperParser.IDENTIFIER)
-            self.state = 191
+            self.state = 197
             self.match(MapperParser.T__15)
-            self.state = 192
+            self.state = 198
             self.figure()
-            self.state = 194 
+            self.state = 200 
             self._errHandler.sync(self)
             _alt = 1
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt == 1:
-                    self.state = 193
+                    self.state = 199
                     self.blendOption()
 
                 else:
                     raise NoViableAltException(self)
-                self.state = 196 
+                self.state = 202 
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,11,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,12,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -1601,11 +1624,11 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 36, self.RULE_roadStart)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 198
+            self.state = 204
             self.match(MapperParser.T__17)
-            self.state = 199
+            self.state = 205
             self.match(MapperParser.IDENTIFIER)
-            self.state = 200
+            self.state = 206
             self.match(MapperParser.T__18)
         except RecognitionException as re:
             localctx.exception = re
@@ -1656,18 +1679,18 @@ class MapperParser ( Parser ):
         localctx = MapperParser.RoadPlacementContext(self, self._ctx, self.state)
         self.enterRule(localctx, 38, self.RULE_roadPlacement)
         try:
-            self.state = 204
+            self.state = 210
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,12,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,13,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 202
+                self.state = 208
                 self.roadStart()
                 pass
 
             elif la_ == 2:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 203
+                self.state = 209
                 self.roadEnd()
                 pass
 
@@ -1717,11 +1740,11 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 40, self.RULE_roadEnd)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 206
+            self.state = 212
             self.match(MapperParser.T__17)
-            self.state = 207
+            self.state = 213
             self.match(MapperParser.IDENTIFIER)
-            self.state = 208
+            self.state = 214
             self.match(MapperParser.T__19)
         except RecognitionException as re:
             localctx.exception = re
@@ -1770,23 +1793,23 @@ class MapperParser ( Parser ):
         localctx = MapperParser.FigureContext(self, self._ctx, self.state)
         self.enterRule(localctx, 42, self.RULE_figure)
         try:
-            self.state = 215
+            self.state = 221
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [21]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 210
+                self.state = 216
                 self.match(MapperParser.T__20)
-                self.state = 211
+                self.state = 217
                 self.match(MapperParser.INT)
                 pass
             elif token in [22]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 212
+                self.state = 218
                 self.match(MapperParser.T__21)
-                self.state = 213
+                self.state = 219
                 self.match(MapperParser.INT)
-                self.state = 214
+                self.state = 220
                 self.match(MapperParser.INT)
                 pass
             else:
@@ -1844,23 +1867,23 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 44, self.RULE_blendOption)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 219
+            self.state = 225
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,14,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,15,self._ctx)
             if la_ == 1:
-                self.state = 217
+                self.state = 223
                 self.match(MapperParser.IDENTIFIER)
                 pass
 
             elif la_ == 2:
-                self.state = 218
+                self.state = 224
                 self.tileSum()
                 pass
 
 
-            self.state = 221
+            self.state = 227
             self.match(MapperParser.INT)
-            self.state = 222
+            self.state = 228
             self.match(MapperParser.T__22)
         except RecognitionException as re:
             localctx.exception = re
@@ -1907,9 +1930,9 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 46, self.RULE_drawRoad)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 224
+            self.state = 230
             self.match(MapperParser.T__23)
-            self.state = 225
+            self.state = 231
             self.match(MapperParser.IDENTIFIER)
         except RecognitionException as re:
             localctx.exception = re
@@ -1969,24 +1992,24 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 48, self.RULE_draw)
         self._la = 0 # Token type
         try:
-            self.state = 244
+            self.state = 250
             self._errHandler.sync(self)
-            la_ = self._interp.adaptivePredict(self._input,17,self._ctx)
+            la_ = self._interp.adaptivePredict(self._input,18,self._ctx)
             if la_ == 1:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 227
-                self.match(MapperParser.T__24)
-                self.state = 228
-                self.match(MapperParser.IDENTIFIER)
                 self.state = 233
+                self.match(MapperParser.T__24)
+                self.state = 234
+                self.match(MapperParser.IDENTIFIER)
+                self.state = 239
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while _la==15:
-                    self.state = 229
-                    self.match(MapperParser.T__14)
-                    self.state = 230
-                    self.match(MapperParser.IDENTIFIER)
                     self.state = 235
+                    self.match(MapperParser.T__14)
+                    self.state = 236
+                    self.match(MapperParser.IDENTIFIER)
+                    self.state = 241
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
 
@@ -1994,22 +2017,22 @@ class MapperParser ( Parser ):
 
             elif la_ == 2:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 236
+                self.state = 242
                 self.match(MapperParser.T__24)
-                self.state = 237
+                self.state = 243
                 self.match(MapperParser.T__25)
-                self.state = 238
+                self.state = 244
                 self.match(MapperParser.INT)
-                self.state = 240 
+                self.state = 246 
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
                 while True:
-                    self.state = 239
+                    self.state = 245
                     self.percentagePair()
-                    self.state = 242 
+                    self.state = 248 
                     self._errHandler.sync(self)
                     _la = self._input.LA(1)
-                    if not (_la==47):
+                    if not (_la==46):
                         break
 
                 pass
@@ -2063,11 +2086,11 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 50, self.RULE_percentagePair)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 246
+            self.state = 252
             self.match(MapperParser.INT)
-            self.state = 247
+            self.state = 253
             self.match(MapperParser.T__22)
-            self.state = 248
+            self.state = 254
             self.match(MapperParser.IDENTIFIER)
         except RecognitionException as re:
             localctx.exception = re
@@ -2115,33 +2138,33 @@ class MapperParser ( Parser ):
         self.enterRule(localctx, 52, self.RULE_move)
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 250
+            self.state = 256
             self.match(MapperParser.T__26)
-            self.state = 259
+            self.state = 265
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [28]:
-                self.state = 251
+                self.state = 257
                 self.match(MapperParser.T__27)
-                self.state = 252
+                self.state = 258
                 self.expr(0)
                 pass
             elif token in [29]:
-                self.state = 253
+                self.state = 259
                 self.match(MapperParser.T__28)
-                self.state = 254
+                self.state = 260
                 self.expr(0)
                 pass
             elif token in [30]:
-                self.state = 255
+                self.state = 261
                 self.match(MapperParser.T__29)
-                self.state = 256
+                self.state = 262
                 self.expr(0)
                 pass
             elif token in [31]:
-                self.state = 257
+                self.state = 263
                 self.match(MapperParser.T__30)
-                self.state = 258
+                self.state = 264
                 self.expr(0)
                 pass
             else:
@@ -2196,17 +2219,17 @@ class MapperParser ( Parser ):
         localctx = MapperParser.LoopContext(self, self._ctx, self.state)
         self.enterRule(localctx, 54, self.RULE_loop)
         try:
-            self.state = 263
+            self.state = 269
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [32]:
                 self.enterOuterAlt(localctx, 1)
-                self.state = 261
+                self.state = 267
                 self.whileLoop()
                 pass
             elif token in [33]:
                 self.enterOuterAlt(localctx, 2)
-                self.state = 262
+                self.state = 268
                 self.forLoop()
                 pass
             else:
@@ -2266,27 +2289,27 @@ class MapperParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 265
+            self.state = 271
             self.match(MapperParser.T__31)
-            self.state = 266
+            self.state = 272
             self.match(MapperParser.T__5)
-            self.state = 267
-            self.exprComp()
-            self.state = 268
-            self.match(MapperParser.T__7)
-            self.state = 269
-            self.match(MapperParser.T__8)
             self.state = 273
+            self.exprComp()
+            self.state = 274
+            self.match(MapperParser.T__7)
+            self.state = 275
+            self.match(MapperParser.T__8)
+            self.state = 279
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4574015784353854) != 0):
-                self.state = 270
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016886846) != 0):
+                self.state = 276
                 self.statement()
-                self.state = 275
+                self.state = 281
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
-            self.state = 276
+            self.state = 282
             self.match(MapperParser.T__9)
         except RecognitionException as re:
             localctx.exception = re
@@ -2350,35 +2373,35 @@ class MapperParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 278
-            self.match(MapperParser.T__32)
-            self.state = 279
-            self.match(MapperParser.T__5)
-            self.state = 280
-            self.numberAssign()
-            self.state = 281
-            self.match(MapperParser.T__33)
-            self.state = 282
-            self.expr(0)
-            self.state = 283
-            self.match(MapperParser.T__33)
             self.state = 284
-            self.increment()
+            self.match(MapperParser.T__32)
             self.state = 285
-            self.match(MapperParser.T__7)
+            self.match(MapperParser.T__5)
             self.state = 286
-            self.match(MapperParser.T__8)
+            self.numberAssign()
+            self.state = 287
+            self.match(MapperParser.T__33)
+            self.state = 288
+            self.expr(0)
+            self.state = 289
+            self.match(MapperParser.T__33)
             self.state = 290
+            self.increment()
+            self.state = 291
+            self.match(MapperParser.T__7)
+            self.state = 292
+            self.match(MapperParser.T__8)
+            self.state = 296
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4574015784353854) != 0):
-                self.state = 287
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016886846) != 0):
+                self.state = 293
                 self.statement()
-                self.state = 292
+                self.state = 298
                 self._errHandler.sync(self)
                 _la = self._input.LA(1)
 
-            self.state = 293
+            self.state = 299
             self.match(MapperParser.T__9)
         except RecognitionException as re:
             localctx.exception = re
@@ -2396,15 +2419,20 @@ class MapperParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+        def ifConditionStatements(self):
+            return self.getTypedRuleContext(MapperParser.IfConditionStatementsContext,0)
+
+
         def exprComp(self):
             return self.getTypedRuleContext(MapperParser.ExprCompContext,0)
 
 
-        def statement(self, i:int=None):
-            if i is None:
-                return self.getTypedRuleContexts(MapperParser.StatementContext)
-            else:
-                return self.getTypedRuleContext(MapperParser.StatementContext,i)
+        def expr(self):
+            return self.getTypedRuleContext(MapperParser.ExprContext,0)
+
+
+        def elseConditionStatements(self):
+            return self.getTypedRuleContext(MapperParser.ElseConditionStatementsContext,0)
 
 
         def getRuleIndex(self):
@@ -2434,49 +2462,165 @@ class MapperParser ( Parser ):
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 295
+            self.state = 301
             self.match(MapperParser.T__34)
-            self.state = 296
+            self.state = 302
             self.match(MapperParser.T__5)
-            self.state = 297
-            self.exprComp()
-            self.state = 298
-            self.match(MapperParser.T__7)
-            self.state = 299
-            self.match(MapperParser.T__8)
-            self.state = 303
+            self.state = 305
             self._errHandler.sync(self)
-            _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4574015784353854) != 0):
-                self.state = 300
-                self.statement()
-                self.state = 305
-                self._errHandler.sync(self)
-                _la = self._input.LA(1)
+            la_ = self._interp.adaptivePredict(self._input,23,self._ctx)
+            if la_ == 1:
+                self.state = 303
+                self.exprComp()
+                pass
 
-            self.state = 306
+            elif la_ == 2:
+                self.state = 304
+                self.expr(0)
+                pass
+
+
+            self.state = 307
+            self.match(MapperParser.T__7)
+            self.state = 308
+            self.match(MapperParser.T__8)
+            self.state = 309
+            self.ifConditionStatements()
+            self.state = 310
             self.match(MapperParser.T__9)
             self.state = 316
             self._errHandler.sync(self)
             _la = self._input.LA(1)
             if _la==36:
-                self.state = 307
+                self.state = 311
                 self.match(MapperParser.T__35)
-                self.state = 308
-                self.match(MapperParser.T__8)
                 self.state = 312
-                self._errHandler.sync(self)
-                _la = self._input.LA(1)
-                while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4574015784353854) != 0):
-                    self.state = 309
-                    self.statement()
-                    self.state = 314
-                    self._errHandler.sync(self)
-                    _la = self._input.LA(1)
-
-                self.state = 315
+                self.match(MapperParser.T__8)
+                self.state = 313
+                self.elseConditionStatements()
+                self.state = 314
                 self.match(MapperParser.T__9)
 
+
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+
+    class IfConditionStatementsContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def statement(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MapperParser.StatementContext)
+            else:
+                return self.getTypedRuleContext(MapperParser.StatementContext,i)
+
+
+        def getRuleIndex(self):
+            return MapperParser.RULE_ifConditionStatements
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterIfConditionStatements" ):
+                listener.enterIfConditionStatements(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitIfConditionStatements" ):
+                listener.exitIfConditionStatements(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitIfConditionStatements" ):
+                return visitor.visitIfConditionStatements(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+
+
+    def ifConditionStatements(self):
+
+        localctx = MapperParser.IfConditionStatementsContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 62, self.RULE_ifConditionStatements)
+        self._la = 0 # Token type
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 321
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016886846) != 0):
+                self.state = 318
+                self.statement()
+                self.state = 323
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
+
+        except RecognitionException as re:
+            localctx.exception = re
+            self._errHandler.reportError(self, re)
+            self._errHandler.recover(self, re)
+        finally:
+            self.exitRule()
+        return localctx
+
+
+    class ElseConditionStatementsContext(ParserRuleContext):
+        __slots__ = 'parser'
+
+        def __init__(self, parser, parent:ParserRuleContext=None, invokingState:int=-1):
+            super().__init__(parent, invokingState)
+            self.parser = parser
+
+        def statement(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MapperParser.StatementContext)
+            else:
+                return self.getTypedRuleContext(MapperParser.StatementContext,i)
+
+
+        def getRuleIndex(self):
+            return MapperParser.RULE_elseConditionStatements
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterElseConditionStatements" ):
+                listener.enterElseConditionStatements(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitElseConditionStatements" ):
+                listener.exitElseConditionStatements(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitElseConditionStatements" ):
+                return visitor.visitElseConditionStatements(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+
+
+    def elseConditionStatements(self):
+
+        localctx = MapperParser.ElseConditionStatementsContext(self, self._ctx, self.state)
+        self.enterRule(localctx, 64, self.RULE_elseConditionStatements)
+        self._la = 0 # Token type
+        try:
+            self.enterOuterAlt(localctx, 1)
+            self.state = 327
+            self._errHandler.sync(self)
+            _la = self._input.LA(1)
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016886846) != 0):
+                self.state = 324
+                self.statement()
+                self.state = 329
+                self._errHandler.sync(self)
+                _la = self._input.LA(1)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -2662,12 +2806,12 @@ class MapperParser ( Parser ):
         _parentState = self.state
         localctx = MapperParser.ExprContext(self, self._ctx, _parentState)
         _prevctx = localctx
-        _startState = 62
-        self.enterRecursionRule(localctx, 62, self.RULE_expr, _p)
+        _startState = 66
+        self.enterRecursionRule(localctx, 66, self.RULE_expr, _p)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 326
+            self.state = 338
             self._errHandler.sync(self)
             token = self._input.LA(1)
             if token in [6]:
@@ -2675,89 +2819,89 @@ class MapperParser ( Parser ):
                 self._ctx = localctx
                 _prevctx = localctx
 
-                self.state = 319
+                self.state = 331
                 self.match(MapperParser.T__5)
-                self.state = 320
+                self.state = 332
                 self.expr(0)
-                self.state = 321
+                self.state = 333
                 self.match(MapperParser.T__7)
                 pass
             elif token in [46]:
-                localctx = MapperParser.ExprVarContext(self, localctx)
-                self._ctx = localctx
-                _prevctx = localctx
-                self.state = 323
-                self.match(MapperParser.IDENTIFIER)
-                pass
-            elif token in [47]:
                 localctx = MapperParser.ExprIntContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
-                self.state = 324
+                self.state = 335
                 self.match(MapperParser.INT)
                 pass
-            elif token in [48]:
+            elif token in [47]:
                 localctx = MapperParser.ExprBoolContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
-                self.state = 325
+                self.state = 336
                 self.match(MapperParser.BOOL)
+                pass
+            elif token in [48]:
+                localctx = MapperParser.ExprVarContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+                self.state = 337
+                self.match(MapperParser.IDENTIFIER)
                 pass
             else:
                 raise NoViableAltException(self)
 
             self._ctx.stop = self._input.LT(-1)
-            self.state = 336
+            self.state = 348
             self._errHandler.sync(self)
-            _alt = self._interp.adaptivePredict(self._input,27,self._ctx)
+            _alt = self._interp.adaptivePredict(self._input,29,self._ctx)
             while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
                 if _alt==1:
                     if self._parseListeners is not None:
                         self.triggerExitRuleEvent()
                     _prevctx = localctx
-                    self.state = 334
+                    self.state = 346
                     self._errHandler.sync(self)
-                    la_ = self._interp.adaptivePredict(self._input,26,self._ctx)
+                    la_ = self._interp.adaptivePredict(self._input,28,self._ctx)
                     if la_ == 1:
                         localctx = MapperParser.ExprMulDivContext(self, MapperParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 328
+                        self.state = 340
                         if not self.precpred(self._ctx, 6):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 6)")
-                        self.state = 329
+                        self.state = 341
                         _la = self._input.LA(1)
                         if not(_la==37 or _la==38):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 330
+                        self.state = 342
                         self.expr(7)
                         pass
 
                     elif la_ == 2:
                         localctx = MapperParser.ExprAddSubContext(self, MapperParser.ExprContext(self, _parentctx, _parentState))
                         self.pushNewRecursionContext(localctx, _startState, self.RULE_expr)
-                        self.state = 331
+                        self.state = 343
                         if not self.precpred(self._ctx, 5):
                             from antlr4.error.Errors import FailedPredicateException
                             raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
-                        self.state = 332
+                        self.state = 344
                         _la = self._input.LA(1)
                         if not(_la==15 or _la==39):
                             self._errHandler.recoverInline(self)
                         else:
                             self._errHandler.reportMatch(self)
                             self.consume()
-                        self.state = 333
+                        self.state = 345
                         self.expr(6)
                         pass
 
              
-                self.state = 338
+                self.state = 350
                 self._errHandler.sync(self)
-                _alt = self._interp.adaptivePredict(self._input,27,self._ctx)
+                _alt = self._interp.adaptivePredict(self._input,29,self._ctx)
 
         except RecognitionException as re:
             localctx.exception = re
@@ -2805,20 +2949,20 @@ class MapperParser ( Parser ):
     def exprComp(self):
 
         localctx = MapperParser.ExprCompContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 64, self.RULE_exprComp)
+        self.enterRule(localctx, 68, self.RULE_exprComp)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 339
+            self.state = 351
             self.expr(0)
-            self.state = 340
+            self.state = 352
             _la = self._input.LA(1)
             if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 69269232549888) != 0)):
                 self._errHandler.recoverInline(self)
             else:
                 self._errHandler.reportMatch(self)
                 self.consume()
-            self.state = 341
+            self.state = 353
             self.expr(0)
         except RecognitionException as re:
             localctx.exception = re
@@ -2833,7 +2977,7 @@ class MapperParser ( Parser ):
     def sempred(self, localctx:RuleContext, ruleIndex:int, predIndex:int):
         if self._predicates == None:
             self._predicates = dict()
-        self._predicates[31] = self.expr_sempred
+        self._predicates[33] = self.expr_sempred
         pred = self._predicates.get(ruleIndex, None)
         if pred is None:
             raise Exception("No predicate with index:" + str(ruleIndex))

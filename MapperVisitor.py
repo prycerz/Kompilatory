@@ -164,6 +164,16 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#ifConditionStatements.
+    def visitIfConditionStatements(self, ctx:MapperParser.IfConditionStatementsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#elseConditionStatements.
+    def visitElseConditionStatements(self, ctx:MapperParser.ElseConditionStatementsContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#ExprVar.
     def visitExprVar(self, ctx:MapperParser.ExprVarContext):
         return self.visitChildren(ctx)

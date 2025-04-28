@@ -287,6 +287,24 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#ifConditionStatements.
+    def enterIfConditionStatements(self, ctx:MapperParser.IfConditionStatementsContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ifConditionStatements.
+    def exitIfConditionStatements(self, ctx:MapperParser.IfConditionStatementsContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#elseConditionStatements.
+    def enterElseConditionStatements(self, ctx:MapperParser.ElseConditionStatementsContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#elseConditionStatements.
+    def exitElseConditionStatements(self, ctx:MapperParser.ElseConditionStatementsContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#ExprVar.
     def enterExprVar(self, ctx:MapperParser.ExprVarContext):
         pass
