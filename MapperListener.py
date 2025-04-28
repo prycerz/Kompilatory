@@ -26,15 +26,6 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#varDecl.
-    def enterVarDecl(self, ctx:MapperParser.VarDeclContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#varDecl.
-    def exitVarDecl(self, ctx:MapperParser.VarDeclContext):
-        pass
-
-
     # Enter a parse tree produced by MapperParser#errorStatement.
     def enterErrorStatement(self, ctx:MapperParser.ErrorStatementContext):
         pass
@@ -107,21 +98,21 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#tileAssign.
-    def enterTileAssign(self, ctx:MapperParser.TileAssignContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#tileAssign.
-    def exitTileAssign(self, ctx:MapperParser.TileAssignContext):
-        pass
-
-
     # Enter a parse tree produced by MapperParser#tileSum.
     def enterTileSum(self, ctx:MapperParser.TileSumContext):
         pass
 
     # Exit a parse tree produced by MapperParser#tileSum.
     def exitTileSum(self, ctx:MapperParser.TileSumContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#reasignment.
+    def enterReasignment(self, ctx:MapperParser.ReasignmentContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#reasignment.
+    def exitReasignment(self, ctx:MapperParser.ReasignmentContext):
         pass
 
 
@@ -134,21 +125,30 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#noValueAssign.
+    def enterNoValueAssign(self, ctx:MapperParser.NoValueAssignContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#noValueAssign.
+    def exitNoValueAssign(self, ctx:MapperParser.NoValueAssignContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#tileAssign.
+    def enterTileAssign(self, ctx:MapperParser.TileAssignContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#tileAssign.
+    def exitTileAssign(self, ctx:MapperParser.TileAssignContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#numberAssign.
     def enterNumberAssign(self, ctx:MapperParser.NumberAssignContext):
         pass
 
     # Exit a parse tree produced by MapperParser#numberAssign.
     def exitNumberAssign(self, ctx:MapperParser.NumberAssignContext):
-        pass
-
-
-    # Enter a parse tree produced by MapperParser#varAssign.
-    def enterVarAssign(self, ctx:MapperParser.VarAssignContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#varAssign.
-    def exitVarAssign(self, ctx:MapperParser.VarAssignContext):
         pass
 
 
@@ -161,12 +161,12 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#roadPlacement.
-    def enterRoadPlacement(self, ctx:MapperParser.RoadPlacementContext):
+    # Enter a parse tree produced by MapperParser#blendAssign.
+    def enterBlendAssign(self, ctx:MapperParser.BlendAssignContext):
         pass
 
-    # Exit a parse tree produced by MapperParser#roadPlacement.
-    def exitRoadPlacement(self, ctx:MapperParser.RoadPlacementContext):
+    # Exit a parse tree produced by MapperParser#blendAssign.
+    def exitBlendAssign(self, ctx:MapperParser.BlendAssignContext):
         pass
 
 
@@ -179,21 +179,21 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#roadPlacement.
+    def enterRoadPlacement(self, ctx:MapperParser.RoadPlacementContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#roadPlacement.
+    def exitRoadPlacement(self, ctx:MapperParser.RoadPlacementContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#roadEnd.
     def enterRoadEnd(self, ctx:MapperParser.RoadEndContext):
         pass
 
     # Exit a parse tree produced by MapperParser#roadEnd.
     def exitRoadEnd(self, ctx:MapperParser.RoadEndContext):
-        pass
-
-
-    # Enter a parse tree produced by MapperParser#blendAssign.
-    def enterBlendAssign(self, ctx:MapperParser.BlendAssignContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#blendAssign.
-    def exitBlendAssign(self, ctx:MapperParser.BlendAssignContext):
         pass
 
 

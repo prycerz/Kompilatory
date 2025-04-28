@@ -1,5 +1,5 @@
 import sys
-
+import copy
 from pygments.lexer import include
 from antlr4 import ParseTreeListener
 from ErrorListener import MapperErrorListener
@@ -24,20 +24,45 @@ class VariableDeclarationListener(ParseTreeListener):
         self.var_types = {}  # Słownik przechowujący zmienne i ich typy
         self.errors = []     # Lista błędów (redeklaracje)
 
-    def enterVarDecl(self, ctx: MapperParser.VarDeclContext):
-        var_name = ctx.IDENTIFIER().getText()
-        var_type = ctx.type_().getText()
-        
+    def enterAssignment(self, ctx: MapperParser.AssignmentContext):
+
+        if ctx.numberAssign():
+            var_name = ctx.numberAssign().IDENTIFIER().getText()
+            var_type = 'number'
+
+        elif ctx.boolAssign():
+            var_name = ctx.boolAssign().IDENTIFIER().getText()
+            var_type = 'bool'
+
+        elif ctx.tileAssign():
+            var_name = ctx.tileAssign().IDENTIFIER().getText()
+            var_type = 'tile'
+
+        elif ctx.blendAssign():
+            var_name = ctx.blendAssign().IDENTIFIER().getText()
+            var_type = 'blend'
+
+        elif ctx.noValueAssign():
+            var_name = ctx.noValueAssign().IDENTIFIER().getText()
+            var_type = ctx.noValueAssign().type_().getText()
+
+        else:
+            return
+ 
+        # Now store in dictionary
         if var_name in self.var_types:
-            token = ctx.IDENTIFIER().getSymbol()
+            token = ctx.start  # safer way to get token position
             line = token.line
             column = token.column
-            self.errors.append(f"line: {line}, column: {column} Redeclaration of variable '{var_name}'")
+            raise RuntimeError(f"line: {line}, column: {column} Redeclaration of variable '{var_name}'")
         else:
             self.var_types[var_name] = var_type
+            # print(f"Declared {var_type} {var_name}")
+        
+
 class MapperInterpreter(MapperVisitor):
     DEBUG = False  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
-    SHOW_ERRORS = False  # Flaga błędów - True włącza rzucanie wyjątków, False je ignoruje
+    SHOW_ERRORS = True  # Flaga błędów - True włącza rzucanie wyjątków, False je ignoruje
 
     def __init__(self, var_types, renderer=None):
         self.var_types = var_types  # Słownik z typami zmiennych z pierwszego przebiegu
@@ -100,6 +125,7 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print('visted blend assign')
         blend_name = ctx.IDENTIFIER().getText()  # Get the blend name
         blend_options = []  # List to store the blend options
+        self.var_types[blend_name] = 'blend' 
 
         self._debug_print(f"figuretext: {ctx.figure().getText()}")  # Debugging
 
@@ -139,24 +165,17 @@ class MapperInterpreter(MapperVisitor):
 
         self.variables[blend_name] = Blend(figure, blend_options)  # Store the blend in variables
     
-    def visitVarAssign(self, ctx:MapperParser.VarAssignContext):
-        self._debug_print("handling var assignment")
-        name = ctx.IDENTIFIER().getText()
-        if name not in self.var_types:
-            self.raiseError(ctx, f"Assignment of undeclared variable '{name}'")
-        op = ctx.getChild(1).getText()
-        expr = ctx.expr()
-        self._debug_print(f"{name} {op} {expr}")
-        expr_value = self.visit(expr)
-        self._debug_print(f"expr v{expr_value}")
-        self.variables[name] = expr_value
-
 
     def visitNumberAssign(self, ctx):
         self._debug_print(f"handling: {ctx.getText()}")
         name = ctx.IDENTIFIER().getText()
+
+        self._debug_print(f"Assigning number: {name}")
+        self._debug_print(self.var_types)
+
         if name not in self.var_types:
             self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
+
         expr = ctx.expr()
         if not expr:
             self._debug_print("Error: ctx.expr() is None!")
@@ -185,7 +204,7 @@ class MapperInterpreter(MapperVisitor):
         current_value = self.variables[name]
         op = ctx.getChild(1).getText()
         if op in ('+=', '-='):
-            value = self.resolve_if_variable_number(ctx.expr())
+            value = self.visit(ctx.expr())
             if isinstance(current_value, int):
                 delta = int(value)
                 if op == '+=':
@@ -213,6 +232,19 @@ class MapperInterpreter(MapperVisitor):
             self._debug_print(f"🔢 {name} po '{op}': {self.variables[name]}")
         return self.variables[name]
 
+    def visitReasignment(self, ctx):
+        self._debug_print("Reassignment detected")
+        name = ctx.IDENTIFIER().getText()
+        if name not in self.var_types:
+            self.raiseError(ctx, f"Undeclared variable '{name}'")
+        if ctx.expr():
+            value = self.visit(ctx.expr())
+
+        self.variables[name] = value
+        self._debug_print(f"Reassigned: {name} = {value}")
+        return value
+
+
     def visitAssignment(self, ctx):
         self._debug_print("⚠️ Visiting assignment...")  # Debug
         if ctx.tileAssign():
@@ -230,10 +262,18 @@ class MapperInterpreter(MapperVisitor):
         elif ctx.blendAssign():
             self._debug_print("✅ Blend assignment detected!")
             return self.visitBlendAssign(ctx.blendAssign())
-        elif ctx.varAssign():
-            return self.visitVarAssign(ctx.varAssign())
+        elif ctx.noValueAssign():
+            self._debug_print("✅ No value assignment detected!")
+            return self.visitNoValueAssign(ctx.noValueAssign())
         else:
             self._debug_print("❌ Unknown assignment type!")
+
+    def visitNoValueAssign(self, ctx): 
+        self._debug_print("No value assignment detected")
+        name = ctx.IDENTIFIER().getText()
+        if name in self.variables:
+            self._raise_error(f"❌ Błąd: Zmienna '{name}' już istnieje!")
+        self.variables[name] = None
 
     def visitMove(self, ctx):
         direction = ctx.getChild(1).getText()
@@ -383,7 +423,7 @@ class MapperInterpreter(MapperVisitor):
             self._debug_print(param.type_().getText())
             self._debug_print(param.IDENTIFIER())
             # Store both TYPE and IDENTIFIER for each parameter
-            param_type = param.type_() # assuming TYPE is defined as 'number', 'tile', etc.
+            param_type = param.type_().getText() # assuming TYPE is defined as 'number', 'tile', etc.
             param_identifier = param.IDENTIFIER().getText()
             params.append({'type': param_type, 'identifier': param_identifier})
 
@@ -417,23 +457,28 @@ class MapperInterpreter(MapperVisitor):
 
         # Here we ensure that each parameter is paired with its corresponding argument
         local_vars = {}
+        local_var_types = {}
         for param, expr in zip(params, expr_list):
             self._debug_print(f"expr: {expr}")
             param_identifier = param['identifier']
             param_type = param['type']
             # You may want to add type-checking here if needed, e.g. ensure the type matches
-
+            local_var_types[param_identifier] = param_type  # Update var_types with the parameter type
             local_vars[param_identifier] = expr
 
-        original_vars = self.variables
-        self.variables = original_vars.copy()
+        original_vars = copy.deepcopy(self.variables)
+        original_var_types = copy.deepcopy(self.var_types)
+        self.var_types.update(local_var_types)
         self.variables.update(local_vars)
+
+        self._debug_print(f"Local variables: {local_vars}")
 
         result = None
         for stmt in statements:
             result = self.visit(stmt)
 
         self.variables = original_vars
+        self.var_types = original_var_types
         return result
 
     def visitExprComp(self, ctx):

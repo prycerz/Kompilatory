@@ -1,0 +1,18 @@
+number a = 10
+number b = 5
+number c = 2
+
+
+number suma = a + b
+
+b = 10
+
+number roznica = a - b
+
+number iloczyn = a * b
+
+number iloraz = a / b
+
+number nawiasowanie = (a + b) * c
+
+print suma, roznica, iloczyn, iloraz, nawiasowanie

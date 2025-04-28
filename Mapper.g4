@@ -4,7 +4,9 @@ grammar Mapper;
 program     : statement* EOF;
 
 // Możliwe instrukcje
-statement   : assignment
+statement   : printStatement
+            | reasignment
+            | assignment
             | draw
             | move
             | loop
@@ -13,21 +15,17 @@ statement   : assignment
             | functionDecl
             | functionCall
             | errorStatement
-            | varDecl
-            | printStatement
             ;
 
 // Deklaracja zmiennej
-varDecl    : type IDENTIFIER ';';  // np. number x; tile y;
 errorStatement : ERROR expr DOT;
-printStatement : 'print' exprList? ';';  // np. print x; print x, y, 42;
+printStatement : 'print' exprList?;  // np. print x; print x, y, 42
 
 //funkcje
 param     : type IDENTIFIER ;
 type : 'number'|'tile'|'blend';
 
 functionDecl : 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement* '}';
-
 
 functionCall : IDENTIFIER '(' exprList? ')';
 exprList     : expr (',' expr)*;
@@ -41,19 +39,22 @@ increment
     | IDENTIFIER '-=' expr
     ;
 
-tileAssign   : 'tile' IDENTIFIER '=' tileSum; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
 tileSum      : IDENTIFIER ('+' IDENTIFIER)*;
 
-assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign|varAssign;
+reasignment  : IDENTIFIER '=' expr;
+assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign | noValueAssign | reasignment;
+noValueAssign: type IDENTIFIER;
+
+tileAssign   : 'tile' IDENTIFIER '=' tileSum; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
 numberAssign : 'number' IDENTIFIER '=' expr;
-varAssign    : IDENTIFIER '=' expr;
 boolAssign   : 'bool' IDENTIFIER '=' expr;
+blendAssign  : 'blend' IDENTIFIER '=' figure blendOption+; 
+roadStart    : 'road' IDENTIFIER 'start';
+
 
 roadPlacement: roadStart | roadEnd;
-roadStart    : 'road' IDENTIFIER 'start';
 roadEnd      : 'road' IDENTIFIER 'end';
 
-blendAssign  : 'blend' IDENTIFIER '=' figure blendOption+; 
 figure       : ('circle' INT) | ('rectangle' INT INT);
 blendOption  : (IDENTIFIER | tileSum) INT '%';
 
