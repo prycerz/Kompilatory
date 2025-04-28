@@ -85,7 +85,7 @@ class MapperRenderer:
 
 	def render(self):
 		self.screen.fill((0, 0, 0))  # Clear screen
-		print('RENDERING')
+		# print('RENDERING')
 		for y, row in enumerate(self.map_data):
 			for x, tile in enumerate(row):
 				if isinstance(tile, Tile):

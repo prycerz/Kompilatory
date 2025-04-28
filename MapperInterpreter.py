@@ -482,7 +482,7 @@ class MapperInterpreter(MapperVisitor):
         return result
 
     def visitExprComp(self, ctx):
-        print("Processing comparison expression")
+        self._debug_print("Processing comparison expression")
         left = self.visit(ctx.expr(0))
         right = self.visit(ctx.expr(1))
         op = ctx.children[1].getText()
@@ -591,7 +591,7 @@ if __name__ == "__main__":
         var_listener = VariableDeclarationListener()
         walker = ParseTreeWalker()
         walker.walk(var_listener, tree)
-        print("Registered variables:", var_listener.var_types)  # Debugowanie
+        # print("Registered variables:", var_listener.var_types)  # Debugowanie
 
         # Sprawdzenie błędów redeklaracji
         if var_listener.errors:
@@ -603,7 +603,7 @@ if __name__ == "__main__":
         interpreter = MapperInterpreter(var_listener.var_types)
         interpreter.visit(tree)
 
-        print("Starting Pygame loop...")
+        # print("Starting Pygame loop...")
         interpreter.renderer.run()
 
     except Exception as e:
