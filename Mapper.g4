@@ -15,7 +15,10 @@ statement   : printStatement
             | functionDecl
             | functionCall
             | errorStatement
+            | block
             ;
+
+block : '{' statement* '}' ;
 
 // Deklaracja zmiennej
 errorStatement : ERROR expr DOT;

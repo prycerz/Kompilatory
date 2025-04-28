@@ -98,14 +98,14 @@ class MapEditorApp(tk.Tk):
                 var_listener = VariableDeclarationListener()
                 walker = ParseTreeWalker()
                 walker.walk(var_listener, tree)
-
+                var_listener.exitScope()
                 if var_listener.errors:
                     for error in var_listener.errors:
                         # print to console
                         self.log(f"Error: {error}")
                     return
 
-                interpreter = MapperInterpreter(var_listener.var_types, renderer=self.renderer, logger=self)
+                interpreter = MapperInterpreter(var_listener.all_var_types, renderer=self.renderer, logger=self)
                 self.renderer.reset_map()  # Reset map before interpreting
                 interpreter.visit(tree)
             except Exception as e:

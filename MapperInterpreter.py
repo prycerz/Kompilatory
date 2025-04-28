@@ -21,8 +21,33 @@ from MapperRenderer import MapperRenderer
 
 class VariableDeclarationListener(ParseTreeListener):
     def __init__(self):
-        self.var_types = {}  # Słownik przechowujący zmienne i ich typy
+        #self.var_types = {}  # Słownik przechowujący zmienne i ich typy
         self.errors = []     # Lista błędów (redeklaracje)
+        self.var_types_scoped = [{}]  # lista słowników, pierwszy to globalny kolejne są młodsze
+        self.all_var_types = {}
+    def enterScope(self):
+        self.var_types_scoped.append({})
+
+    def exitScope(self):
+        current_scope = self.var_types_scoped.pop()
+        for name, vartype in current_scope.items():
+            self.all_var_types[name] = vartype
+    def enterBlock(self,ctx):
+        self.enterScope()
+        for stmt in ctx.statement():
+            self.enterEveryRule(stmt)
+    def exitBlock(self,ctx):
+        self.exitScope()
+
+    def nameExists(self,name):
+        for scope in self.var_types_scoped:
+            if name in scope:
+                return True
+        return False
+    def getTypeOfName(self,ctx,name):
+        for scope in reversed (self.var_types_scoped):
+            if name in scope:
+                return scope[name]
 
     def enterAssignment(self, ctx: MapperParser.AssignmentContext):
 
@@ -50,33 +75,45 @@ class VariableDeclarationListener(ParseTreeListener):
             return
  
         # Now store in dictionary
-        if var_name in self.var_types:
+        if var_name in self.var_types_scoped[-1]:
             token = ctx.start  # safer way to get token position
             line = token.line
             column = token.column
-            raise RuntimeError(f"line: {line}, column: {column} Redeclaration of variable '{var_name}'")
+            raise RuntimeError(f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
         else:
-            self.var_types[var_name] = var_type
+            self.var_types_scoped[-1][var_name] = var_type
             # print(f"Declared {var_type} {var_name}")
         
 
 class MapperInterpreter(MapperVisitor):
-    DEBUG = False  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
+    DEBUG = True  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
     SHOW_ERRORS = True  # Flaga błędów - True włącza rzucanie wyjątków, False je ignoruje
 
     def __init__(self, var_types, renderer=None, logger=None):
+
         self.var_types = var_types  # Słownik z typami zmiennych z pierwszego przebiegu
         self.variables = {}         # Przechowuje wartości zmiennych
         self.functions = {}         # Przechowuje funkcje
         self.renderer = renderer or MapperRenderer()
         self.roads = {}
         self.logger = logger  # Logger do rejestrowania komunikatów
+        self.scopes = [{}]  # lista słowników, pierwszy to globalny kolejne są młodsze
 
     def raiseError(self, ctx, msg):
         token = ctx.IDENTIFIER().getSymbol()
         line = token.line
         column = token.column
         raise RuntimeError(f"line: {line}, column: {column} {msg}")
+    def enterScope(self):
+        self.scopes.append({})
+
+    def exitScope(self):
+        self.scopes.pop()
+    def visitBlock(self,ctx):
+        self.enterScope()
+        for stmt in ctx.statement():
+            self.visit(stmt)
+        self.exitScope()
     
     def visitPrintStatement(self, ctx: MapperParser.PrintStatementContext):
         self._debug_print("Handling print statement")
@@ -156,8 +193,8 @@ class MapperInterpreter(MapperVisitor):
             # blend blendName = circle 10 grass 20%
             elif (option_ctx.IDENTIFIER()):
                 identifier = option_ctx.IDENTIFIER().getText()
-                if(identifier in self.variables and isinstance(self.variables[identifier], Tile)):
-                    tile = self.variables[identifier]
+                if(self.nameExists(identifier) and isinstance(self.getVariableOfName(ctx,identifier), Tile)):
+                    tile = self.getVariableOfName(ctx,identifier)
                 else:
                     tile = Tile([identifier])
             else:
@@ -166,13 +203,13 @@ class MapperInterpreter(MapperVisitor):
             percentage = int(option_ctx.INT().getText())
             blend_options.append((tile, percentage))
 
-        self.variables[blend_name] = Blend(figure, blend_options)  # Store the blend in variables
+        self.scopes[-1][blend_name] = Blend(figure, blend_options)  # Store the blend in variables
     
 
     def visitNumberAssign(self, ctx):
         self._debug_print(f"handling: {ctx.getText()}")
         name = ctx.IDENTIFIER().getText()
-
+        print(self.var_types)
         self._debug_print(f"Assigning number: {name}")
         self._debug_print(self.var_types)
 
@@ -185,7 +222,7 @@ class MapperInterpreter(MapperVisitor):
             return None
         value = self.visit(expr)
         self._debug_print(f"Evaluated value: {value}")
-        self.variables[name] = value
+        self.scopes[-1][name] = value
         self._debug_print(f"Number assigned: {name} = {value}")
 
     def visitBoolAssign(self, ctx):
@@ -200,18 +237,23 @@ class MapperInterpreter(MapperVisitor):
             value = self.visit(ctx.exprComp())
 
 
-        self.variables[name] = value
+        self.scopes[-1][name] = value
         self._debug_print(f"Boolean assigned: {name} = {value}")
         return value
+
+    def getVariableOfName(self,ctx,name):
+        for scope in reversed (self.scopes):
+            if name in scope:
+                return scope[name]
+        self.raiseError(ctx,f"variable of name {name} isn't initialized")
 
     def visitIncrement(self, ctx):
         name = ctx.IDENTIFIER().getText()
         self._debug_print(f"🆔 name: {name}")
         if name not in self.var_types:
             self.raiseError(ctx, f"Use of undeclared variable '{name}'")
-        if name not in self.variables:
-            self._raise_error(f"❌ Błąd: Zmienna '{name}' nie została zainicjalizowana!")
-        current_value = self.variables[name]
+
+        current_value = self.getVariableOfName(ctx,name)
         op = ctx.getChild(1).getText()
         if op in ('+=', '-='):
             value = self.visit(ctx.expr())
@@ -219,14 +261,14 @@ class MapperInterpreter(MapperVisitor):
                 delta = int(value)
                 if op == '+=':
                     self._debug_print(f"🔄 {name} = {current_value} + {delta}")
-                    self.variables[name] += delta
+                    self.scopes[-1][name] += delta
                 else:
                     self._debug_print(f"🔄 {name} = {current_value} - {delta}")
-                    self.variables[name] -= delta
+                    self.scopes[-1][name] -= delta
             elif isinstance(current_value, Tile):
                 if op == '+=':
                     self._debug_print(f"🧱 Dodaję do Tile: {name}.add_obj({value})")
-                    self.variables[name].add_obj(value)
+                    self.scopes[-1][name].add_obj(value)
                 else:
                     self._raise_error(f"❌ Tile nie obsługuje '-=': {name}")
             else:
@@ -236,11 +278,11 @@ class MapperInterpreter(MapperVisitor):
                 self._raise_error(f"❌ Operator '{op}' działa tylko na liczbach całkowitych")
             if op == '++':
                 self._debug_print("++")
-                self.variables[name] += 1
+                self.scopes[-1][name] += 1
             else:
-                self.variables[name] -= 1
-            self._debug_print(f"🔢 {name} po '{op}': {self.variables[name]}")
-        return self.variables[name]
+                self.scopes[-1][name] -= 1
+            self._debug_print(f"🔢 {name} po '{op}': {self.scopes[-1][name]}")
+        return self.getVariableOfName(ctx,name)
 
     def visitReasignment(self, ctx):
         self._debug_print("Reassignment detected")
@@ -250,7 +292,7 @@ class MapperInterpreter(MapperVisitor):
         if ctx.expr():
             value = self.visit(ctx.expr())
 
-        self.variables[name] = value
+        self.scopes[-1][name] = value
         self._debug_print(f"Reassigned: {name} = {value}")
         return value
 
@@ -278,12 +320,19 @@ class MapperInterpreter(MapperVisitor):
         else:
             self._debug_print("❌ Unknown assignment type!")
 
+    def nameExists(self,name):
+        for scope in self.scopes:
+            if name in scope:
+                return True
+        return False
+
+
     def visitNoValueAssign(self, ctx): 
         self._debug_print("No value assignment detected")
         name = ctx.IDENTIFIER().getText()
-        if name in self.variables:
-            self._raise_error(f"❌ Błąd: Zmienna '{name}' już istnieje!")
-        self.variables[name] = None
+        if self.nameExists(name):
+            self.raiseError(ctx, f"variable '{name}' already exists!")
+        self.scopes[-1][name] = None
 
     def visitMove(self, ctx):
         direction = ctx.getChild(1).getText()
@@ -314,8 +363,8 @@ class MapperInterpreter(MapperVisitor):
                 counter += 1
                 
             for arg in args:
-                if(arg in self.variables):
-                    self.renderer.draw_tile(self.variables[arg])
+                if(self.nameExists(arg)):
+                    self.renderer.draw_tile(self.getVariableOfName(ctx,arg))
                     return
 
 
@@ -458,7 +507,7 @@ class MapperInterpreter(MapperVisitor):
         }
 
         self._debug_print(f"Function '{function_name}' declared with parameters {params}")
-
+#to be done kurwa
     def visitFunctionCall(self, ctx):
         self._debug_print("fun call")
         function_name = ctx.IDENTIFIER().getText()
@@ -559,10 +608,10 @@ class MapperInterpreter(MapperVisitor):
 
     def visitExprVar(self, ctx):
         var_name = ctx.IDENTIFIER().getText()
-        self._debug_print(f"Processing variable reference: {var_name}: value: {self.variables.get(var_name)}")
+        #self._debug_print(f"Processing variable reference: {var_name}: value: {self.variables.get(var_name)}")
         if var_name not in self.var_types:
             self.raiseError(ctx, f"Use of undeclared variable '{var_name}'")
-        return self.variables.get(var_name)
+        return self.getVariableOfName(ctx,var_name)
 
     def visitExprInt(self, ctx):
         value = int(ctx.INT().getText())
@@ -580,20 +629,20 @@ class MapperInterpreter(MapperVisitor):
     # Visit a parse tree produced by MapperParser#roadStart.
     def visitRoadStart(self, ctx: MapperParser.RoadStartContext):
         name = ctx.IDENTIFIER().getText()
-        if name in self.variables.keys():
+        if self.nameExists(name):
             self._debug_print("this must be a new road")
         else:
             self._debug_print(f"Starting road: {name}")
-            self.variables[name] = Road(Position(self.renderer.pointer_x , self.renderer.pointer_y))
+            self.scopes[-1][name] = Road(Position(self.renderer.pointer_x , self.renderer.pointer_y))
 
     # Visit a parse tree produced by MapperParser#roadEnd.
     def visitRoadEnd(self, ctx: MapperParser.RoadEndContext):
         name = ctx.IDENTIFIER().getText()
         self._debug_print(f"Ending road {name}")
-        if name not in self.variables.keys():
+        if not self.nameExists(name):
             self._debug_print("the road you are refering to doesnt exist")
         else:
-            self.variables[name].end(Position(self.renderer.pointer_x, self.renderer.pointer_y), self.renderer)
+            self.scopes[-1][name].end(Position(self.renderer.pointer_x, self.renderer.pointer_y), self.renderer)
 
 
 if __name__ == "__main__":
@@ -622,7 +671,7 @@ if __name__ == "__main__":
             sys.exit(1)
 
         # Drugi przebieg: interpretacja programu
-        interpreter = MapperInterpreter(var_listener.var_types)
+        interpreter = MapperInterpreter(var_listener.all_var_types)
         interpreter.visit(tree)
 
         # print("Starting Pygame loop...")
@@ -631,3 +680,4 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"Error: {str(e)}")
         sys.exit(1)
+
