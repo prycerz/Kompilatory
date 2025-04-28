@@ -56,6 +56,15 @@ class MapperRenderer:
 		self.pointer_x = max(0, min(MAP_WIDTH - 1, self.pointer_x + dx))
 		self.pointer_y = max(0, min(MAP_HEIGHT - 1, self.pointer_y + dy))
 
+
+	def process_events(self):
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				return
+		pygame.display.flip()
+
+
 	def copy_tile(self, x, y, tile : Tile):
 		# debug
 		print(f'copying tile {tile} to {y}, {x}')
@@ -121,7 +130,6 @@ class MapperRenderer:
 				if event.type == pygame.QUIT:
 					running = False  # Close window when user clicks 'X'
 			pygame.display.flip()  # Continuously update display
-
 		pygame.quit()  # Properly exit Pygame when loop ends
 
 

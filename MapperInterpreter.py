@@ -64,12 +64,13 @@ class MapperInterpreter(MapperVisitor):
     DEBUG = False  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
     SHOW_ERRORS = True  # Flaga błędów - True włącza rzucanie wyjątków, False je ignoruje
 
-    def __init__(self, var_types, renderer=None):
+    def __init__(self, var_types, renderer=None, logger=None):
         self.var_types = var_types  # Słownik z typami zmiennych z pierwszego przebiegu
         self.variables = {}         # Przechowuje wartości zmiennych
         self.functions = {}         # Przechowuje funkcje
         self.renderer = renderer or MapperRenderer()
         self.roads = {}
+        self.logger = logger  # Logger do rejestrowania komunikatów
 
     def raiseError(self, ctx, msg):
         token = ctx.IDENTIFIER().getSymbol()
@@ -81,6 +82,8 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print("Handling print statement")
         if ctx.exprList():
             expr_values = [self.visit(expr) for expr in ctx.exprList().expr()]
+            if(self.logger):
+                self.logger.log(" ".join(map(str, expr_values)))
             print(*expr_values)  # Wypisz wszystkie wartości, oddzielone spacjami
             self._debug_print(f"Printed: {expr_values}")
         else:
@@ -570,8 +573,6 @@ class MapperInterpreter(MapperVisitor):
             self._debug_print("the road you are refering to doesnt exist")
         else:
             self.variables[name].end(Position(self.renderer.pointer_x, self.renderer.pointer_y), self.renderer)
-
-
 
 
 if __name__ == "__main__":

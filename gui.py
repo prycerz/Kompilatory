@@ -10,8 +10,8 @@ from MapperLexer import MapperLexer
 from MapperParser import MapperParser
 from MapperListener import MapperListener
 from MapperInterpreter import MapperInterpreter
-from Tile import Tile
-from Blend import Blend
+from ErrorListener import MapperErrorListener
+from MapperInterpreter import VariableDeclarationListener
 import pygame
 
 # GUI Application
@@ -58,8 +58,9 @@ class MapEditorApp(tk.Tk):
         self.renderer = MapperRenderer()
 
         # Start the pygame event loop in a thread
-        t = threading.Thread(target=self.renderer.run, daemon=True)
-        t.start()
+    def update_pygame(self):
+        self.renderer.process_events()
+        self.after(10, self.update_pygame) 
 
     def log(self, message):
         self.log_console.configure(state=tk.NORMAL)
@@ -79,20 +80,29 @@ class MapEditorApp(tk.Tk):
         def task():
             try:
                 # Reset renderer map to initial state
-                self.renderer.reset_map()
-
                 input_stream = FileStream(tmp.name)
+
                 lexer = MapperLexer(input_stream)
                 token_stream = CommonTokenStream(lexer)
+                
                 parser = MapperParser(token_stream)
                 parser.removeErrorListeners()
+                parser.addErrorListener(MapperErrorListener())
                 tree = parser.program()
+
+                var_listener = VariableDeclarationListener()
                 walker = ParseTreeWalker()
-                listener = MapperListener()
-                walker.walk(listener, tree)
-                interpreter = MapperInterpreter(listener.var_types, renderer=self.renderer)
+                walker.walk(var_listener, tree)
+
+                if var_listener.errors:
+                    for error in var_listener.errors:
+                        # print to console
+                        self.log(f"Error: {error}")
+                    return
+
+                interpreter = MapperInterpreter(var_listener.var_types, renderer=self.renderer, logger=self)
+                self.renderer.reset_map()  # Reset map before interpreting
                 interpreter.visit(tree)
-                self.log("Map rendered successfully.")
             except Exception as e:
                 self.log(f"Error: {e}")
 
