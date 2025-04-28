@@ -70,6 +70,11 @@ class MapEditorApp(tk.Tk):
 
     def on_run(self):
         # Write current code to temp file
+        self.log_console.configure(state=tk.NORMAL)
+        self.log_console.delete('1.0', tk.END)
+        self.log_console.configure(state=tk.DISABLED)
+
+
         code = self.code_editor.get('1.0', tk.END)
         tmp = tempfile.NamedTemporaryFile(delete=False, suffix='.map')
         tmp.write(code.encode('utf-8'))
