@@ -603,7 +603,7 @@ class MapperInterpreter(MapperVisitor):
         if op == '*':
             return left * right
         elif op == '/':
-            return left / right
+            return int(left / right)
         else:
             raise RuntimeError(f"Unknown operator: {op}")
     def visitExprParens(self, ctx):

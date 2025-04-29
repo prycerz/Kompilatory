@@ -85,6 +85,8 @@ class MapperRenderer:
 		elif isinstance(tile, Blend):
 			for x, y in tile.figure.tiles_to_visit():
 				self.copy_tile(self.pointer_x + x, self.pointer_y + y, tile.random_tile())
+		else:
+			raise TypeError(f"Cannot draw object of type {type(tile).__name__}")
 		self.render()  # Force an update on screen
 
 
