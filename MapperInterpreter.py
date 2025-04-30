@@ -122,8 +122,17 @@ class MapperInterpreter(MapperVisitor):
     def visitPrintStatement(self, ctx: MapperParser.PrintStatementContext):
         self._debug_print("Handling print statement")
         if ctx.exprList():
-            expr_values = [self.visit(expr) for expr in ctx.exprList().expr()]
-            if(self.logger):
+            expr_values = []
+            for expr in ctx.exprList().expr():
+                # Sprawdź, czy wyrażenie jest literałem stringa
+                if expr.getText().startswith('"') and expr.getText().endswith('"'):
+                    string_value = expr.getText()[1:-1]  # Usuń otaczające cudzysłowy
+                    expr_values.append(string_value)
+                else:
+                    # Obsłuż inne wyrażenia (np. zmienne, liczby)
+                    expr_values.append(self.visit(expr))
+            
+            if self.logger:
                 self.logger.log(" ".join(map(str, expr_values)))
             print(*expr_values)  # Wypisz wszystkie wartości, oddzielone spacjami
             self._debug_print(f"Printed: {expr_values}")
@@ -558,11 +567,52 @@ class MapperInterpreter(MapperVisitor):
         self.var_types = original_var_types
         return result
 
-    def visitExprComp(self, ctx):
-        self._debug_print("Processing comparison expression")
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
-        op = ctx.children[1].getText()
+    # ... (reszta kodu bez zmian, aż do metod związanych z exprComp) ...
+
+    def visitExprComp(self, ctx: MapperParser.ExprCompContext):
+        self._debug_print("Processing comparison or logical expression")
+        if isinstance(ctx, MapperParser.ExprNotContext):
+            return self.visitExprNot(ctx)
+        elif isinstance(ctx, MapperParser.ExprAndContext):
+            return self.visitExprAnd(ctx)
+        elif isinstance(ctx, MapperParser.ExprOrContext):
+            return self.visitExprOr(ctx)
+        elif isinstance(ctx, MapperParser.ExprCompRelContext):
+            return self.visitExprCompRel(ctx)
+        elif isinstance(ctx, MapperParser.ExprCompParensContext):
+            return self.visitExprCompParens(ctx)
+        elif isinstance(ctx, MapperParser.ExprCompBoolContext):
+            return self.visitExprCompBool(ctx)
+        elif isinstance(ctx, MapperParser.ExprCompVarContext):
+            return self.visitExprCompVar(ctx)
+        else:
+            raise RuntimeError(f"Unknown exprComp type: {type(ctx).__name__}")
+
+    def visitExprNot(self, ctx: MapperParser.ExprNotContext):
+        self._debug_print("Processing logical NOT")
+        value = self.visit(ctx.exprComp())
+        if not isinstance(value, bool):
+            self._raise_error("❌ Operator 'not' requires a boolean operand")
+        return not value
+
+    def visitExprAnd(self, ctx: MapperParser.ExprAndContext):
+        self._debug_print("Processing logical AND")
+        left = self.visit(ctx.exprComp(0))
+        right = self.visit(ctx.exprComp(1))
+        if not (isinstance(left, bool) and isinstance(right, bool)):
+            self._raise_error("❌ Operator 'and' requires boolean operands")
+        return left and right
+
+    def visitExprOr(self, ctx: MapperParser.ExprOrContext):
+        self._debug_print("Processing logical OR")
+        left = self.visit(ctx.exprComp(0))
+        right = self.visit(ctx.exprComp(1))
+        if not (isinstance(left, bool) and isinstance(right, bool)):
+            self._raise_error("❌ Operator 'or' requires boolean operands")
+        return left or right
+
+    def visitExprCompRel(self, ctx: MapperParser.ExprCompRelContext):
+        self._debug_print("Processing relational expression")
         left = self.visit(ctx.expr(0))
         right = self.visit(ctx.expr(1))
         op = ctx.getChild(1).getText()
@@ -579,7 +629,28 @@ class MapperInterpreter(MapperVisitor):
         elif op == '>=':
             return left >= right
         else:
-            raise Exception(f"Unknown comparison operator: {op}")
+            raise RuntimeError(f"Unknown comparison operator: {op}")
+
+    def visitExprCompParens(self, ctx: MapperParser.ExprCompParensContext):
+        self._debug_print("Processing parenthesized comparison expression")
+        return self.visit(ctx.exprComp())
+
+    def visitExprCompBool(self, ctx: MapperParser.ExprCompBoolContext):
+        self._debug_print("Processing boolean literal in exprComp")
+        value = ctx.BOOL().getText().lower() == 'true'
+        return value
+
+    def visitExprCompVar(self, ctx: MapperParser.ExprCompVarContext):
+        self._debug_print("Processing variable in exprComp")
+        var_name = ctx.IDENTIFIER().getText()
+        if var_name not in self.var_types:
+            self.raiseError(ctx, f"Use of undeclared variable '{var_name}'")
+        value = self.getVariableOfName(ctx, var_name)
+        if not isinstance(value, bool):
+            self._raise_error(f"❌ Variable '{var_name}' must be boolean in logical expression")
+        return value
+
+# ... (reszta kodu bez zmian) ...
 
     def visitExprAddSub(self, ctx):
         self._debug_print("Processing addition/subtraction expression")
@@ -652,7 +723,7 @@ class MapperInterpreter(MapperVisitor):
 if __name__ == "__main__":
     try:
         import sys
-        input_stream = FileStream(sys.argv[1])
+        input_stream = FileStream(sys.argv[1], encoding='utf-8')  # Dodaj encoding='utf-8'
         lexer = MapperLexer(input_stream)
         token_stream = CommonTokenStream(lexer)
         parser = MapperParser(token_stream)
@@ -666,7 +737,6 @@ if __name__ == "__main__":
         var_listener = VariableDeclarationListener()
         walker = ParseTreeWalker()
         walker.walk(var_listener, tree)
-        # print("Registered variables:", var_listener.var_types)  # Debugowanie
 
         # Sprawdzenie błędów redeklaracji
         if var_listener.errors:

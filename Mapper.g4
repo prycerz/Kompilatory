@@ -77,6 +77,7 @@ whileLoop   : 'while' '(' exprComp ')' '{' statement* '}';
 forLoop     : 'for' '(' numberAssign ';' expr ';' increment ')' '{' statement* '}';
 
 
+
 // Instrukcja warunkowa
 conditional : 'if' '(' (exprComp  | expr) ')' '{' ifConditionStatements '}' ('else' '{' elseConditionStatements '}')?;
 
@@ -89,16 +90,32 @@ expr
             : expr ('*'|'/') expr                      # ExprMulDiv
             | expr ('+'|'-') expr                      # ExprAddSub
             | '(' expr ')'                             # ExprParens
-            | INT                                      # ExprInt
+            | INT                         # ExprInt
             | BOOL                                     # ExprBool
             | IDENTIFIER                               # ExprVar;
 
-exprComp    : expr ('=='|'!='|'>'|'<'|'>='|'<=') expr;
+exprComp    : 'not' exprComp                           # ExprNot
+            | exprComp 'and' exprComp                  # ExprAnd
+            | exprComp 'or' exprComp                   # ExprOr
+            | expr ('=='|'!='|'>'|'<'|'>='|'<=') expr  # ExprCompRel
+            | '(' exprComp ')'                         # ExprCompParens
+            | BOOL                                     # ExprCompBool
+            | IDENTIFIER                               # ExprCompVar;
 
 INT         : [0-9]+;
 BOOL        : 'true' | 'false';
+// Nowe tokeny dla operatorów logicznych
+AND         : 'and';
+OR          : 'or';
+NOT         : 'not';
 IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]*;
 STRING      : '"' .*? '"';
 WS          : [ \t\r\n]+ -> skip;
 DOT         :'.';
 ERROR       :'YAPPING';
+
+
+
+// Reguły dla komentarzy
+SINGLE_LINE_COMMENT: '//' ~[\r\n]* -> skip;
+MULTI_LINE_COMMENT: '/*' .*? '*/' -> skip;

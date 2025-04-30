@@ -1,0 +1,25 @@
+bool x = true // Przypisanie wartosci true
+bool y = false // Przypisanie wartosci false
+bool z = x and y // z = true and false = false
+print z // Powinno wypisac: false
+
+bool w = x or y // w = true or false = true
+print w // Powinno wypisac: true
+
+bool v = not x // v = not true = false
+print v // Powinno wypisac: false
+
+// Test zlozonego wyrazenia
+number a = 5
+number b = 10
+bool c = a < 7 and b > 8 // c = (5 < 7) and (10 > 8) = true and true = true
+print c // Powinno wypisac: true
+
+// Test z nawiasami
+bool d = not (x or y) // d = not (true or false) = not true = false
+print d // Powinno wypisac: false
+number e = 6
+// Test w warunku
+if (a < 7 and not y) {
+    print e // Powinno sie wypisac
+}

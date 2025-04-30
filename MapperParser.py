@@ -10,7 +10,7 @@ else:
 
 def serializedATN():
     return [
-        4,1,52,368,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
+        4,1,57,390,2,0,7,0,2,1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,
         6,2,7,7,7,2,8,7,8,2,9,7,9,2,10,7,10,2,11,7,11,2,12,7,12,2,13,7,13,
         2,14,7,14,2,15,7,15,2,16,7,16,2,17,7,17,2,18,7,18,2,19,7,19,2,20,
         7,20,2,21,7,21,2,22,7,22,2,23,7,23,2,24,7,24,2,25,7,25,2,26,7,26,
@@ -40,75 +40,77 @@ def serializedATN():
         32,12,32,335,9,32,1,33,5,33,338,8,33,10,33,12,33,341,9,33,1,34,1,
         34,1,34,1,34,1,34,1,34,1,34,1,34,3,34,351,8,34,1,34,1,34,1,34,1,
         34,1,34,1,34,5,34,359,8,34,10,34,12,34,362,9,34,1,35,1,35,1,35,1,
-        35,1,35,0,1,68,36,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,
-        34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,0,4,1,0,
-        4,6,1,0,37,38,2,0,15,15,39,39,1,0,40,45,383,0,75,1,0,0,0,2,92,1,
-        0,0,0,4,94,1,0,0,0,6,103,1,0,0,0,8,107,1,0,0,0,10,111,1,0,0,0,12,
-        114,1,0,0,0,14,116,1,0,0,0,16,139,1,0,0,0,18,146,1,0,0,0,20,164,
-        1,0,0,0,22,166,1,0,0,0,24,174,1,0,0,0,26,185,1,0,0,0,28,187,1,0,
-        0,0,30,190,1,0,0,0,32,195,1,0,0,0,34,200,1,0,0,0,36,207,1,0,0,0,
-        38,216,1,0,0,0,40,222,1,0,0,0,42,224,1,0,0,0,44,233,1,0,0,0,46,237,
-        1,0,0,0,48,242,1,0,0,0,50,262,1,0,0,0,52,264,1,0,0,0,54,268,1,0,
-        0,0,56,281,1,0,0,0,58,283,1,0,0,0,60,296,1,0,0,0,62,313,1,0,0,0,
-        64,333,1,0,0,0,66,339,1,0,0,0,68,350,1,0,0,0,70,363,1,0,0,0,72,74,
-        3,2,1,0,73,72,1,0,0,0,74,77,1,0,0,0,75,73,1,0,0,0,75,76,1,0,0,0,
-        76,78,1,0,0,0,77,75,1,0,0,0,78,79,5,0,0,1,79,1,1,0,0,0,80,93,3,8,
-        4,0,81,93,3,24,12,0,82,93,3,26,13,0,83,93,3,50,25,0,84,93,3,54,27,
-        0,85,93,3,56,28,0,86,93,3,62,31,0,87,93,3,40,20,0,88,93,3,14,7,0,
-        89,93,3,16,8,0,90,93,3,6,3,0,91,93,3,4,2,0,92,80,1,0,0,0,92,81,1,
-        0,0,0,92,82,1,0,0,0,92,83,1,0,0,0,92,84,1,0,0,0,92,85,1,0,0,0,92,
-        86,1,0,0,0,92,87,1,0,0,0,92,88,1,0,0,0,92,89,1,0,0,0,92,90,1,0,0,
-        0,92,91,1,0,0,0,93,3,1,0,0,0,94,98,5,1,0,0,95,97,3,2,1,0,96,95,1,
-        0,0,0,97,100,1,0,0,0,98,96,1,0,0,0,98,99,1,0,0,0,99,101,1,0,0,0,
-        100,98,1,0,0,0,101,102,5,2,0,0,102,5,1,0,0,0,103,104,5,52,0,0,104,
-        105,3,68,34,0,105,106,5,51,0,0,106,7,1,0,0,0,107,109,5,3,0,0,108,
-        110,3,18,9,0,109,108,1,0,0,0,109,110,1,0,0,0,110,9,1,0,0,0,111,112,
-        3,12,6,0,112,113,5,48,0,0,113,11,1,0,0,0,114,115,7,0,0,0,115,13,
-        1,0,0,0,116,117,5,7,0,0,117,118,5,48,0,0,118,127,5,8,0,0,119,124,
-        3,10,5,0,120,121,5,9,0,0,121,123,3,10,5,0,122,120,1,0,0,0,123,126,
+        35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,1,35,3,35,377,8,35,1,
+        35,1,35,1,35,1,35,1,35,1,35,5,35,385,8,35,10,35,12,35,388,9,35,1,
+        35,0,2,68,70,36,0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,
+        36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,0,4,1,0,4,
+        6,1,0,37,38,2,0,15,15,39,39,1,0,40,45,411,0,75,1,0,0,0,2,92,1,0,
+        0,0,4,94,1,0,0,0,6,103,1,0,0,0,8,107,1,0,0,0,10,111,1,0,0,0,12,114,
+        1,0,0,0,14,116,1,0,0,0,16,139,1,0,0,0,18,146,1,0,0,0,20,164,1,0,
+        0,0,22,166,1,0,0,0,24,174,1,0,0,0,26,185,1,0,0,0,28,187,1,0,0,0,
+        30,190,1,0,0,0,32,195,1,0,0,0,34,200,1,0,0,0,36,207,1,0,0,0,38,216,
+        1,0,0,0,40,222,1,0,0,0,42,224,1,0,0,0,44,233,1,0,0,0,46,237,1,0,
+        0,0,48,242,1,0,0,0,50,262,1,0,0,0,52,264,1,0,0,0,54,268,1,0,0,0,
+        56,281,1,0,0,0,58,283,1,0,0,0,60,296,1,0,0,0,62,313,1,0,0,0,64,333,
+        1,0,0,0,66,339,1,0,0,0,68,350,1,0,0,0,70,376,1,0,0,0,72,74,3,2,1,
+        0,73,72,1,0,0,0,74,77,1,0,0,0,75,73,1,0,0,0,75,76,1,0,0,0,76,78,
+        1,0,0,0,77,75,1,0,0,0,78,79,5,0,0,1,79,1,1,0,0,0,80,93,3,8,4,0,81,
+        93,3,24,12,0,82,93,3,26,13,0,83,93,3,50,25,0,84,93,3,54,27,0,85,
+        93,3,56,28,0,86,93,3,62,31,0,87,93,3,40,20,0,88,93,3,14,7,0,89,93,
+        3,16,8,0,90,93,3,6,3,0,91,93,3,4,2,0,92,80,1,0,0,0,92,81,1,0,0,0,
+        92,82,1,0,0,0,92,83,1,0,0,0,92,84,1,0,0,0,92,85,1,0,0,0,92,86,1,
+        0,0,0,92,87,1,0,0,0,92,88,1,0,0,0,92,89,1,0,0,0,92,90,1,0,0,0,92,
+        91,1,0,0,0,93,3,1,0,0,0,94,98,5,1,0,0,95,97,3,2,1,0,96,95,1,0,0,
+        0,97,100,1,0,0,0,98,96,1,0,0,0,98,99,1,0,0,0,99,101,1,0,0,0,100,
+        98,1,0,0,0,101,102,5,2,0,0,102,5,1,0,0,0,103,104,5,55,0,0,104,105,
+        3,68,34,0,105,106,5,54,0,0,106,7,1,0,0,0,107,109,5,3,0,0,108,110,
+        3,18,9,0,109,108,1,0,0,0,109,110,1,0,0,0,110,9,1,0,0,0,111,112,3,
+        12,6,0,112,113,5,51,0,0,113,11,1,0,0,0,114,115,7,0,0,0,115,13,1,
+        0,0,0,116,117,5,7,0,0,117,118,5,51,0,0,118,127,5,8,0,0,119,124,3,
+        10,5,0,120,121,5,9,0,0,121,123,3,10,5,0,122,120,1,0,0,0,123,126,
         1,0,0,0,124,122,1,0,0,0,124,125,1,0,0,0,125,128,1,0,0,0,126,124,
         1,0,0,0,127,119,1,0,0,0,127,128,1,0,0,0,128,129,1,0,0,0,129,130,
         5,10,0,0,130,134,5,1,0,0,131,133,3,2,1,0,132,131,1,0,0,0,133,136,
         1,0,0,0,134,132,1,0,0,0,134,135,1,0,0,0,135,137,1,0,0,0,136,134,
-        1,0,0,0,137,138,5,2,0,0,138,15,1,0,0,0,139,140,5,48,0,0,140,142,
+        1,0,0,0,137,138,5,2,0,0,138,15,1,0,0,0,139,140,5,51,0,0,140,142,
         5,8,0,0,141,143,3,18,9,0,142,141,1,0,0,0,142,143,1,0,0,0,143,144,
         1,0,0,0,144,145,5,10,0,0,145,17,1,0,0,0,146,151,3,68,34,0,147,148,
         5,9,0,0,148,150,3,68,34,0,149,147,1,0,0,0,150,153,1,0,0,0,151,149,
         1,0,0,0,151,152,1,0,0,0,152,19,1,0,0,0,153,151,1,0,0,0,154,155,5,
-        48,0,0,155,165,5,11,0,0,156,157,5,48,0,0,157,165,5,12,0,0,158,159,
-        5,48,0,0,159,160,5,13,0,0,160,165,3,68,34,0,161,162,5,48,0,0,162,
+        51,0,0,155,165,5,11,0,0,156,157,5,51,0,0,157,165,5,12,0,0,158,159,
+        5,51,0,0,159,160,5,13,0,0,160,165,3,68,34,0,161,162,5,51,0,0,162,
         163,5,14,0,0,163,165,3,68,34,0,164,154,1,0,0,0,164,156,1,0,0,0,164,
-        158,1,0,0,0,164,161,1,0,0,0,165,21,1,0,0,0,166,171,5,48,0,0,167,
-        168,5,15,0,0,168,170,5,48,0,0,169,167,1,0,0,0,170,173,1,0,0,0,171,
+        158,1,0,0,0,164,161,1,0,0,0,165,21,1,0,0,0,166,171,5,51,0,0,167,
+        168,5,15,0,0,168,170,5,51,0,0,169,167,1,0,0,0,170,173,1,0,0,0,171,
         169,1,0,0,0,171,172,1,0,0,0,172,23,1,0,0,0,173,171,1,0,0,0,174,175,
-        5,48,0,0,175,176,5,16,0,0,176,177,3,68,34,0,177,25,1,0,0,0,178,186,
+        5,51,0,0,175,176,5,16,0,0,176,177,3,68,34,0,177,25,1,0,0,0,178,186,
         3,30,15,0,179,186,3,32,16,0,180,186,3,34,17,0,181,186,3,20,10,0,
         182,186,3,36,18,0,183,186,3,28,14,0,184,186,3,24,12,0,185,178,1,
         0,0,0,185,179,1,0,0,0,185,180,1,0,0,0,185,181,1,0,0,0,185,182,1,
         0,0,0,185,183,1,0,0,0,185,184,1,0,0,0,186,27,1,0,0,0,187,188,3,12,
-        6,0,188,189,5,48,0,0,189,29,1,0,0,0,190,191,5,5,0,0,191,192,5,48,
+        6,0,188,189,5,51,0,0,189,29,1,0,0,0,190,191,5,5,0,0,191,192,5,51,
         0,0,192,193,5,16,0,0,193,194,3,22,11,0,194,31,1,0,0,0,195,196,5,
-        4,0,0,196,197,5,48,0,0,197,198,5,16,0,0,198,199,3,68,34,0,199,33,
-        1,0,0,0,200,201,5,17,0,0,201,202,5,48,0,0,202,205,5,16,0,0,203,206,
+        4,0,0,196,197,5,51,0,0,197,198,5,16,0,0,198,199,3,68,34,0,199,33,
+        1,0,0,0,200,201,5,17,0,0,201,202,5,51,0,0,202,205,5,16,0,0,203,206,
         3,68,34,0,204,206,3,70,35,0,205,203,1,0,0,0,205,204,1,0,0,0,206,
-        35,1,0,0,0,207,208,5,6,0,0,208,209,5,48,0,0,209,210,5,16,0,0,210,
+        35,1,0,0,0,207,208,5,6,0,0,208,209,5,51,0,0,209,210,5,16,0,0,210,
         212,3,44,22,0,211,213,3,46,23,0,212,211,1,0,0,0,213,214,1,0,0,0,
         214,212,1,0,0,0,214,215,1,0,0,0,215,37,1,0,0,0,216,217,5,18,0,0,
-        217,218,5,48,0,0,218,219,5,19,0,0,219,39,1,0,0,0,220,223,3,38,19,
+        217,218,5,51,0,0,218,219,5,19,0,0,219,39,1,0,0,0,220,223,3,38,19,
         0,221,223,3,42,21,0,222,220,1,0,0,0,222,221,1,0,0,0,223,41,1,0,0,
-        0,224,225,5,18,0,0,225,226,5,48,0,0,226,227,5,20,0,0,227,43,1,0,
+        0,224,225,5,18,0,0,225,226,5,51,0,0,226,227,5,20,0,0,227,43,1,0,
         0,0,228,229,5,21,0,0,229,234,5,46,0,0,230,231,5,22,0,0,231,232,5,
         46,0,0,232,234,5,46,0,0,233,228,1,0,0,0,233,230,1,0,0,0,234,45,1,
-        0,0,0,235,238,5,48,0,0,236,238,3,22,11,0,237,235,1,0,0,0,237,236,
+        0,0,0,235,238,5,51,0,0,236,238,3,22,11,0,237,235,1,0,0,0,237,236,
         1,0,0,0,238,239,1,0,0,0,239,240,5,46,0,0,240,241,5,23,0,0,241,47,
-        1,0,0,0,242,243,5,24,0,0,243,244,5,48,0,0,244,49,1,0,0,0,245,246,
-        5,25,0,0,246,251,5,48,0,0,247,248,5,15,0,0,248,250,5,48,0,0,249,
+        1,0,0,0,242,243,5,24,0,0,243,244,5,51,0,0,244,49,1,0,0,0,245,246,
+        5,25,0,0,246,251,5,51,0,0,247,248,5,15,0,0,248,250,5,51,0,0,249,
         247,1,0,0,0,250,253,1,0,0,0,251,249,1,0,0,0,251,252,1,0,0,0,252,
         263,1,0,0,0,253,251,1,0,0,0,254,255,5,25,0,0,255,256,5,26,0,0,256,
         258,5,46,0,0,257,259,3,52,26,0,258,257,1,0,0,0,259,260,1,0,0,0,260,
         258,1,0,0,0,260,261,1,0,0,0,261,263,1,0,0,0,262,245,1,0,0,0,262,
         254,1,0,0,0,263,51,1,0,0,0,264,265,5,46,0,0,265,266,5,23,0,0,266,
-        267,5,48,0,0,267,53,1,0,0,0,268,277,5,27,0,0,269,270,5,28,0,0,270,
+        267,5,51,0,0,267,53,1,0,0,0,268,277,5,27,0,0,269,270,5,28,0,0,270,
         278,3,68,34,0,271,272,5,29,0,0,272,278,3,68,34,0,273,274,5,30,0,
         0,274,278,3,68,34,0,275,276,5,31,0,0,276,278,3,68,34,0,277,269,1,
         0,0,0,277,271,1,0,0,0,277,273,1,0,0,0,277,275,1,0,0,0,278,55,1,0,
@@ -131,15 +133,22 @@ def serializedATN():
         336,338,3,2,1,0,337,336,1,0,0,0,338,341,1,0,0,0,339,337,1,0,0,0,
         339,340,1,0,0,0,340,67,1,0,0,0,341,339,1,0,0,0,342,343,6,34,-1,0,
         343,344,5,8,0,0,344,345,3,68,34,0,345,346,5,10,0,0,346,351,1,0,0,
-        0,347,351,5,46,0,0,348,351,5,47,0,0,349,351,5,48,0,0,350,342,1,0,
+        0,347,351,5,46,0,0,348,351,5,47,0,0,349,351,5,51,0,0,350,342,1,0,
         0,0,350,347,1,0,0,0,350,348,1,0,0,0,350,349,1,0,0,0,351,360,1,0,
         0,0,352,353,10,6,0,0,353,354,7,1,0,0,354,359,3,68,34,7,355,356,10,
         5,0,0,356,357,7,2,0,0,357,359,3,68,34,6,358,352,1,0,0,0,358,355,
         1,0,0,0,359,362,1,0,0,0,360,358,1,0,0,0,360,361,1,0,0,0,361,69,1,
-        0,0,0,362,360,1,0,0,0,363,364,3,68,34,0,364,365,7,3,0,0,365,366,
-        3,68,34,0,366,71,1,0,0,0,31,75,92,98,109,124,127,134,142,151,164,
-        171,185,205,214,222,233,237,251,260,262,277,281,291,308,317,328,
-        333,339,350,358,360
+        0,0,0,362,360,1,0,0,0,363,364,6,35,-1,0,364,365,5,50,0,0,365,377,
+        3,70,35,7,366,367,3,68,34,0,367,368,7,3,0,0,368,369,3,68,34,0,369,
+        377,1,0,0,0,370,371,5,8,0,0,371,372,3,70,35,0,372,373,5,10,0,0,373,
+        377,1,0,0,0,374,377,5,47,0,0,375,377,5,51,0,0,376,363,1,0,0,0,376,
+        366,1,0,0,0,376,370,1,0,0,0,376,374,1,0,0,0,376,375,1,0,0,0,377,
+        386,1,0,0,0,378,379,10,6,0,0,379,380,5,48,0,0,380,385,3,70,35,7,
+        381,382,10,5,0,0,382,383,5,49,0,0,383,385,3,70,35,6,384,378,1,0,
+        0,0,384,381,1,0,0,0,385,388,1,0,0,0,386,384,1,0,0,0,386,387,1,0,
+        0,0,387,71,1,0,0,0,388,386,1,0,0,0,34,75,92,98,109,124,127,134,142,
+        151,164,171,185,205,214,222,233,237,251,260,262,277,281,291,308,
+        317,328,333,339,350,358,360,376,384,386
     ]
 
 class MapperParser ( Parser ):
@@ -160,8 +169,8 @@ class MapperParser ( Parser ):
                      "'down'", "'left'", "'right'", "'while'", "'for'", 
                      "';'", "'if'", "'else'", "'*'", "'/'", "'-'", "'=='", 
                      "'!='", "'>'", "'<'", "'>='", "'<='", "<INVALID>", 
-                     "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                     "'.'", "'YAPPING'" ]
+                     "<INVALID>", "'and'", "'or'", "'not'", "<INVALID>", 
+                     "<INVALID>", "<INVALID>", "'.'", "'YAPPING'" ]
 
     symbolicNames = [ "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
@@ -174,8 +183,9 @@ class MapperParser ( Parser ):
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
                       "<INVALID>", "<INVALID>", "<INVALID>", "<INVALID>", 
-                      "<INVALID>", "<INVALID>", "INT", "BOOL", "IDENTIFIER", 
-                      "STRING", "WS", "DOT", "ERROR" ]
+                      "<INVALID>", "<INVALID>", "INT", "BOOL", "AND", "OR", 
+                      "NOT", "IDENTIFIER", "STRING", "WS", "DOT", "ERROR", 
+                      "SINGLE_LINE_COMMENT", "MULTI_LINE_COMMENT" ]
 
     RULE_program = 0
     RULE_statement = 1
@@ -272,11 +282,16 @@ class MapperParser ( Parser ):
     T__44=45
     INT=46
     BOOL=47
-    IDENTIFIER=48
-    STRING=49
-    WS=50
-    DOT=51
-    ERROR=52
+    AND=48
+    OR=49
+    NOT=50
+    IDENTIFIER=51
+    STRING=52
+    WS=53
+    DOT=54
+    ERROR=55
+    SINGLE_LINE_COMMENT=56
+    MULTI_LINE_COMMENT=57
 
     def __init__(self, input:TokenStream, output:TextIO = sys.stdout):
         super().__init__(input, output)
@@ -334,7 +349,7 @@ class MapperParser ( Parser ):
             self.state = 75
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016887034) != 0):
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 38280644245455098) != 0):
                 self.state = 72
                 self.statement()
                 self.state = 77
@@ -563,7 +578,7 @@ class MapperParser ( Parser ):
             self.state = 98
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016887034) != 0):
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 38280644245455098) != 0):
                 self.state = 95
                 self.statement()
                 self.state = 100
@@ -883,7 +898,7 @@ class MapperParser ( Parser ):
             self.state = 134
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016887034) != 0):
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 38280644245455098) != 0):
                 self.state = 131
                 self.statement()
                 self.state = 136
@@ -949,7 +964,7 @@ class MapperParser ( Parser ):
             self.state = 142
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            if (((_la) & ~0x3f) == 0 and ((1 << _la) & 492581209243904) != 0):
+            if (((_la) & ~0x3f) == 0 and ((1 << _la) & 2462906046218496) != 0):
                 self.state = 141
                 self.exprList()
 
@@ -1577,7 +1592,7 @@ class MapperParser ( Parser ):
 
             elif la_ == 2:
                 self.state = 204
-                self.exprComp()
+                self.exprComp(0)
                 pass
 
 
@@ -2374,7 +2389,7 @@ class MapperParser ( Parser ):
             self.state = 284
             self.match(MapperParser.T__7)
             self.state = 285
-            self.exprComp()
+            self.exprComp(0)
             self.state = 286
             self.match(MapperParser.T__9)
             self.state = 287
@@ -2382,7 +2397,7 @@ class MapperParser ( Parser ):
             self.state = 291
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016887034) != 0):
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 38280644245455098) != 0):
                 self.state = 288
                 self.statement()
                 self.state = 293
@@ -2474,7 +2489,7 @@ class MapperParser ( Parser ):
             self.state = 308
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016887034) != 0):
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 38280644245455098) != 0):
                 self.state = 305
                 self.statement()
                 self.state = 310
@@ -2551,7 +2566,7 @@ class MapperParser ( Parser ):
             la_ = self._interp.adaptivePredict(self._input,24,self._ctx)
             if la_ == 1:
                 self.state = 315
-                self.exprComp()
+                self.exprComp(0)
                 pass
 
             elif la_ == 2:
@@ -2635,7 +2650,7 @@ class MapperParser ( Parser ):
             self.state = 333
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016887034) != 0):
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 38280644245455098) != 0):
                 self.state = 330
                 self.statement()
                 self.state = 335
@@ -2695,7 +2710,7 @@ class MapperParser ( Parser ):
             self.state = 339
             self._errHandler.sync(self)
             _la = self._input.LA(1)
-            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 4785122016887034) != 0):
+            while (((_la) & ~0x3f) == 0 and ((1 << _la) & 38280644245455098) != 0):
                 self.state = 336
                 self.statement()
                 self.state = 341
@@ -2920,7 +2935,7 @@ class MapperParser ( Parser ):
                 self.state = 348
                 self.match(MapperParser.BOOL)
                 pass
-            elif token in [48]:
+            elif token in [51]:
                 localctx = MapperParser.ExprVarContext(self, localctx)
                 self._ctx = localctx
                 _prevctx = localctx
@@ -2999,6 +3014,51 @@ class MapperParser ( Parser ):
             super().__init__(parent, invokingState)
             self.parser = parser
 
+
+        def getRuleIndex(self):
+            return MapperParser.RULE_exprComp
+
+     
+        def copyFrom(self, ctx:ParserRuleContext):
+            super().copyFrom(ctx)
+
+
+    class ExprAndContext(ExprCompContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprCompContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def exprComp(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MapperParser.ExprCompContext)
+            else:
+                return self.getTypedRuleContext(MapperParser.ExprCompContext,i)
+
+        def AND(self):
+            return self.getToken(MapperParser.AND, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprAnd" ):
+                listener.enterExprAnd(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprAnd" ):
+                listener.exitExprAnd(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprAnd" ):
+                return visitor.visitExprAnd(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprCompRelContext(ExprCompContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprCompContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
         def expr(self, i:int=None):
             if i is None:
                 return self.getTypedRuleContexts(MapperParser.ExprContext)
@@ -3006,50 +3066,271 @@ class MapperParser ( Parser ):
                 return self.getTypedRuleContext(MapperParser.ExprContext,i)
 
 
-        def getRuleIndex(self):
-            return MapperParser.RULE_exprComp
-
         def enterRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "enterExprComp" ):
-                listener.enterExprComp(self)
+            if hasattr( listener, "enterExprCompRel" ):
+                listener.enterExprCompRel(self)
 
         def exitRule(self, listener:ParseTreeListener):
-            if hasattr( listener, "exitExprComp" ):
-                listener.exitExprComp(self)
+            if hasattr( listener, "exitExprCompRel" ):
+                listener.exitExprCompRel(self)
 
         def accept(self, visitor:ParseTreeVisitor):
-            if hasattr( visitor, "visitExprComp" ):
-                return visitor.visitExprComp(self)
+            if hasattr( visitor, "visitExprCompRel" ):
+                return visitor.visitExprCompRel(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprCompBoolContext(ExprCompContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprCompContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def BOOL(self):
+            return self.getToken(MapperParser.BOOL, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprCompBool" ):
+                listener.enterExprCompBool(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprCompBool" ):
+                listener.exitExprCompBool(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprCompBool" ):
+                return visitor.visitExprCompBool(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprCompVarContext(ExprCompContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprCompContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def IDENTIFIER(self):
+            return self.getToken(MapperParser.IDENTIFIER, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprCompVar" ):
+                listener.enterExprCompVar(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprCompVar" ):
+                listener.exitExprCompVar(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprCompVar" ):
+                return visitor.visitExprCompVar(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprOrContext(ExprCompContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprCompContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def exprComp(self, i:int=None):
+            if i is None:
+                return self.getTypedRuleContexts(MapperParser.ExprCompContext)
+            else:
+                return self.getTypedRuleContext(MapperParser.ExprCompContext,i)
+
+        def OR(self):
+            return self.getToken(MapperParser.OR, 0)
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprOr" ):
+                listener.enterExprOr(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprOr" ):
+                listener.exitExprOr(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprOr" ):
+                return visitor.visitExprOr(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprNotContext(ExprCompContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprCompContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def NOT(self):
+            return self.getToken(MapperParser.NOT, 0)
+        def exprComp(self):
+            return self.getTypedRuleContext(MapperParser.ExprCompContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprNot" ):
+                listener.enterExprNot(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprNot" ):
+                listener.exitExprNot(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprNot" ):
+                return visitor.visitExprNot(self)
+            else:
+                return visitor.visitChildren(self)
+
+
+    class ExprCompParensContext(ExprCompContext):
+
+        def __init__(self, parser, ctx:ParserRuleContext): # actually a MapperParser.ExprCompContext
+            super().__init__(parser)
+            self.copyFrom(ctx)
+
+        def exprComp(self):
+            return self.getTypedRuleContext(MapperParser.ExprCompContext,0)
+
+
+        def enterRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "enterExprCompParens" ):
+                listener.enterExprCompParens(self)
+
+        def exitRule(self, listener:ParseTreeListener):
+            if hasattr( listener, "exitExprCompParens" ):
+                listener.exitExprCompParens(self)
+
+        def accept(self, visitor:ParseTreeVisitor):
+            if hasattr( visitor, "visitExprCompParens" ):
+                return visitor.visitExprCompParens(self)
             else:
                 return visitor.visitChildren(self)
 
 
 
-
-    def exprComp(self):
-
-        localctx = MapperParser.ExprCompContext(self, self._ctx, self.state)
-        self.enterRule(localctx, 70, self.RULE_exprComp)
+    def exprComp(self, _p:int=0):
+        _parentctx = self._ctx
+        _parentState = self.state
+        localctx = MapperParser.ExprCompContext(self, self._ctx, _parentState)
+        _prevctx = localctx
+        _startState = 70
+        self.enterRecursionRule(localctx, 70, self.RULE_exprComp, _p)
         self._la = 0 # Token type
         try:
             self.enterOuterAlt(localctx, 1)
-            self.state = 363
-            self.expr(0)
-            self.state = 364
-            _la = self._input.LA(1)
-            if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 69269232549888) != 0)):
-                self._errHandler.recoverInline(self)
-            else:
-                self._errHandler.reportMatch(self)
-                self.consume()
-            self.state = 365
-            self.expr(0)
+            self.state = 376
+            self._errHandler.sync(self)
+            la_ = self._interp.adaptivePredict(self._input,31,self._ctx)
+            if la_ == 1:
+                localctx = MapperParser.ExprNotContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+
+                self.state = 364
+                self.match(MapperParser.NOT)
+                self.state = 365
+                self.exprComp(7)
+                pass
+
+            elif la_ == 2:
+                localctx = MapperParser.ExprCompRelContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+                self.state = 366
+                self.expr(0)
+                self.state = 367
+                _la = self._input.LA(1)
+                if not((((_la) & ~0x3f) == 0 and ((1 << _la) & 69269232549888) != 0)):
+                    self._errHandler.recoverInline(self)
+                else:
+                    self._errHandler.reportMatch(self)
+                    self.consume()
+                self.state = 368
+                self.expr(0)
+                pass
+
+            elif la_ == 3:
+                localctx = MapperParser.ExprCompParensContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+                self.state = 370
+                self.match(MapperParser.T__7)
+                self.state = 371
+                self.exprComp(0)
+                self.state = 372
+                self.match(MapperParser.T__9)
+                pass
+
+            elif la_ == 4:
+                localctx = MapperParser.ExprCompBoolContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+                self.state = 374
+                self.match(MapperParser.BOOL)
+                pass
+
+            elif la_ == 5:
+                localctx = MapperParser.ExprCompVarContext(self, localctx)
+                self._ctx = localctx
+                _prevctx = localctx
+                self.state = 375
+                self.match(MapperParser.IDENTIFIER)
+                pass
+
+
+            self._ctx.stop = self._input.LT(-1)
+            self.state = 386
+            self._errHandler.sync(self)
+            _alt = self._interp.adaptivePredict(self._input,33,self._ctx)
+            while _alt!=2 and _alt!=ATN.INVALID_ALT_NUMBER:
+                if _alt==1:
+                    if self._parseListeners is not None:
+                        self.triggerExitRuleEvent()
+                    _prevctx = localctx
+                    self.state = 384
+                    self._errHandler.sync(self)
+                    la_ = self._interp.adaptivePredict(self._input,32,self._ctx)
+                    if la_ == 1:
+                        localctx = MapperParser.ExprAndContext(self, MapperParser.ExprCompContext(self, _parentctx, _parentState))
+                        self.pushNewRecursionContext(localctx, _startState, self.RULE_exprComp)
+                        self.state = 378
+                        if not self.precpred(self._ctx, 6):
+                            from antlr4.error.Errors import FailedPredicateException
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 6)")
+                        self.state = 379
+                        self.match(MapperParser.AND)
+                        self.state = 380
+                        self.exprComp(7)
+                        pass
+
+                    elif la_ == 2:
+                        localctx = MapperParser.ExprOrContext(self, MapperParser.ExprCompContext(self, _parentctx, _parentState))
+                        self.pushNewRecursionContext(localctx, _startState, self.RULE_exprComp)
+                        self.state = 381
+                        if not self.precpred(self._ctx, 5):
+                            from antlr4.error.Errors import FailedPredicateException
+                            raise FailedPredicateException(self, "self.precpred(self._ctx, 5)")
+                        self.state = 382
+                        self.match(MapperParser.OR)
+                        self.state = 383
+                        self.exprComp(6)
+                        pass
+
+             
+                self.state = 388
+                self._errHandler.sync(self)
+                _alt = self._interp.adaptivePredict(self._input,33,self._ctx)
+
         except RecognitionException as re:
             localctx.exception = re
             self._errHandler.reportError(self, re)
             self._errHandler.recover(self, re)
         finally:
-            self.exitRule()
+            self.unrollRecursionContexts(_parentctx)
         return localctx
 
 
@@ -3058,6 +3339,7 @@ class MapperParser ( Parser ):
         if self._predicates == None:
             self._predicates = dict()
         self._predicates[34] = self.expr_sempred
+        self._predicates[35] = self.exprComp_sempred
         pred = self._predicates.get(ruleIndex, None)
         if pred is None:
             raise Exception("No predicate with index:" + str(ruleIndex))
@@ -3070,6 +3352,15 @@ class MapperParser ( Parser ):
          
 
             if predIndex == 1:
+                return self.precpred(self._ctx, 5)
+         
+
+    def exprComp_sempred(self, localctx:ExprCompContext, predIndex:int):
+            if predIndex == 2:
+                return self.precpred(self._ctx, 6)
+         
+
+            if predIndex == 3:
                 return self.precpred(self._ctx, 5)
          
 
