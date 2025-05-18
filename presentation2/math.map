@@ -1,0 +1,6 @@
+// nic nie zmieniałem tutaj
+number a = 8
+number b = 3
+
+
+number wynik = (a + (b * 2)) / (a - b)

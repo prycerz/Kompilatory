@@ -27,7 +27,6 @@ class VariableDeclarationListener(ParseTreeListener):
         self.all_var_types = {}
     def enterScope(self):
         self.var_types_scoped.append({})
-
     def exitScope(self):
         current_scope = self.var_types_scoped.pop()
         for name, vartype in current_scope.items():
@@ -94,7 +93,6 @@ class MapperInterpreter(MapperVisitor):
     SHOW_ERRORS = True  # Flaga błędów - True włącza rzucanie wyjątków, False je ignoruje
 
     def __init__(self, var_types, renderer=None, logger=None):
-
         self.var_types = var_types  # Słownik z typami zmiennych z pierwszego przebiegu
         self.variables = {}         # Przechowuje wartości zmiennych
         self.functions = {}         # Przechowuje funkcje
@@ -226,14 +224,18 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print(f"Assigning number: {name}")
         self._debug_print(self.var_types)
 
-        if name not in self.var_types:
-            self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
+
+        #  czemu to jest tutaj?
+        # if name not in self.var_types:
+        #     self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
 
         expr = ctx.expr()
         if not expr:
             self._debug_print("Error: ctx.expr() is None!")
             return None
         value = self.visit(expr)
+        self.var_types[name] = 'number'
+
         self._debug_print(f"Evaluated value: {value}")
         self.scopes[-1][name] = value
         self._debug_print(f"Number assigned: {name} = {value}")
@@ -243,19 +245,17 @@ class MapperInterpreter(MapperVisitor):
         name = ctx.IDENTIFIER().getText()
         if name not in self.var_types:
             self.raiseError(ctx, f"Assignment of undeclared boolean '{name}'")
-
-        if ctx.expr():
-            value = bool(self.visit(ctx.expr()))
-        elif ctx.exprComp():
+        if ctx.exprComp():
             value = self.visit(ctx.exprComp())
-
-
-        self.scopes[-1][name] = value
-        self._debug_print(f"Boolean assigned: {name} = {value}")
-        return value
+            self.scopes[-1][name] = value
+            self._debug_print(f"Boolean assigned: {name} = {value}")
+            return value
+        else :
+            self._debug_print("Error: ctx.exprComp() is None!")
+            return None
 
     def getVariableOfName(self,ctx,name):
-        for scope in reversed (self.scopes):
+        for scope in reversed(self.scopes):
             if name in scope:
                 return scope[name]
         self.raiseError(ctx,f"variable of name {name} isn't initialized")
@@ -302,8 +302,21 @@ class MapperInterpreter(MapperVisitor):
         name = ctx.IDENTIFIER().getText()
         if name not in self.var_types:
             self.raiseError(ctx, f"Undeclared variable '{name}'")
-        if ctx.expr():
-            value = self.visit(ctx.expr())
+        
+        # get variable type
+        var_type = self.var_types[name]
+
+        # makes sure that the type of variable is same as before (cant change type)
+        if var_type == 'number':
+            if ctx.expr():
+                value = self.visit(ctx.expr())
+            else:
+                self._raise_error(f"Invalid number reasignment for '{name}'")
+        elif var_type == 'bool':
+            if ctx.exprComp():
+                value = self.visit(ctx.exprComp())
+            else:
+                self._raise_error(f"Invalid boolean reasignment for '{name}'")
 
         self.scopes[-1][name] = value
         self._debug_print(f"Reassigned: {name} = {value}")
@@ -497,12 +510,16 @@ class MapperInterpreter(MapperVisitor):
 
     def visitFunctionDecl(self, ctx):
         self._debug_print("fun decl")
+
         function_name = ctx.IDENTIFIER().getText()
         self._debug_print(function_name)
+        return_type = ctx.getChild(0).getText()
+        if(return_type not in ['void', 'number', 'tile', 'blend']):
+            self._raise_error(f"❌ Błąd: Nieznany typ funkcji '{return_type}'!")
 
         params = []
-
         statements = ctx.statement()  # List of statements in the function body
+
         self._debug_print(f"dir: {dir(ctx)}")
 
         for param in ctx.param():
@@ -516,11 +533,12 @@ class MapperInterpreter(MapperVisitor):
         # Store the function definition
         self.functions[function_name] = {
             'params': params,
-            'statements': statements
+            'statements': statements,
+            'return_type': return_type
         }
 
         self._debug_print(f"Function '{function_name}' declared with parameters {params}")
-#to be done kurwa
+
     def visitFunctionCall(self, ctx):
         self._debug_print("fun call")
         function_name = ctx.IDENTIFIER().getText()
@@ -536,6 +554,7 @@ class MapperInterpreter(MapperVisitor):
         function = self.functions[function_name]
         params = function['params']
         statements = function['statements']
+        return_type = function['return_type']
 
         if len(expr_list) != len(params):
             self._raise_error(
@@ -560,8 +579,21 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print(f"Local variables: {local_vars}")
 
         result = None
+        
         for stmt in statements:
             result = self.visit(stmt)
+
+        # check if the return value is correct type
+        if return_type == 'number' and not isinstance(result, int):
+            self._raise_error(f"❌ Błąd: Oczekiwano liczby, a otrzymano {type(result).__name__}!")
+        elif return_type == 'tile' and not isinstance(result, Tile):
+            self._raise_error(f"❌ Błąd: Oczekiwano Tile, a otrzymano {type(result).__name__}!")
+        elif return_type == 'blend' and not isinstance(result, Blend):
+            self._raise_error(f"❌ Błąd: Oczekiwano Blend, a otrzymano {type(result).__name__}!")
+        elif return_type == 'void' and result is not None:
+            self._raise_error(f"❌ Błąd: Oczekiwano void, a otrzymano {type(result).__name__}!")
+        elif return_type == 'bool' and not isinstance(result, bool):
+            self._raise_error(f"❌ Błąd: Oczekiwano bool, a otrzymano {type(result).__name__}!")
 
         self.variables = original_vars
         self.var_types = original_var_types
@@ -585,6 +617,9 @@ class MapperInterpreter(MapperVisitor):
             return self.visitExprCompBool(ctx)
         elif isinstance(ctx, MapperParser.ExprCompVarContext):
             return self.visitExprCompVar(ctx)
+        # DEVDEV
+        elif isinstance(ctx, MapperParser.ExprCompBoolsContext):
+            return self.visitExprCompBools(ctx)
         else:
             raise RuntimeError(f"Unknown exprComp type: {type(ctx).__name__}")
 
@@ -649,8 +684,18 @@ class MapperInterpreter(MapperVisitor):
         if not isinstance(value, bool):
             self._raise_error(f"❌ Variable '{var_name}' must be boolean in logical expression")
         return value
-
-# ... (reszta kodu bez zmian) ...
+    
+    def visitExprCompBools(self, ctx: MapperParser.ExprCompBoolsContext):
+        self._debug_print("Processing boolean literal in exprComp")
+        left = self.visit(ctx.exprComp(0))
+        right = self.visit(ctx.exprComp(1))
+        op = ctx.getChild(1).getText()
+        if op == '==':
+            return left == right
+        elif op == '!=':
+            return left != right
+        else:
+            raise RuntimeError(f"Unknown comparison operator: {op} - only == and != are allowed in this context")
 
     def visitExprAddSub(self, ctx):
         self._debug_print("Processing addition/subtraction expression")

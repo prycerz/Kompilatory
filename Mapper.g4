@@ -26,9 +26,9 @@ printStatement : 'print' exprList?;  // np. print x; print x, y, 42
 
 //funkcje
 param     : type IDENTIFIER ;
-type : 'number'|'tile'|'blend';
+type : 'number'|'tile'|'blend'|'bool';
 
-functionDecl : 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement* '}';
+functionDecl : (VOID | type) 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement* '}';
 
 functionCall : IDENTIFIER '(' exprList? ')';
 exprList     : expr (',' expr)*;
@@ -43,24 +43,21 @@ increment
     ;
 
 tileSum      : IDENTIFIER ('+' IDENTIFIER)*;
-
-reasignment  : IDENTIFIER '=' expr;
+reasignment  : IDENTIFIER '=' (expr | exprComp);
 assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign | noValueAssign | reasignment;
 noValueAssign: type IDENTIFIER;
 
 tileAssign   : 'tile' IDENTIFIER '=' tileSum; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
 numberAssign : 'number' IDENTIFIER '=' expr;
-boolAssign   : 'bool' IDENTIFIER '=' (expr | exprComp);
+boolAssign   : 'bool' IDENTIFIER '=' exprComp;
 blendAssign  : 'blend' IDENTIFIER '=' figure blendOption+; 
 roadStart    : 'road' IDENTIFIER 'start';
-
 
 roadPlacement: roadStart | roadEnd;
 roadEnd      : 'road' IDENTIFIER 'end';
 
 figure       : ('circle' INT) | ('rectangle' INT INT);
 blendOption  : (IDENTIFIER | tileSum) INT '%';
-
 
 // Rysowanie płytek
 drawRoad    : 'drawRoad' IDENTIFIER;
@@ -74,8 +71,7 @@ move        : 'pointer' ('up' expr | 'down' expr | 'left' expr | 'right' expr);
 // Pętle
 loop        : whileLoop | forLoop; 
 whileLoop   : 'while' '(' exprComp ')' '{' statement* '}';
-forLoop     : 'for' '(' numberAssign ';' expr ';' increment ')' '{' statement* '}';
-
+forLoop     : 'for' '(' numberAssign ';' exprComp ';' increment ')' '{' statement* '}';
 
 
 // Instrukcja warunkowa
@@ -84,21 +80,21 @@ conditional : 'if' '(' (exprComp  | expr) ')' '{' ifConditionStatements '}' ('el
 ifConditionStatements : statement*;
 elseConditionStatements : statement*;
 
-
-// Wyrażenia arytmetyczne i logiczne
+// Wyrażenia arytmetyczne
 expr
             : expr ('*'|'/') expr                      # ExprMulDiv
             | expr ('+'|'-') expr                      # ExprAddSub
             | '(' expr ')'                             # ExprParens
-            | INT                         # ExprInt
-            | BOOL                                     # ExprBool
+            | INT                                      # ExprInt
             | IDENTIFIER                               # ExprVar;
 
+// Wyrażenie logiczne
 exprComp    : 'not' exprComp                           # ExprNot
             | exprComp 'and' exprComp                  # ExprAnd
             | exprComp 'or' exprComp                   # ExprOr
             | expr ('=='|'!='|'>'|'<'|'>='|'<=') expr  # ExprCompRel
             | '(' exprComp ')'                         # ExprCompParens
+            | exprComp ('==' | '!=') exprComp          # ExprCompBools
             | BOOL                                     # ExprCompBool
             | IDENTIFIER                               # ExprCompVar;
 
@@ -113,8 +109,7 @@ STRING      : '"' .*? '"';
 WS          : [ \t\r\n]+ -> skip;
 DOT         :'.';
 ERROR       :'YAPPING';
-
-
+VOID        : 'void';
 
 // Reguły dla komentarzy
 SINGLE_LINE_COMMENT: '//' ~[\r\n]* -> skip;

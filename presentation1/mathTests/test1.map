@@ -1,0 +1,8 @@
+function obliczSkomplikowane(number x, number y) {
+    number wynik = (x + (y * 2)) / (x - y)
+    print wynik
+}
+
+number a = 8
+number b = 3
+obliczSkomplikowane(a, b)

@@ -1,0 +1,11 @@
+for(number a = 10; a > 5; a--){
+    print a
+}
+
+// break
+print 0,0,0,0,0,0
+
+while(a > 0 or false){
+	a--
+	print a
+}
