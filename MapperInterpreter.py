@@ -49,6 +49,7 @@ class VariableDeclarationListener(ParseTreeListener):
         #self.var_types_scoped.append({})
         new_child = TreeNode(self.current_node)
         self.current_node.add_child(new_child)
+        print("added child")
         self.current_node = self.current_node.move_in()
 
     def exitScope(self):
@@ -66,15 +67,15 @@ class VariableDeclarationListener(ParseTreeListener):
     def exitBlock(self,ctx):
         self.exitScope()
 
-    def nameExists(self,name):
-        for scope in self.var_types_scoped:
-            if name in scope:
-                return True
-        return False
-    def getTypeOfName(self,ctx,name):
-        for scope in reversed (self.var_types_scoped):
-            if name in scope:
-                return scope[name]
+    # def nameExists(self,name):
+    #     for scope in self.var_types_scoped:
+    #         if name in scope:
+    #             return True
+    #     return False
+    # def getTypeOfName(self,ctx,name):
+    #     for scope in reversed (self.var_types_scoped):
+    #         if name in scope:
+    #             return scope[name]
 
     def enterAssignment(self, ctx: MapperParser.AssignmentContext):
 
@@ -230,7 +231,7 @@ class MapperInterpreter(MapperVisitor):
             # blend blendName = circle 10 grass 20%
             elif (option_ctx.IDENTIFIER()):
                 identifier = option_ctx.IDENTIFIER().getText()
-                if(self.root.nameExists(identifier)  and isinstance(self.getVariableOfName(ctx,identifier), Tile)):
+                if(self.current_node.name_Exists_up(identifier)  and isinstance(self.getVariableOfName(ctx,identifier), Tile)):
                     tile = self.getVariableOfName(ctx,identifier)
                 else:
                     tile = Tile([identifier])
@@ -251,6 +252,7 @@ class MapperInterpreter(MapperVisitor):
 
         if not self.current_node.name_Exists_up(name):
             self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
+
         if self.current_node.type_search_up(name) != Types.NUMBER:
             self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
 
@@ -291,7 +293,7 @@ class MapperInterpreter(MapperVisitor):
         return value
 
     def getVariableOfName(self,ctx,name):
-        val = self.current_node.value_search_up()
+        val = self.current_node.value_search_up(name)
         if val!=None:
             return val
         self.raiseError(ctx,f"variable of name {name} isn't initialized")
@@ -299,7 +301,7 @@ class MapperInterpreter(MapperVisitor):
     def visitIncrement(self, ctx):
         name = ctx.IDENTIFIER().getText()
         self._debug_print(f"🆔 name: {name}")
-        if name not in self.var_types:
+        if not self.current_node.name_Exists_up:
             self.raiseError(ctx, f"Use of undeclared variable '{name}'")
 
         current_value = self.getVariableOfName(ctx,name)
@@ -393,7 +395,7 @@ class MapperInterpreter(MapperVisitor):
     def visitNoValueAssign(self, ctx): 
         self._debug_print("No value assignment detected")
         name = ctx.IDENTIFIER().getText()
-        if self.nameExists(name):
+        if self.current_node.name_Exists_up(name):
             self.raiseError(ctx, f"variable '{name}' already exists!")
         self.current_node.add_var(name,None)
 
@@ -426,7 +428,7 @@ class MapperInterpreter(MapperVisitor):
                 counter += 1
                 
             for arg in args:
-                if(self.nameExists(arg)):
+                if(self.current_node.name_Exists_up(arg)):
                     self.renderer.draw_tile(self.getVariableOfName(ctx,arg))
                     return
 
@@ -571,51 +573,51 @@ class MapperInterpreter(MapperVisitor):
 
         self._debug_print(f"Function '{function_name}' declared with parameters {params}")
 #to be done kurwa
-    def visitFunctionCall(self, ctx):
-        self._debug_print("fun call")
-        function_name = ctx.IDENTIFIER().getText()
-        expr_list = [self.visit(expr) for expr in ctx.exprList().expr()] if ctx.exprList() else []
-
-        if function_name == "print":
-            self._debug_print(*expr_list)
-            return None
-
-        if function_name not in self.functions:
-            self._raise_error(f"❌ Błąd: Funkcja '{function_name}' nie jest zadeklarowana!")
-
-        function = self.functions[function_name]
-        params = function['params']
-        statements = function['statements']
-
-        if len(expr_list) != len(params):
-            self._raise_error(
-                f"❌ Błąd: Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
-
-        # Here we ensure that each parameter is paired with its corresponding argument
-        local_vars = {}
-        local_var_types = {}
-        for param, expr in zip(params, expr_list):
-            self._debug_print(f"expr: {expr}")
-            param_identifier = param['identifier']
-            param_type = param['type']
-            # You may want to add type-checking here if needed, e.g. ensure the type matches
-            local_var_types[param_identifier] = param_type  # Update var_types with the parameter type
-            local_vars[param_identifier] = expr
-
-        original_vars = copy.deepcopy(self.variables)
-        original_var_types = copy.deepcopy(self.var_types)
-        self.var_types.update(local_var_types)
-        self.variables.update(local_vars)
-
-        self._debug_print(f"Local variables: {local_vars}")
-
-        result = None
-        for stmt in statements:
-            result = self.visit(stmt)
-
-        self.variables = original_vars
-        self.var_types = original_var_types
-        return result
+    # def visitFunctionCall(self, ctx):
+    #     self._debug_print("fun call")
+    #     function_name = ctx.IDENTIFIER().getText()
+    #     expr_list = [self.visit(expr) for expr in ctx.exprList().expr()] if ctx.exprList() else []
+    #
+    #     if function_name == "print":
+    #         self._debug_print(*expr_list)
+    #         return None
+    #
+    #     if function_name not in self.functions:
+    #         self._raise_error(f"❌ Błąd: Funkcja '{function_name}' nie jest zadeklarowana!")
+    #
+    #     function = self.functions[function_name]
+    #     params = function['params']
+    #     statements = function['statements']
+    #
+    #     if len(expr_list) != len(params):
+    #         self._raise_error(
+    #             f"❌ Błąd: Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
+    #
+    #     # Here we ensure that each parameter is paired with its corresponding argument
+    #     local_vars = {}
+    #     local_var_types = {}
+    #     for param, expr in zip(params, expr_list):
+    #         self._debug_print(f"expr: {expr}")
+    #         param_identifier = param['identifier']
+    #         param_type = param['type']
+    #         # You may want to add type-checking here if needed, e.g. ensure the type matches
+    #         local_var_types[param_identifier] = param_type  # Update var_types with the parameter type
+    #         local_vars[param_identifier] = expr
+    #
+    #     original_vars = copy.deepcopy(self.variables)
+    #     original_var_types = copy.deepcopy(self.var_types)
+    #     self.var_types.update(local_var_types)
+    #     self.variables.update(local_vars)
+    #
+    #     self._debug_print(f"Local variables: {local_vars}")
+    #
+    #     result = None
+    #     for stmt in statements:
+    #         result = self.visit(stmt)
+    #
+    #     self.variables = original_vars
+    #     self.var_types = original_var_types
+    #     return result
 
     def visitExprComp(self, ctx):
         self._debug_print("Processing comparison expression")
@@ -672,7 +674,7 @@ class MapperInterpreter(MapperVisitor):
     def visitExprVar(self, ctx):
         var_name = ctx.IDENTIFIER().getText()
         #self._debug_print(f"Processing variable reference: {var_name}: value: {self.variables.get(var_name)}")
-        if var_name not in self.var_types:
+        if not self.current_node.name_Exists_up(var_name):
             self.raiseError(ctx, f"Use of undeclared variable '{var_name}'")
         return self.getVariableOfName(ctx,var_name)
 
@@ -692,7 +694,7 @@ class MapperInterpreter(MapperVisitor):
     # Visit a parse tree produced by MapperParser#roadStart.
     def visitRoadStart(self, ctx: MapperParser.RoadStartContext):
         name = ctx.IDENTIFIER().getText()
-        if self.nameExists(name):
+        if self.root.nameExists(name):
             self._debug_print("this must be a new road")
         else:
             self._debug_print(f"Starting road: {name}")
@@ -702,7 +704,7 @@ class MapperInterpreter(MapperVisitor):
     def visitRoadEnd(self, ctx: MapperParser.RoadEndContext):
         name = ctx.IDENTIFIER().getText()
         self._debug_print(f"Ending road {name}")
-        if not self.nameExists(name):
+        if not self.root.nameExists(name):
             self._debug_print("the road you are refering to doesnt exist")
         else:
             self.current_node.scope[name].obj.end(Position(self.renderer.pointer_x, self.renderer.pointer_y), self.renderer)
@@ -725,6 +727,7 @@ if __name__ == "__main__":
         var_listener = VariableDeclarationListener()
         walker = ParseTreeWalker()
         walker.walk(var_listener, tree)
+        var_listener.root.reset_scope_counter()
         # print("Registered variables:", var_listener.var_types)  # Debugowanie
 
         # Sprawdzenie błędów redeklaracji

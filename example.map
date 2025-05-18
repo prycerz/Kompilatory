@@ -1,1 +1,10 @@
-bool b = grass
+number a = 3
+{
+    number a = 4
+    print a
+}
+{
+    number a = 5
+    print a
+}
+print a

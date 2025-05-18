@@ -1,6 +1,6 @@
 x = 10
 {
-number x = 3
-print(x)
+    number x = 3
+    print(x)
 }
 print x

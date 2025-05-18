@@ -26,7 +26,7 @@ printStatement : 'print' exprList?;  // np. print x; print x, y, 42
 
 //funkcje
 param     : type IDENTIFIER ;
-type : 'number'|'tile'|'blend';
+type : 'number'|'tile'|'blend'|'bool';
 
 functionDecl : 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement* '}';
 
@@ -45,7 +45,7 @@ increment
 tileSum      : IDENTIFIER ('+' IDENTIFIER)*;
 
 reasignment  : IDENTIFIER '=' expr;
-assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign | noValueAssign | reasignment;
+assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign | noValueAssign | reasignment | roadStart;
 noValueAssign: type IDENTIFIER;
 
 tileAssign   : 'tile' IDENTIFIER '=' tileSum; // atrybuty foreground i background są nadpisywane przez kolejne argumenty

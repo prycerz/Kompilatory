@@ -17,18 +17,29 @@ class TreeNode:
         self.scope = {}
         self.children = [] #lista dzieci po kolei kazde dziecko to scope
         self.parent = parent
+    def reset_scope_counter(self):
+        root = self.get_root()
+        root._dfs_reset_i()
+    def _dfs_reset_i(self):
+        self.i=0
+        for child in self.children:
+            child._dfs_reset_i()
     def add_child(self,child):
         self.children.append(child)
     def move_in(self):
+        print(self.children)
         if self.i < len(self.children):
+            var= self.children[self.i]
             self.i+=1
-            return self.children[self.i]
+            print(f"moving in to scope {self.i}")
+            return var
         elif self.parent!=None:
             return self.parent.move_in()
         else:
             print("blad move_in")
             return None
     def move_out(self):
+        print("move out {curr scope = }")
         return self.parent
     def type_search_up(self, var_name):
         return self.search_up(var_name,True)
@@ -73,11 +84,13 @@ class TreeNode:
             return self
 
 
+    def n_Exists_curr_scope(self,name):
+        return name in self.scope
 
     def name_Exists_up(self, name): #just for the root
         if name in self.scope:
             return True
         if self.parent!=None:
-            return self.parent.nameExists_up(name)
+            return self.parent.name_Exists_up(name)
         return False
 
