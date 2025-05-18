@@ -1,5 +1,7 @@
 import sys
 import copy
+
+from numpy import roots
 from pygments.lexer import include
 from antlr4 import ParseTreeListener
 from ErrorListener import MapperErrorListener
@@ -7,7 +9,7 @@ from PyQt5.QtCore import right
 from antlr4 import *
 from hamcrest import instance_of
 from vtk.numpy_interface.algorithms import condition
-
+from scope_tree import TreeNode
 from Blend import Blend
 from MapperListener import MapperListener
 from Road import Road
@@ -21,21 +23,35 @@ from MapperRenderer import MapperRenderer
 
 class VariableDeclarationListener(ParseTreeListener):
     def __init__(self):
-        #self.var_types = {}  # Słownik przechowujący zmienne i ich typy
+        #self.var_types = {}  # Słownik przechowujący zmienne i ich typy -> zmiana koncepcji
+        #self.var_types_scoped = [{}]  # lista słowników, pierwszy to globalny kolejne są młodsze
+        #self.all_var_types = {}
+
+        self.root = TreeNode() #korzen drzewa
+        self.current_node = self.root #obecny node
+        self.var_tree = self.root #drzewo przechowujące zmienne i ich typy
         self.errors = []     # Lista błędów (redeklaracje)
-        self.var_types_scoped = [{}]  # lista słowników, pierwszy to globalny kolejne są młodsze
-        self.all_var_types = {}
+
+
+
     def enterScope(self):
-        self.var_types_scoped.append({})
+        #self.var_types_scoped.append({})
+        new_child = TreeNode(parent=self.current_node)
+        self.current_node.add_child(new_child)
+        self.current_node = self.current_node.move_in()
 
     def exitScope(self):
-        current_scope = self.var_types_scoped.pop()
-        for name, vartype in current_scope.items():
-            self.all_var_types[name] = vartype
+        self.current_node = self.current_node.move_out()
+
+        #for name, vartype in current_scope.items():
+        #    self.all_var_types[name] = vartype
+
+
     def enterBlock(self,ctx):
         self.enterScope()
         for stmt in ctx.statement():
             self.enterEveryRule(stmt)
+
     def exitBlock(self,ctx):
         self.exitScope()
 

@@ -3,3 +3,16 @@ number a
 a = 5
 
 number a
+
+and or
+2+a++
+bool b = 5 == 5
+a++
+a--
+
+
+bool a
+a = 5==5
+---wywala blad
+ a
+ bool a = 5==5 nie
