@@ -1,7 +1,19 @@
+from re import search
+
+
+class VarInfo:
+    def __init__(self, t, o):
+        self.type = t
+        self.obj = o
+
 class TreeNode:
+    from dataclasses import dataclass
+
+
+
     def __init__(self, parent):
         self.i = 0
-        self.scope = {} #scope
+        self.scope = {}
         self.children = [] #lista dzieci po kolei kazde dziecko to scope
         self.parent = parent
     def add_child(self,child):
@@ -17,16 +29,42 @@ class TreeNode:
             return None
     def move_out(self):
         return self.parent
-    def search_up(self, var_name):
-        var_type = None
-        if var_name not in self.scope:
-            if self.parent!=None:
-                var_type = self.parent.search_up()
+    def type_search_up(self, var_name):
+        return self.search_up(var_name,True)
+
+    def value_search_up(self, var_name):
+        return self.search_up(var_name,False)
+
+    def search_up(self,var_name,type):
+        if type:
+            var_type = None
+            if var_name not in self.scope:
+                if self.parent!=None:
+                    var_type = self.parent.search_up(var_name,True)
+            else:
+                var_type = self.scope[var_name].type
+            return var_type
         else:
-            var_type = self.scope[var_name]
-        return var_type
+            val = None
+            if var_name not in self.scope:
+                if self.parent!=None:
+                    val = self.parent.search_up(var_name,False)
+            else:
+                val = self.scope[var_name].obj
+            return val
     def var_name_is_declared(self,var_name):
         return var_name in self.scope
+    def add_type(self, name, type):
+        info = VarInfo(type,None)
+        self.scope[name] = info
+    def add_var(self,name,obj):
+        self.scope[name].obj = obj
+
+    def get_root(self):
+        if self.parent!=None:
+            return self.get_root()
+        else:
+            return self
 
 
 

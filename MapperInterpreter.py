@@ -4,6 +4,8 @@ import copy
 from numpy import roots
 from pygments.lexer import include
 from antlr4 import ParseTreeListener
+
+import scope_tree
 from ErrorListener import MapperErrorListener
 from PyQt5.QtCore import right
 from antlr4 import *
@@ -83,9 +85,9 @@ class VariableDeclarationListener(ParseTreeListener):
             var_name = ctx.blendAssign().IDENTIFIER().getText()
             var_type = 'blend'
 
-        # elif ctx.roadStart():
-        #     var_name = ctx.blendAssign().IDENTIFIER().getText()
-        #     var_type = 'road'
+        elif ctx.roadStart():
+            var_name = ctx.blendAssign().IDENTIFIER().getText()
+            var_type = 'road'
 
         elif ctx.noValueAssign():
             var_name = ctx.noValueAssign().IDENTIFIER().getText()
@@ -95,13 +97,13 @@ class VariableDeclarationListener(ParseTreeListener):
             return
  
         # Now store in dictionary
-        if var_name in self.var_types_scoped[-1]:
+        if self.current_node.var_name_is_declared(var_name):
             token = ctx.start  # safer way to get token position
             line = token.line
             column = token.column
             raise RuntimeError(f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
         else:
-            self.var_types_scoped[-1][var_name] = var_type
+            self.current_node.add_type(var_name,var_type)
             # print(f"Declared {var_type} {var_name}")
         
 
@@ -109,15 +111,16 @@ class MapperInterpreter(MapperVisitor):
     DEBUG = True  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
     SHOW_ERRORS = True  # Flaga błędów - True włącza rzucanie wyjątków, False je ignoruje
 
-    def __init__(self, var_types, renderer=None, logger=None):
+    def __init__(self, types_tree, renderer=None, logger=None):
 
-        self.var_types = var_types  # Słownik z typami zmiennych z pierwszego przebiegu
-        self.variables = {}         # Przechowuje wartości zmiennych
+        self.root = types_tree.get_root() #korzen drzewa
+        self.current_node = self.root #obecny node
+        #self.variables = {}         # Przechowuje wartości zmiennych
         self.functions = {}         # Przechowuje funkcje
         self.renderer = renderer or MapperRenderer()
         self.roads = {}
         self.logger = logger  # Logger do rejestrowania komunikatów
-        self.scopes = [{}]  # lista słowników, pierwszy to globalny kolejne są młodsze
+
 
     def raiseError(self, ctx, msg):
         token = ctx.IDENTIFIER().getSymbol()
@@ -125,15 +128,20 @@ class MapperInterpreter(MapperVisitor):
         column = token.column
         raise RuntimeError(f"line: {line}, column: {column} {msg}")
     def enterScope(self):
-        self.scopes.append({})
-
+        #self.var_types_scoped.append({})
+        new_child = TreeNode(parent=self.current_node)
+        self.current_node.add_child(new_child)
+        self.current_node = self.current_node.move_in()
     def exitScope(self):
-        self.scopes.pop()
+        self.current_node = self.current_node.move_out()
     def visitBlock(self,ctx):
         self.enterScope()
         for stmt in ctx.statement():
             self.visit(stmt)
         self.exitScope()
+
+
+
     
     def visitPrintStatement(self, ctx: MapperParser.PrintStatementContext):
         self._debug_print("Handling print statement")
@@ -177,15 +185,15 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print('tile assign')
         name = ctx.IDENTIFIER().getText()
         tile = self.visitTileSum(ctx.tileSum())  # Get the tile type (e.g., sand, grass)
+        self.current_node.add_var(name,tile)
 
-        self.scopes[-1][name] = tile
 
     def visitBlendAssign(self, ctx):
 
         self._debug_print('visted blend assign')
         blend_name = ctx.IDENTIFIER().getText()  # Get the blend name
         blend_options = []  # List to store the blend options
-        self.var_types[blend_name] = 'blend' 
+
 
         self._debug_print(f"figuretext: {ctx.figure().getText()}")  # Debugging
 
@@ -222,7 +230,7 @@ class MapperInterpreter(MapperVisitor):
             
             percentage = int(option_ctx.INT().getText())
             blend_options.append((tile, percentage))
-
+        
         self.scopes[-1][blend_name] = Blend(figure, blend_options)  # Store the blend in variables
     
 
