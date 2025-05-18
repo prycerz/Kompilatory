@@ -1,6 +1,8 @@
 import sys
 import copy
+from logging import exception
 
+from mpi4py.futures.aplus import catch
 from numpy import roots
 from pygments.lexer import include
 from antlr4 import ParseTreeListener
@@ -23,6 +25,13 @@ from MapperParser import MapperParser
 from MapperVisitor import MapperVisitor
 from MapperRenderer import MapperRenderer
 
+class Types:
+    NUMBER = "number"
+    BOOL = "bool"
+    TILE = "tile"
+    BLEND = "blend"
+    ROAD = "road"
+
 class VariableDeclarationListener(ParseTreeListener):
     def __init__(self):
         #self.var_types = {}  # Słownik przechowujący zmienne i ich typy -> zmiana koncepcji
@@ -30,7 +39,7 @@ class VariableDeclarationListener(ParseTreeListener):
         #self.all_var_types = {}
 
         self.root = TreeNode() #korzen drzewa
-        self.current_node = self.root #obecny node
+        self.current_node: TreeNode = self.root #obecny node
         self.var_tree = self.root #drzewo przechowujące zmienne i ich typy
         self.errors = []     # Lista błędów (redeklaracje)
 
@@ -38,7 +47,7 @@ class VariableDeclarationListener(ParseTreeListener):
 
     def enterScope(self):
         #self.var_types_scoped.append({})
-        new_child = TreeNode(parent=self.current_node)
+        new_child = TreeNode(self.current_node)
         self.current_node.add_child(new_child)
         self.current_node = self.current_node.move_in()
 
@@ -127,9 +136,11 @@ class MapperInterpreter(MapperVisitor):
         line = token.line
         column = token.column
         raise RuntimeError(f"line: {line}, column: {column} {msg}")
+
+    #scope functions
     def enterScope(self):
         #self.var_types_scoped.append({})
-        new_child = TreeNode(parent=self.current_node)
+        new_child = TreeNode(self.current_node)
         self.current_node.add_child(new_child)
         self.current_node = self.current_node.move_in()
     def exitScope(self):
@@ -141,8 +152,6 @@ class MapperInterpreter(MapperVisitor):
         self.exitScope()
 
 
-
-    
     def visitPrintStatement(self, ctx: MapperParser.PrintStatementContext):
         self._debug_print("Handling print statement")
         if ctx.exprList():
@@ -221,7 +230,7 @@ class MapperInterpreter(MapperVisitor):
             # blend blendName = circle 10 grass 20%
             elif (option_ctx.IDENTIFIER()):
                 identifier = option_ctx.IDENTIFIER().getText()
-                if(self.nameExists(identifier) and isinstance(self.getVariableOfName(ctx,identifier), Tile)):
+                if(self.root.nameExists(identifier)  and isinstance(self.getVariableOfName(ctx,identifier), Tile)):
                     tile = self.getVariableOfName(ctx,identifier)
                 else:
                     tile = Tile([identifier])
@@ -230,18 +239,19 @@ class MapperInterpreter(MapperVisitor):
             
             percentage = int(option_ctx.INT().getText())
             blend_options.append((tile, percentage))
-        
-        self.scopes[-1][blend_name] = Blend(figure, blend_options)  # Store the blend in variables
+        self.current_node.add_var(blend_name,Blend(figure, blend_options))
+
     
 
     def visitNumberAssign(self, ctx):
         self._debug_print(f"handling: {ctx.getText()}")
         name = ctx.IDENTIFIER().getText()
-        print(self.var_types)
         self._debug_print(f"Assigning number: {name}")
-        self._debug_print(self.var_types)
 
-        if name not in self.var_types:
+
+        if not self.current_node.name_Exists_up(name):
+            self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
+        if self.current_node.type_search_up(name) != Types.NUMBER:
             self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
 
         expr = ctx.expr()
@@ -250,29 +260,40 @@ class MapperInterpreter(MapperVisitor):
             return None
         value = self.visit(expr)
         self._debug_print(f"Evaluated value: {value}")
-        self.scopes[-1][name] = value
+
+        self.current_node.add_var(name,value)
         self._debug_print(f"Number assigned: {name} = {value}")
 
     def visitBoolAssign(self, ctx):
         print('visiting bool assign')
         name = ctx.IDENTIFIER().getText()
-        if name not in self.var_types:
+        if not self.current_node.name_Exists_up(name):
             self.raiseError(ctx, f"Assignment of undeclared boolean '{name}'")
-
+        print("passed")
+        # try:
+        value = self.visit(ctx.expr())
+        # except error:
+        #     self.raiseError(ctx, f"invalid value for boolean '{name}'")
+        print("nig")
+        print(f"xd {value}")
         if ctx.expr():
-            value = bool(self.visit(ctx.expr()))
+            try:
+                value = bool(self.visit(ctx.expr()))
+                print(f"xd {value}")
+            except ValueError:
+                self.raiseError(ctx, "expected sth convertible to boolean")
         elif ctx.exprComp():
             value = self.visit(ctx.exprComp())
 
+        self.current_node.add_var(name, value)
 
-        self.scopes[-1][name] = value
         self._debug_print(f"Boolean assigned: {name} = {value}")
         return value
 
     def getVariableOfName(self,ctx,name):
-        for scope in reversed (self.scopes):
-            if name in scope:
-                return scope[name]
+        val = self.current_node.value_search_up()
+        if val!=None:
+            return val
         self.raiseError(ctx,f"variable of name {name} isn't initialized")
 
     def visitIncrement(self, ctx):
@@ -289,14 +310,14 @@ class MapperInterpreter(MapperVisitor):
                 delta = int(value)
                 if op == '+=':
                     self._debug_print(f"🔄 {name} = {current_value} + {delta}")
-                    self.scopes[-1][name] += delta
+                    self.current_node.scope[name].obj += delta
                 else:
                     self._debug_print(f"🔄 {name} = {current_value} - {delta}")
-                    self.scopes[-1][name] -= delta
+                    self.current_node.scope[name].obj -= delta
             elif isinstance(current_value, Tile):
                 if op == '+=':
                     self._debug_print(f"🧱 Dodaję do Tile: {name}.add_obj({value})")
-                    self.scopes[-1][name].add_obj(value)
+                    self.current_node.add_var(name,value)
                 else:
                     self._raise_error(f"❌ Tile nie obsługuje '-=': {name}")
             else:
@@ -306,24 +327,43 @@ class MapperInterpreter(MapperVisitor):
                 self._raise_error(f"❌ Operator '{op}' działa tylko na liczbach całkowitych")
             if op == '++':
                 self._debug_print("++")
-                self.scopes[-1][name] += 1
+                self.current_node.scope[name].obj += 1
             else:
-                self.scopes[-1][name] -= 1
-            self._debug_print(f"🔢 {name} po '{op}': {self.scopes[-1][name]}")
+                self.current_node.scope[name].obj -= 1
+            self._debug_print(f"🔢 {name} po '{op}': {self.current_node.scope[name].obj}")
         return self.getVariableOfName(ctx,name)
 
+    def get_type_string(self, value):
+        if isinstance(value, int) or isinstance(value, float):
+            return "number"
+        elif isinstance(value, bool):
+            return "bool"
+        elif isinstance(value, str):
+            return "tile"
+        elif isinstance(value,Road):
+            return "road"
+        elif isinstance(value,Tile):
+            return "tile"
+        elif isinstance(value,Blend):
+            return "blend"
+        else:
+            return "unknown"
     def visitReasignment(self, ctx):
         self._debug_print("Reassignment detected")
         name = ctx.IDENTIFIER().getText()
-        if name not in self.var_types:
+        if not self.current_node.name_Exists_up(name):
             self.raiseError(ctx, f"Undeclared variable '{name}'")
         if ctx.expr():
             value = self.visit(ctx.expr())
-
-        self.scopes[-1][name] = value
-        self._debug_print(f"Reassigned: {name} = {value}")
-        return value
-
+            previous_type = self.current_node.type_search_up(name)
+            new_type = self.get_type_string(value)
+            if  new_type != previous_type:
+                self.raiseError(ctx, f"'reassignment of {previous_type} '{name}' to {new_type} you have to constrain to previous type!'")
+            self.current_node.var_change_up(name,value)
+            self._debug_print(f"Reassigned: {name} = {value}")
+            return value
+        else:
+            self.raiseError(ctx, f"expression not resolved")
 
     def visitAssignment(self, ctx):
         self._debug_print("⚠️ Visiting assignment...")  # Debug
@@ -348,11 +388,6 @@ class MapperInterpreter(MapperVisitor):
         else:
             self._debug_print("❌ Unknown assignment type!")
 
-    def nameExists(self,name):
-        for scope in self.scopes:
-            if name in scope:
-                return True
-        return False
 
 
     def visitNoValueAssign(self, ctx): 
@@ -360,7 +395,7 @@ class MapperInterpreter(MapperVisitor):
         name = ctx.IDENTIFIER().getText()
         if self.nameExists(name):
             self.raiseError(ctx, f"variable '{name}' already exists!")
-        self.scopes[-1][name] = None
+        self.current_node.add_var(name,None)
 
     def visitMove(self, ctx):
         direction = ctx.getChild(1).getText()
@@ -647,7 +682,7 @@ class MapperInterpreter(MapperVisitor):
         return value
 
     def visitExprBool(self, ctx):
-        self._debug_print("looking at bool in expr")
+        print("looking at bool in expr")
         value = ctx.BOOL().getText().lower() == 'true'
         self._debug_print(f"Processing boolean literal: {value}")
         return value
@@ -661,7 +696,7 @@ class MapperInterpreter(MapperVisitor):
             self._debug_print("this must be a new road")
         else:
             self._debug_print(f"Starting road: {name}")
-            self.scopes[-1][name] = Road(Position(self.renderer.pointer_x , self.renderer.pointer_y))
+            self.current_node.add_var(name,Road(Position(self.renderer.pointer_x , self.renderer.pointer_y)))
 
     # Visit a parse tree produced by MapperParser#roadEnd.
     def visitRoadEnd(self, ctx: MapperParser.RoadEndContext):
@@ -670,7 +705,7 @@ class MapperInterpreter(MapperVisitor):
         if not self.nameExists(name):
             self._debug_print("the road you are refering to doesnt exist")
         else:
-            self.scopes[-1][name].end(Position(self.renderer.pointer_x, self.renderer.pointer_y), self.renderer)
+            self.current_node.scope[name].obj.end(Position(self.renderer.pointer_x, self.renderer.pointer_y), self.renderer)
 
 
 if __name__ == "__main__":
@@ -699,7 +734,7 @@ if __name__ == "__main__":
             sys.exit(1)
 
         # Drugi przebieg: interpretacja programu
-        interpreter = MapperInterpreter(var_listener.all_var_types)
+        interpreter = MapperInterpreter(var_listener.root)
         interpreter.visit(tree)
 
         # print("Starting Pygame loop...")

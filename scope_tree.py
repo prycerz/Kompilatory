@@ -5,13 +5,14 @@ class VarInfo:
     def __init__(self, t, o):
         self.type = t
         self.obj = o
+        self.is_fun = False
 
 class TreeNode:
     from dataclasses import dataclass
 
 
 
-    def __init__(self, parent):
+    def __init__(self, parent=None):
         self.i = 0
         self.scope = {}
         self.children = [] #lista dzieci po kolei kazde dziecko to scope
@@ -59,6 +60,11 @@ class TreeNode:
         self.scope[name] = info
     def add_var(self,name,obj):
         self.scope[name].obj = obj
+    def var_change_up(self,name,obj):
+        if name in self.scope:
+            self.scope[name] = obj
+        if self.parent!=None:
+            return self.parent.var_change_up(name,obj)
 
     def get_root(self):
         if self.parent!=None:
@@ -67,4 +73,11 @@ class TreeNode:
             return self
 
 
+
+    def name_Exists_up(self, name): #just for the root
+        if name in self.scope:
+            return True
+        if self.parent!=None:
+            return self.parent.nameExists_up(name)
+        return False
 
