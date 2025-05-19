@@ -70,6 +70,8 @@ class TreeNode:
         info = VarInfo(type,None)
         self.scope[name] = info
     def add_var(self,name,obj):
+        print("adding var")
+        print(self.scope[name].type)
         self.scope[name].obj = obj
     def var_change_up(self,name,obj):
         if name in self.scope:
@@ -77,6 +79,11 @@ class TreeNode:
         if self.parent!=None:
             return self.parent.var_change_up(name,obj)
 
+    def end_road_up(self, name, obj,renderer):
+        if name in self.scope:
+            self.scope[name].obj.end(obj, renderer)
+        if self.parent != None:
+            return self.parent.end_road_up(name, obj,renderer)
     def get_root(self):
         if self.parent!=None:
             return self.get_root()

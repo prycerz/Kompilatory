@@ -94,9 +94,6 @@ class VariableDeclarationListener(ParseTreeListener):
         elif ctx.blendAssign():
             var_name = ctx.blendAssign().IDENTIFIER().getText()
             var_type = Types.BLEND
-        elif ctx.roadStart():
-            var_name = ctx.blendAssign().IDENTIFIER().getText()
-            var_type = Types.ROAD
 
         elif ctx.noValueAssign():
             var_name = ctx.noValueAssign().IDENTIFIER().getText()
@@ -114,7 +111,29 @@ class VariableDeclarationListener(ParseTreeListener):
         else:
             self.current_node.add_type(var_name,var_type)
             # print(f"Declared {var_type} {var_name}")
-        
+
+    def enterRoadStart(self, ctx:MapperParser.RoadStartContext):
+        var_name = ctx.IDENTIFIER().getText()
+        var_type = Types.ROAD
+        # Now store in dictionary
+        if self.current_node.var_name_is_declared(var_name):
+            token = ctx.start  # safer way to get token position
+            line = token.line
+            column = token.column
+            raise RuntimeError(
+                f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
+        else:
+            self.current_node.add_type(var_name, var_type)
+
+    def enterRoadEnd(self, ctx:MapperParser.RoadEndContext):
+        var_name = ctx.IDENTIFIER().getText()
+        var_type = Types.ROAD
+        # Now store in dictionary
+        if not self.current_node.name_Exists_up(var_name):
+            MapperInterpreter.raiseError(ctx,"the road you are trying to end doesnt exist in this or the parent scope!")
+
+
+
 
 class MapperInterpreter(MapperVisitor):
     DEBUG = True  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
@@ -193,6 +212,9 @@ class MapperInterpreter(MapperVisitor):
         # Name of tile
         self._debug_print('tile assign')
         name = ctx.IDENTIFIER().getText()
+        if not self.current_node.name_Exists_up(name):
+            self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
+
         tile = self.visitTileSum(ctx.tileSum())  # Get the tile type (e.g., sand, grass)
         self.current_node.add_var(name,tile)
 
@@ -202,6 +224,8 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print('visted blend assign')
         blend_name = ctx.IDENTIFIER().getText()  # Get the blend name
         blend_options = []  # List to store the blend options
+        if not self.current_node.name_Exists_up(blend_name):
+            self.raiseError(ctx, f"Assignment of undeclared number '{blend_name}'")
 
 
         self._debug_print(f"figuretext: {ctx.figure().getText()}")  # Debugging
@@ -270,7 +294,6 @@ class MapperInterpreter(MapperVisitor):
         value = self.l_r_type(ctx)
 
         self._debug_print(f"Evaluated value: {value}")
-
         self.current_node.add_var(name,value)
         self._debug_print(f"Number assigned: {name} = {value}")
 
@@ -278,14 +301,11 @@ class MapperInterpreter(MapperVisitor):
         print('visiting bool assign')
         name = ctx.IDENTIFIER().getText()
         if not self.current_node.name_Exists_up(name):
-            self.raiseError(ctx, f"Assignment of undeclared boolean '{name}'")
-        print("passed")
-        # try:
-        value = self.visit(ctx.expr())
+            self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
+        value = self.l_r_type(ctx)
         # except error:
         #     self.raiseError(ctx, f"invalid value for boolean '{name}'")
-        print("nig")
-        print(f"xd {value}")
+
         if ctx.expr():
             try:
                 value = bool(self.visit(ctx.expr()))
@@ -705,20 +725,19 @@ class MapperInterpreter(MapperVisitor):
     # Visit a parse tree produced by MapperParser#roadStart.
     def visitRoadStart(self, ctx: MapperParser.RoadStartContext):
         name = ctx.IDENTIFIER().getText()
-        if self.root.nameExists(name):
-            self._debug_print("this must be a new road")
-        else:
-            self._debug_print(f"Starting road: {name}")
-            self.current_node.add_var(name,Road(Position(self.renderer.pointer_x , self.renderer.pointer_y)))
+        self._debug_print(f"Starting road: {name}")
+        self.current_node.add_var(name, Road(Position(self.renderer.pointer_x, self.renderer.pointer_y)))
+
 
     # Visit a parse tree produced by MapperParser#roadEnd.
     def visitRoadEnd(self, ctx: MapperParser.RoadEndContext):
         name = ctx.IDENTIFIER().getText()
         self._debug_print(f"Ending road {name}")
-        if not self.root.nameExists(name):
-            self._debug_print("the road you are refering to doesnt exist")
+        if not self.current_node.name_Exists_up:
+            self.raiseError(ctx,f"road '{name} doesnt have a starting point!")
         else:
-            self.current_node.scope[name].obj.end(Position(self.renderer.pointer_x, self.renderer.pointer_y), self.renderer)
+            pos = Position(self.renderer.pointer_x, self.renderer.pointer_y)
+            self.current_node.end_road_up(name,pos,self.renderer)
 
 
 if __name__ == "__main__":

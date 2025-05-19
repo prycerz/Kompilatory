@@ -1,3 +1,6 @@
-number a = 3
-a = 4
-a = true
+road village_forest start
+
+pointer left 8
+{
+road village_forest end
+}
