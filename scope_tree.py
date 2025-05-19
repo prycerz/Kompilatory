@@ -73,7 +73,7 @@ class TreeNode:
         self.scope[name].obj = obj
     def var_change_up(self,name,obj):
         if name in self.scope:
-            self.scope[name] = obj
+            self.scope[name].obj = obj
         if self.parent!=None:
             return self.parent.var_change_up(name,obj)
 

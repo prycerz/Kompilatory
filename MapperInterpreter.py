@@ -26,11 +26,11 @@ from MapperVisitor import MapperVisitor
 from MapperRenderer import MapperRenderer
 
 class Types:
-    NUMBER = "number"
-    BOOL = "bool"
-    TILE = "tile"
-    BLEND = "blend"
-    ROAD = "road"
+    NUMBER = int
+    BOOL = bool
+    TILE = Tile
+    BLEND = Blend
+    ROAD = Road
 
 class VariableDeclarationListener(ParseTreeListener):
     def __init__(self):
@@ -81,23 +81,22 @@ class VariableDeclarationListener(ParseTreeListener):
 
         if ctx.numberAssign():
             var_name = ctx.numberAssign().IDENTIFIER().getText()
-            var_type = 'number'
+            var_type = Types.NUMBER
 
         elif ctx.boolAssign():
             var_name = ctx.boolAssign().IDENTIFIER().getText()
-            var_type = 'bool'
+            var_type = Types.BOOL
 
         elif ctx.tileAssign():
             var_name = ctx.tileAssign().IDENTIFIER().getText()
-            var_type = 'tile'
+            var_type = Types.TILE
 
         elif ctx.blendAssign():
             var_name = ctx.blendAssign().IDENTIFIER().getText()
-            var_type = 'blend'
-
+            var_type = Types.BLEND
         elif ctx.roadStart():
             var_name = ctx.blendAssign().IDENTIFIER().getText()
-            var_type = 'road'
+            var_type = Types.ROAD
 
         elif ctx.noValueAssign():
             var_name = ctx.noValueAssign().IDENTIFIER().getText()
@@ -243,6 +242,22 @@ class MapperInterpreter(MapperVisitor):
         self.current_node.add_var(blend_name,Blend(figure, blend_options))
 
     
+    def l_r_type(self,ctx):
+        # to nie dziala i przechodzi number a = false
+        name = ctx.IDENTIFIER().getText()
+        print("checking lr type")
+        lval = self.current_node.type_search_up(name)
+        expr = ctx.expr()
+        if not expr:
+            self._debug_print("Error: ctx.expr() is None!")
+            return None
+        rval = self.visit(expr)
+        print(rval)
+        rtype = type(rval)
+        print(f"type: {lval} rtype: {rtype}")
+        if  rtype!=lval:
+            self.raiseError(ctx, f"{lval} '{name}' cannot be {rtype.__name__}")
+        return rval
 
     def visitNumberAssign(self, ctx):
         self._debug_print(f"handling: {ctx.getText()}")
@@ -252,15 +267,8 @@ class MapperInterpreter(MapperVisitor):
 
         if not self.current_node.name_Exists_up(name):
             self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
+        value = self.l_r_type(ctx)
 
-        if self.current_node.type_search_up(name) != Types.NUMBER:
-            self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
-
-        expr = ctx.expr()
-        if not expr:
-            self._debug_print("Error: ctx.expr() is None!")
-            return None
-        value = self.visit(expr)
         self._debug_print(f"Evaluated value: {value}")
 
         self.current_node.add_var(name,value)
@@ -356,11 +364,14 @@ class MapperInterpreter(MapperVisitor):
         if not self.current_node.name_Exists_up(name):
             self.raiseError(ctx, f"Undeclared variable '{name}'")
         if ctx.expr():
-            value = self.visit(ctx.expr())
-            previous_type = self.current_node.type_search_up(name)
-            new_type = self.get_type_string(value)
-            if  new_type != previous_type:
-                self.raiseError(ctx, f"'reassignment of {previous_type} '{name}' to {new_type} you have to constrain to previous type!'")
+
+            value = self.l_r_type(ctx)
+            print(value)
+           # value = self.visit(ctx.expr())
+           #  previous_type = self.current_node.type_search_up(name)
+           #  new_type = self.get_type_string(value)
+           #  if  new_type != previous_type:
+           #      self.raiseError(ctx, f"'reassignment of {previous_type} '{name}' to {new_type} you have to constrain to previous type!'")
             self.current_node.var_change_up(name,value)
             self._debug_print(f"Reassigned: {name} = {value}")
             return value
