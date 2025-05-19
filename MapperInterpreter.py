@@ -120,8 +120,7 @@ class VariableDeclarationListener(ParseTreeListener):
             token = ctx.start  # safer way to get token position
             line = token.line
             column = token.column
-            raise RuntimeError(
-                f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
+            raise RuntimeError(f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
         else:
             self.current_node.add_type(var_name, var_type)
 
@@ -130,7 +129,12 @@ class VariableDeclarationListener(ParseTreeListener):
         var_type = Types.ROAD
         # Now store in dictionary
         if not self.current_node.name_Exists_up(var_name):
-            MapperInterpreter.raiseError(ctx,"the road you are trying to end doesnt exist in this or the parent scope!")
+            token = ctx.start  # safer way to get token position
+            line = token.line
+            column = token.column
+            raise RuntimeError(
+                f"line: {line}, column: {column} the road '{var_name}' you are trying to end doesnt start in this or the parent scope!")
+
 
 
 
@@ -148,6 +152,7 @@ class MapperInterpreter(MapperVisitor):
         self.renderer = renderer or MapperRenderer()
         self.roads = {}
         self.logger = logger  # Logger do rejestrowania komunikatów
+
 
 
     def raiseError(self, ctx, msg):
@@ -734,7 +739,7 @@ class MapperInterpreter(MapperVisitor):
         name = ctx.IDENTIFIER().getText()
         self._debug_print(f"Ending road {name}")
         if not self.current_node.name_Exists_up:
-            self.raiseError(ctx,f"road '{name} doesnt have a starting point!")
+            self.raiseError(ctx,f"road '{name}' doesnt have a starting point!")
         else:
             pos = Position(self.renderer.pointer_x, self.renderer.pointer_y)
             self.current_node.end_road_up(name,pos,self.renderer)
