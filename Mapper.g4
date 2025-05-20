@@ -27,7 +27,7 @@ printStatement : 'print' exprList?;  // np. print x; print x, y, 42
 
 //funkcje
 param     : type IDENTIFIER ;
-type : 'number'|'tile'|'blend'|'bool';
+type : 'number'|'tile'|'blend'|'bool'|'void';
 
 functionDecl :type 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement* '}';
 

@@ -1,4 +1,4 @@
-bool function silnia(number n)
+void function silnia(number n)
 {
     if (n == 0) {
         return 1
@@ -6,7 +6,7 @@ bool function silnia(number n)
 
     number n_ = n - 1
     bool result = true
-    return result
+
 }
 
 number val = silnia(5)

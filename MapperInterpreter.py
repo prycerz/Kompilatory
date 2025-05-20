@@ -154,6 +154,7 @@ class VariableDeclarationListener(ParseTreeListener):
             "tile": Types.TILE,
             "blend": Types.BLEND,
             "road": Types.ROAD,
+            "void": None
         }
         if type_str not in type_map:
             self.raiseError(ctx,f"Unknown type: {type_str}")
