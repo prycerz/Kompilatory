@@ -15,14 +15,12 @@ statement   : printStatement
             | functionDecl
             | functionCall
             | returnStatement
-            | errorStatement
             | block
             ;
 
 block : '{' statement* '}' ;
 
 // Deklaracja zmiennej
-errorStatement : ERROR expr DOT;
 printStatement : 'print' exprList?;  // np. print x; print x, y, 42
 
 //funkcje
@@ -31,9 +29,11 @@ type : 'number'|'tile'|'blend'|'bool'|'void';
 
 functionDecl :type 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement* '}';
 
+exprOrExprComp : expr | exprComp;
+
 functionCall : IDENTIFIER '(' exprList? ')';
-returnStatement : 'return' expr?  ;
-exprList     : expr (',' expr)*;
+returnStatement : 'return' exprOrExprComp?  ;
+exprList     : exprOrExprComp (',' exprOrExprComp)*;
 
 
 // Przypisania zmiennych
@@ -46,7 +46,7 @@ increment
 
 tileSum      : IDENTIFIER ('+' IDENTIFIER)*;
 
-reasignment  : IDENTIFIER '=' expr;
+reasignment  : IDENTIFIER '=' (expr | exprComp);
 assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign | noValueAssign | reasignment | roadStart;
 noValueAssign: type IDENTIFIER;
 
@@ -76,11 +76,11 @@ move        : 'pointer' ('up' expr | 'down' expr | 'left' expr | 'right' expr);
 // Pętle
 loop        : whileLoop | forLoop; 
 whileLoop   : 'while' '(' exprComp ')' '{' statement* '}';
-forLoop     : 'for' '(' numberAssign ';' expr ';' increment ')' '{' statement* '}';
+forLoop     : 'for' '(' assignment ';' exprComp ';' increment ')' '{' statement* '}';
 
 
 // Instrukcja warunkowa
-conditional : 'if' '(' (exprComp  | expr) ')' '{' ifConditionStatements '}' ('else' '{' elseConditionStatements '}')?;
+conditional : 'if' '(' (exprComp) ')' '{' ifConditionStatements '}' ('else' '{' elseConditionStatements '}')?;
 
 ifConditionStatements : statement*;
 elseConditionStatements : statement*;
@@ -88,20 +88,31 @@ elseConditionStatements : statement*;
 
 // Wyrażenia arytmetyczne i logiczne
 expr
-            : expr ('*'|'/') expr                      # ExprMulDiv
+            : '-' expr                                 # ExprUnaryMinus
+            | expr ('*'|'/') expr                      # ExprMulDiv
             | expr ('+'|'-') expr                      # ExprAddSub
             | '(' expr ')'                             # ExprParens
             | INT                                      # ExprInt
-            | BOOL                                     # ExprBool
             | IDENTIFIER                               # ExprVar
             | functionCall                             # ExprFUnctionCall;
 
-exprComp    : expr ('=='|'!='|'>'|'<'|'>='|'<=') expr;
+exprComp    : NOT exprComp                             # ExprNot
+            | exprComp AND exprComp                    # ExprAnd
+            | exprComp OR exprComp                     # ExprOr
+            | expr ('=='|'!='|'>'|'<'|'>='|'<=') expr  # ExprCompRel
+            | '(' exprComp ')'                         # ExprCompParens
+            | exprComp ('==' | '!=') exprComp          # ExprCompBools
+            | BOOL                                     # ExprCompBool
+            | IDENTIFIER                               # ExprCompVar;
 
+
+AND         : 'and';
+OR          : 'or';
+NOT         : 'not';
 INT         : [0-9]+;
 BOOL        : 'true' | 'false';
 IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]*;
-STRING      : '"' .*? '"';
 WS          : [ \t\r\n]+ -> skip;
-DOT         :'.';
-ERROR       :'YAPPING';
+
+SINGLE_LINE_COMMENT: '//' ~[\r\n]* -> skip;
+MULTI_LINE_COMMENT: '/*' .*? '*/' -> skip;

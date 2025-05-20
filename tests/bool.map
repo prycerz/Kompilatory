@@ -1,0 +1,26 @@
+// assignments
+bool a
+bool b = false
+a = not (b and b)
+print a 
+
+bool c = 10 > 5
+print c
+
+// reasignment
+c = false
+print c
+// reasignment na inny typ - error
+// c = 10
+
+// or and not
+bool d = not((10 > 4) and (1 < 2)) or true
+print d
+
+// operatory '!=' i '==' na boolach
+bool x = false
+bool y = true
+bool z = x == y
+print z 
+z = z != true
+print z

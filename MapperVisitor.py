@@ -24,11 +24,6 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#errorStatement.
-    def visitErrorStatement(self, ctx:MapperParser.ErrorStatementContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by MapperParser#printStatement.
     def visitPrintStatement(self, ctx:MapperParser.PrintStatementContext):
         return self.visitChildren(ctx)
@@ -46,6 +41,11 @@ class MapperVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MapperParser#functionDecl.
     def visitFunctionDecl(self, ctx:MapperParser.FunctionDeclContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#exprOrExprComp.
+    def visitExprOrExprComp(self, ctx:MapperParser.ExprOrExprCompContext):
         return self.visitChildren(ctx)
 
 
@@ -214,13 +214,48 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#ExprBool.
-    def visitExprBool(self, ctx:MapperParser.ExprBoolContext):
+    # Visit a parse tree produced by MapperParser#ExprUnaryMinus.
+    def visitExprUnaryMinus(self, ctx:MapperParser.ExprUnaryMinusContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#exprComp.
-    def visitExprComp(self, ctx:MapperParser.ExprCompContext):
+    # Visit a parse tree produced by MapperParser#ExprAnd.
+    def visitExprAnd(self, ctx:MapperParser.ExprAndContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprCompRel.
+    def visitExprCompRel(self, ctx:MapperParser.ExprCompRelContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprCompBool.
+    def visitExprCompBool(self, ctx:MapperParser.ExprCompBoolContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprCompVar.
+    def visitExprCompVar(self, ctx:MapperParser.ExprCompVarContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprCompBools.
+    def visitExprCompBools(self, ctx:MapperParser.ExprCompBoolsContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprOr.
+    def visitExprOr(self, ctx:MapperParser.ExprOrContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprNot.
+    def visitExprNot(self, ctx:MapperParser.ExprNotContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprCompParens.
+    def visitExprCompParens(self, ctx:MapperParser.ExprCompParensContext):
         return self.visitChildren(ctx)
 
 

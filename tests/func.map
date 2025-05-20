@@ -1,0 +1,31 @@
+// number function
+number function foo (number a, bool b){
+	if(b){
+		return foo(10, false)
+	} else {
+		return a * 2
+	}
+}
+
+bool z = foo(2, true)
+print z
+
+// bool function
+bool function boo(number a, number b){
+	return a > b
+}
+
+print boo(10, 22)
+
+// void function
+void function foo (number a, bool b){
+	
+	// return 2 // błąd
+	if(b){
+		print a * 10
+	} else {
+		print a * (-10)
+	}
+}
+
+foo(1, not (10 < 2))

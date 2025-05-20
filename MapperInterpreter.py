@@ -1,22 +1,12 @@
 import sys
-import copy
 from logging import exception
 
-from mpi4py.futures.aplus import catch
-from numpy import roots
-from pygments.lexer import include
 from antlr4 import ParseTreeListener
-from xdg.Mime import get_type
 
-import scope_tree
 from ErrorListener import MapperErrorListener
-from PyQt5.QtCore import right
 from antlr4 import *
-from hamcrest import instance_of
-from vtk.numpy_interface.algorithms import condition
 from scope_tree import TreeNode
 from Blend import Blend
-from MapperListener import MapperListener
 from Road import Road
 from Road import Position
 from Tile import Tile
@@ -35,6 +25,7 @@ class Types:
 class ReturnValue(Exception):
     def __init__(self, value):
         self.value = value
+        
 class VariableDeclarationListener(ParseTreeListener):
     def __init__(self):
         #self.var_types = {}  # Słownik przechowujący zmienne i ich typy -> zmiana koncepcji
@@ -45,8 +36,6 @@ class VariableDeclarationListener(ParseTreeListener):
         self.current_node: TreeNode = self.root #obecny node
         self.var_tree = self.root #drzewo przechowujące zmienne i ich typy
         self.errors = []     # Lista błędów (redeklaracje)
-
-
 
     def enterScope(self):
         #self.var_types_scoped.append({})
@@ -81,7 +70,6 @@ class VariableDeclarationListener(ParseTreeListener):
     #             return scope[name]
 
     def enterAssignment(self, ctx: MapperParser.AssignmentContext):
-
         if ctx.numberAssign():
             var_name = ctx.numberAssign().IDENTIFIER().getText()
             var_type = Types.NUMBER
@@ -100,8 +88,8 @@ class VariableDeclarationListener(ParseTreeListener):
 
         elif ctx.noValueAssign():
             var_name = ctx.noValueAssign().IDENTIFIER().getText()
-            var_type = ctx.noValueAssign().type_().getText()
-
+            # type according to types class
+            var_type = getattr(Types, ctx.noValueAssign().type_().getText().upper())
         else:
             return
  
@@ -169,10 +157,10 @@ class VariableDeclarationListener(ParseTreeListener):
         seen_names = set()
         statements = ctx.statement()  # List of statements in the function body
 
-
+        return_type = self.get_type(ctx, ctx.children[0].getText())
+        print(f"return type {return_type}")
+        
         for param in ctx.param():
-            return_type = self.get_type(ctx,ctx.children[0].getText())
-            print(f"return type {return_type}")
             param_type = param.type_().getText()
             param_identifier = param.IDENTIFIER().getText()
             print(param_type)
@@ -202,7 +190,7 @@ class VariableDeclarationListener(ParseTreeListener):
     def enterFunctionCall(self, ctx: MapperParser.FunctionCallContext):
         print("fun call listener")
         function_name = ctx.IDENTIFIER().getText()
-        expr_list = [self.enterEveryRule(expr) for expr in ctx.exprList().expr()] if ctx.exprList() else []
+        expr_list = [self.enterEveryRule(expr) for expr in ctx.exprList().exprOrExprComp()] if ctx.exprList() else []
 
         if function_name == "print":
             pass
@@ -215,7 +203,7 @@ class VariableDeclarationListener(ParseTreeListener):
         statements = function['statements']
 
         if len(expr_list) != len(params):
-            self._raise_error(
+            self.raiseError(ctx,
                 f"❌ Błąd: Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
         self.enterScope()
 
@@ -236,8 +224,6 @@ class VariableDeclarationListener(ParseTreeListener):
     # Exit a parse tree produced by MapperParser#functionCall.
     def exitFunctionCall(self, ctx: MapperParser.FunctionCallContext):
         pass
-
-
 
 
 class MapperInterpreter(MapperVisitor):
@@ -280,7 +266,7 @@ class MapperInterpreter(MapperVisitor):
     def visitPrintStatement(self, ctx: MapperParser.PrintStatementContext):
         self._debug_print("Handling print statement")
         if ctx.exprList():
-            expr_values = [self.visit(expr) for expr in ctx.exprList().expr()]
+            expr_values = [self.visit(expr) for expr in ctx.exprList().exprOrExprComp()]
             if(self.logger):
                 self.logger.log(" ".join(map(str, expr_values)))
             print(*expr_values)  # Wypisz wszystkie wartości, oddzielone spacjami
@@ -377,7 +363,7 @@ class MapperInterpreter(MapperVisitor):
         name = ctx.IDENTIFIER().getText()
         print("checking lr type")
         lval = self.current_node.type_search_up(name)
-        expr = ctx.expr()
+        expr = ctx.expr() or ctx.exprComp()
         if not expr:
             self._debug_print("Error: ctx.expr() is None!")
             return None
@@ -393,7 +379,6 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print(f"handling: {ctx.getText()}")
         name = ctx.IDENTIFIER().getText()
         self._debug_print(f"Assigning number: {name}")
-
 
         if not self.current_node.name_Exists_up(name):
             self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
@@ -412,16 +397,10 @@ class MapperInterpreter(MapperVisitor):
         # except error:
         #     self.raiseError(ctx, f"invalid value for boolean '{name}'")
 
-        if ctx.expr():
-            try:
-                value = bool(self.visit(ctx.expr()))
-                print(f"xd {value}")
-            except ValueError:
-                self.raiseError(ctx, "expected sth convertible to boolean")
-        elif ctx.exprComp():
+        if ctx.exprComp():
             value = self.visit(ctx.exprComp())
 
-        self.current_node.add_var(name, value,Types.BOOL)
+        self.current_node.add_var(name, value, Types.BOOL)
 
         self._debug_print(f"Boolean assigned: {name} = {value}")
         return value
@@ -484,13 +463,13 @@ class MapperInterpreter(MapperVisitor):
             return "blend"
         else:
             return "unknown"
+        
     def visitReasignment(self, ctx):
         self._debug_print("Reassignment detected")
         name = ctx.IDENTIFIER().getText()
         if not self.current_node.name_Exists_up(name):
             self.raiseError(ctx, f"Undeclared variable '{name}'")
-        if ctx.expr():
-
+        if ctx.expr() or ctx.exprComp():
             value = self.l_r_type(ctx)
             print(value)
            # value = self.visit(ctx.expr())
@@ -527,13 +506,11 @@ class MapperInterpreter(MapperVisitor):
         else:
             self._debug_print("❌ Unknown assignment type!")
 
-
-
     def visitNoValueAssign(self, ctx): 
         self._debug_print("No value assignment detected")
         name = ctx.IDENTIFIER().getText()
-        if self.current_node.name_Exists_up(name):
-            self.raiseError(ctx, f"variable '{name}' already exists!")
+        if not self.current_node.name_Exists_up(name):
+            self.raiseError(ctx, f"Assignment of undeclared variable :'{name}'!")
         self.current_node.add_var(name,None)
 
     def visitMove(self, ctx):
@@ -613,9 +590,9 @@ class MapperInterpreter(MapperVisitor):
 
     def visitForLoop(self, ctx):
         self._debug_print("Handling for loop")
-        number_assign = ctx.numberAssign()
-        self.visit(number_assign)  # Execute the number assignment statement
-        self._debug_print(f"Initialized: {number_assign.getText()}")
+        assignment = ctx.assignment()
+        self.visit(assignment)  # Execute the number assignment statement
+        self._debug_print(f"Initialized: {assignment.getText()}")
 
         # Get condition expression
         condition_expr = ctx.exprComp()
@@ -725,7 +702,7 @@ class MapperInterpreter(MapperVisitor):
     def visitFunctionCall(self, ctx):
         self._debug_print("fun call")
         function_name = ctx.IDENTIFIER().getText()
-        expr_list = [self.visit(expr) for expr in ctx.exprList().expr()] if ctx.exprList() else []
+        expr_list = [self.visit(expr) for expr in ctx.exprList().exprOrExprComp()] if ctx.exprList() else []
 
         if function_name == "print":
             self._debug_print(*expr_list)
@@ -767,22 +744,68 @@ class MapperInterpreter(MapperVisitor):
             value = rv.value
             fun_value = return_type
             val_type = type(value)
+
+            print(f"type: {fun_value} rtype: {rtype}")
+
             if return_type!=val_type:
-                self.raiseError(ctx,f"return type '{val_type.__name__}' should be function return type: '{fun_value.__name__}'")
+                self.raiseError(ctx,f"return type '{val_type.__name__}' should be function return type: '{fun_value.__name__ if fun_value else 'void'}'")
             return value
         self.exitScope()
         return None
 
 
-
     def visitReturnStatement(self, ctx):
-        value = self.visit(ctx.expr()) if ctx.expr() else None
+        value = self.visit(ctx.exprOrExprComp()) if ctx.exprOrExprComp() else None
         raise ReturnValue(value)
-    def visitExprComp(self, ctx):
-        self._debug_print("Processing comparison expression")
-        left = self.visit(ctx.expr(0))
-        right = self.visit(ctx.expr(1))
-        op = ctx.children[1].getText()
+    
+   
+    def visitExprComp(self, ctx: MapperParser.ExprCompContext):
+        self._debug_print("Processing comparison or logical expression")
+        if isinstance(ctx, MapperParser.ExprNotContext):
+            return self.visitExprNot(ctx)
+        elif isinstance(ctx, MapperParser.ExprAndContext):
+            return self.visitExprAnd(ctx)
+        elif isinstance(ctx, MapperParser.ExprOrContext):
+            return self.visitExprOr(ctx)
+        elif isinstance(ctx, MapperParser.ExprCompRelContext):
+            return self.visitExprCompRel(ctx)
+        elif isinstance(ctx, MapperParser.ExprCompParensContext):
+            return self.visitExprCompParens(ctx)
+        elif isinstance(ctx, MapperParser.ExprCompBoolContext):
+            return self.visitExprCompBool(ctx)
+        elif isinstance(ctx, MapperParser.ExprCompVarContext):
+            return self.visitExprCompVar(ctx)
+        # DEVDEV
+        elif isinstance(ctx, MapperParser.ExprCompBoolsContext):
+            return self.visitExprCompBools(ctx)
+        else:
+            raise RuntimeError(f"Unknown exprComp type: {type(ctx).__name__}")
+
+    def visitExprNot(self, ctx: MapperParser.ExprNotContext):
+        self._debug_print("Processing logical NOT")
+        value = self.visit(ctx.exprComp())
+        if not isinstance(value, bool):
+            self._raise_error("❌ Operator 'not' requires a boolean operand")
+        return not value
+
+    def visitExprAnd(self, ctx: MapperParser.ExprAndContext):
+        self._debug_print("Processing logical AND")
+        left = self.visit(ctx.exprComp(0))
+        right = self.visit(ctx.exprComp(1))
+        if not (isinstance(left, bool) and isinstance(right, bool)):
+            self._raise_error("❌ Operator 'and' requires boolean operands")
+        return left and right
+
+    def visitExprOr(self, ctx: MapperParser.ExprOrContext):
+        self._debug_print("Processing logical OR")
+        left = self.visit(ctx.exprComp(0))
+        right = self.visit(ctx.exprComp(1))
+        if not (isinstance(left, bool) and isinstance(right, bool)):
+            self._raise_error("❌ Operator 'or' requires boolean operands")
+        return left or right
+
+    def visitExprCompRel(self, ctx: MapperParser.ExprCompRelContext):
+        self._debug_print("Processing relational expression")
         left = self.visit(ctx.expr(0))
         right = self.visit(ctx.expr(1))
         op = ctx.getChild(1).getText()
@@ -799,7 +822,42 @@ class MapperInterpreter(MapperVisitor):
         elif op == '>=':
             return left >= right
         else:
-            raise Exception(f"Unknown comparison operator: {op}")
+            raise RuntimeError(f"Unknown comparison operator: {op}")
+
+    def visitExprCompParens(self, ctx: MapperParser.ExprCompParensContext):
+        self._debug_print("Processing parenthesized comparison expression")
+        return self.visit(ctx.exprComp())
+
+    def visitExprCompBool(self, ctx: MapperParser.ExprCompBoolContext):
+        self._debug_print("Processing boolean literal in exprComp")
+        value = ctx.BOOL().getText().lower() == 'true'
+        return value
+
+    def visitExprCompVar(self, ctx: MapperParser.ExprCompVarContext):
+        self._debug_print("Processing variable in exprComp")
+        var_name = ctx.IDENTIFIER().getText()
+
+        # TESTTEST
+        if not self.current_node.name_Exists_up(var_name):
+            self.raiseError(ctx, f"Use of  undeclared number '{var_name}'")
+        
+        value = self.getVariableOfName(ctx, var_name)
+        if not isinstance(value, bool):
+            self._raise_error(f"❌ Variable '{var_name}' must be boolean in logical expression")
+        return value
+    
+    def visitExprCompBools(self, ctx: MapperParser.ExprCompBoolsContext):
+        self._debug_print("Processing boolean literal in exprComp")
+        left = self.visit(ctx.exprComp(0))
+        right = self.visit(ctx.exprComp(1))
+        op = ctx.getChild(1).getText()
+        if op == '==':
+            return left == right
+        elif op == '!=':
+            return left != right
+        else:
+            raise RuntimeError(f"Unknown comparison operator: {op} - only == and != are allowed in this context")
+    
 
     def visitExprAddSub(self, ctx):
         self._debug_print("Processing addition/subtraction expression")
@@ -826,6 +884,7 @@ class MapperInterpreter(MapperVisitor):
             return int(left / right)
         else:
             raise RuntimeError(f"Unknown operator: {op}")
+    
     def visitExprParens(self, ctx):
         self._debug_print("Processing parenthesized expression")
         return self.visit(ctx.expr())

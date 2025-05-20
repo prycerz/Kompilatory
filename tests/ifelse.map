@@ -1,0 +1,14 @@
+bool prawda = 10 > 5
+
+
+if(not prawda){
+	print 1
+} else {
+	print 2
+}
+
+if(not(10 == 4) or 5 > 10){
+	print 3
+} else {
+	print 4
+}
