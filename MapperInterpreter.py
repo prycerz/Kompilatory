@@ -745,8 +745,6 @@ class MapperInterpreter(MapperVisitor):
             fun_value = return_type
             val_type = type(value)
 
-            print(f"type: {fun_value} rtype: {rtype}")
-
             if return_type!=val_type:
                 self.raiseError(ctx,f"return type '{val_type.__name__}' should be function return type: '{fun_value.__name__ if fun_value else 'void'}'")
             return value
