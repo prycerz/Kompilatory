@@ -29,3 +29,17 @@ void function foo (number a, bool b){
 }
 
 foo(1, not (10 < 2))
+
+// recrursive function
+number function silnia(number n) {
+    if (n == 0) {
+        return 1
+    }
+
+    number nMinusOne = n - 1
+    number result = n * silnia(nMinusOne)
+    return result
+}
+
+number val = silnia(5)
+print val
