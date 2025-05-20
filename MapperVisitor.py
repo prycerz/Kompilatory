@@ -19,6 +19,11 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#block.
+    def visitBlock(self, ctx:MapperParser.BlockContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#errorStatement.
     def visitErrorStatement(self, ctx:MapperParser.ErrorStatementContext):
         return self.visitChildren(ctx)
@@ -41,11 +46,6 @@ class MapperVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MapperParser#functionDecl.
     def visitFunctionDecl(self, ctx:MapperParser.FunctionDeclContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MapperParser#block.
-    def visitBlock(self, ctx:MapperParser.BlockContext):
         return self.visitChildren(ctx)
 
 
@@ -201,6 +201,11 @@ class MapperVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MapperParser#ExprInt.
     def visitExprInt(self, ctx:MapperParser.ExprIntContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprUnaryMinus.
+    def visitExprUnaryMinus(self, ctx:MapperParser.ExprUnaryMinusContext):
         return self.visitChildren(ctx)
 
 

@@ -66,10 +66,6 @@ class VariableDeclarationListener(ParseTreeListener):
             var_name = ctx.blendAssign().IDENTIFIER().getText()
             var_type = 'blend'
 
-        # elif ctx.roadStart():
-        #     var_name = ctx.blendAssign().IDENTIFIER().getText()
-        #     var_type = 'road'
-
         elif ctx.noValueAssign():
             var_name = ctx.noValueAssign().IDENTIFIER().getText()
             var_type = ctx.noValueAssign().type_().getText()
@@ -743,6 +739,11 @@ class MapperInterpreter(MapperVisitor):
         value = ctx.BOOL().getText().lower() == 'true'
         self._debug_print(f"Processing boolean literal: {value}")
         return value
+    
+    def visitExprUnaryMinus(self, ctx):
+        self._debug_print("Processing unary minus")
+        value = self.visit(ctx.expr())
+        return -value
 
 
 

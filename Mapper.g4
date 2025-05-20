@@ -82,7 +82,8 @@ elseConditionStatements : statement*;
 
 // Wyrażenia arytmetyczne
 expr
-            : expr ('*'|'/') expr                      # ExprMulDiv
+            : '-' expr                                 # ExprUnaryMinus
+            | expr ('*'|'/') expr                      # ExprMulDiv
             | expr ('+'|'-') expr                      # ExprAddSub
             | '(' expr ')'                             # ExprParens
             | INT                                      # ExprInt

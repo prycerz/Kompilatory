@@ -26,6 +26,15 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#block.
+    def enterBlock(self, ctx:MapperParser.BlockContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#block.
+    def exitBlock(self, ctx:MapperParser.BlockContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#errorStatement.
     def enterErrorStatement(self, ctx:MapperParser.ErrorStatementContext):
         pass
@@ -68,15 +77,6 @@ class MapperListener(ParseTreeListener):
 
     # Exit a parse tree produced by MapperParser#functionDecl.
     def exitFunctionDecl(self, ctx:MapperParser.FunctionDeclContext):
-        pass
-
-
-    # Enter a parse tree produced by MapperParser#block.
-    def enterBlock(self, ctx:MapperParser.BlockContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#block.
-    def exitBlock(self, ctx:MapperParser.BlockContext):
         pass
 
 
@@ -356,6 +356,15 @@ class MapperListener(ParseTreeListener):
 
     # Exit a parse tree produced by MapperParser#ExprInt.
     def exitExprInt(self, ctx:MapperParser.ExprIntContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprUnaryMinus.
+    def enterExprUnaryMinus(self, ctx:MapperParser.ExprUnaryMinusContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprUnaryMinus.
+    def exitExprUnaryMinus(self, ctx:MapperParser.ExprUnaryMinusContext):
         pass
 
 

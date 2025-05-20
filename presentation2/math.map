@@ -1,6 +1,13 @@
-// nic nie zmieniałem tutaj
 number a = 8
 number b = 3
 
 
-number wynik = (a + (b * 2)) / (a - b)
+number wynik = (a + (b * 2)) / -(a - b)
+print wynik
+
+number c = -2
+print c
+
+number z = c - (-2)
+print z
+
