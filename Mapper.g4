@@ -14,6 +14,7 @@ statement   : printStatement
             | roadPlacement
             | functionDecl
             | functionCall
+            | returnStatement
             | errorStatement
             | block
             ;
@@ -28,9 +29,10 @@ printStatement : 'print' exprList?;  // np. print x; print x, y, 42
 param     : type IDENTIFIER ;
 type : 'number'|'tile'|'blend'|'bool';
 
-functionDecl : 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement* '}';
+functionDecl :type 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement* '}';
 
 functionCall : IDENTIFIER '(' exprList? ')';
+returnStatement : 'return' expr?  ;
 exprList     : expr (',' expr)*;
 
 
@@ -91,7 +93,8 @@ expr
             | '(' expr ')'                             # ExprParens
             | INT                                      # ExprInt
             | BOOL                                     # ExprBool
-            | IDENTIFIER                               # ExprVar;
+            | IDENTIFIER                               # ExprVar
+            | functionCall                             # ExprFUnctionCall;
 
 exprComp    : expr ('=='|'!='|'>'|'<'|'>='|'<=') expr;
 

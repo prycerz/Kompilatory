@@ -89,6 +89,15 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#returnStatement.
+    def enterReturnStatement(self, ctx:MapperParser.ReturnStatementContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#returnStatement.
+    def exitReturnStatement(self, ctx:MapperParser.ReturnStatementContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#exprList.
     def enterExprList(self, ctx:MapperParser.ExprListContext):
         pass
@@ -356,6 +365,15 @@ class MapperListener(ParseTreeListener):
 
     # Exit a parse tree produced by MapperParser#ExprInt.
     def exitExprInt(self, ctx:MapperParser.ExprIntContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprFUnctionCall.
+    def enterExprFUnctionCall(self, ctx:MapperParser.ExprFUnctionCallContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprFUnctionCall.
+    def exitExprFUnctionCall(self, ctx:MapperParser.ExprFUnctionCallContext):
         pass
 
 

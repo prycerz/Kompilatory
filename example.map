@@ -1,2 +1,13 @@
+bool function silnia(number n)
+{
+    if (n == 0) {
+        return 1
+    }
 
-road v end
+    number n_ = n - 1
+    bool result = true
+    return result
+}
+
+number val = silnia(5)
+print val

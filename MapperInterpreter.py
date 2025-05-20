@@ -6,6 +6,7 @@ from mpi4py.futures.aplus import catch
 from numpy import roots
 from pygments.lexer import include
 from antlr4 import ParseTreeListener
+from xdg.Mime import get_type
 
 import scope_tree
 from ErrorListener import MapperErrorListener
@@ -31,7 +32,9 @@ class Types:
     TILE = Tile
     BLEND = Blend
     ROAD = Road
-
+class ReturnValue(Exception):
+    def __init__(self, value):
+        self.value = value
 class VariableDeclarationListener(ParseTreeListener):
     def __init__(self):
         #self.var_types = {}  # Słownik przechowujący zmienne i ich typy -> zmiana koncepcji
@@ -136,6 +139,103 @@ class VariableDeclarationListener(ParseTreeListener):
                 f"line: {line}, column: {column} the road '{var_name}' you are trying to end doesnt start in this or the parent scope!")
 
 
+    def raiseError(self, ctx, msg):
+        token = ctx.IDENTIFIER().getSymbol()
+        line = token.line
+        column = token.column
+        raise RuntimeError(f"line: {line}, column: {column} {msg}")
+
+
+    def get_type(self,ctx,type_str: str):
+        print("entered ")
+        type_map = {
+            "number": Types.NUMBER,
+            "bool": Types.BOOL,
+            "tile": Types.TILE,
+            "blend": Types.BLEND,
+            "road": Types.ROAD,
+        }
+        if type_str not in type_map:
+            self.raiseError(ctx,f"Unknown type: {type_str}")
+        return type_map[type_str]
+
+    # Enter a parse tree produced by MapperParser#functionDecl.
+    def enterFunctionDecl(self, ctx: MapperParser.FunctionDeclContext):
+        function_name = ctx.IDENTIFIER().getText()
+        if function_name in self.current_node.functions:
+            self.raiseError(ctx,f"function {function_name} already exists in this scope")
+        params = []
+        seen_names = set()
+        statements = ctx.statement()  # List of statements in the function body
+
+
+        for param in ctx.param():
+            return_type = self.get_type(ctx,ctx.children[0].getText())
+            print(f"return type {return_type}")
+            param_type = param.type_().getText()
+            param_identifier = param.IDENTIFIER().getText()
+            print(param_type)
+            print(param_identifier)
+            # Store both TYPE and IDENTIFIER for each parameter
+            param_type = self.get_type(ctx,param_type)  # assuming TYPE is defined as 'number', 'tile', etc.
+            print(f"resolved type:{param_type}")
+            if param_identifier in seen_names:
+                self.raiseError(ctx,f"{param_identifier} multiple occurences in function declaration")
+            seen_names.add(param_identifier)
+            params.append({'type': param_type, 'identifier': param_identifier})
+
+        # Store the function definition
+        self.root.functions[function_name] = {
+            'params': params,
+            'statements': statements,
+            'return_type': return_type
+        }
+
+
+        print(f"Function '{function_name}' declared with parameters {params}")
+    # Exit a parse tree produced by MapperParser#functionDecl.
+    def exitFunctionDecl(self, ctx: MapperParser.FunctionDeclContext):
+        pass
+
+    # Enter a parse tree produced by MapperParser#functionCall.
+    def enterFunctionCall(self, ctx: MapperParser.FunctionCallContext):
+        print("fun call listener")
+        function_name = ctx.IDENTIFIER().getText()
+        expr_list = [self.enterEveryRule(expr) for expr in ctx.exprList().expr()] if ctx.exprList() else []
+
+        if function_name == "print":
+            pass
+
+        if function_name not in self.root.functions:
+            self.raiseError(ctx,f"function'{function_name}' isnt declared!")
+
+        function = self.root.functions[function_name]
+        params = function['params']
+        statements = function['statements']
+
+        if len(expr_list) != len(params):
+            self._raise_error(
+                f"❌ Błąd: Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
+        self.enterScope()
+
+        for param, value in zip(params, expr_list):
+            param_identifier = param['identifier']
+            param_type = param['type']
+            print(f"value {value}")
+            self.current_node.add_type(param_identifier, param_type)
+            #self.current_node.add_var(param_identifier, value)
+
+        result = None
+        # for stmt in statements:
+        #     result = self.visit(stmt)
+
+        self.exitScope()
+        # return result
+
+    # Exit a parse tree produced by MapperParser#functionCall.
+    def exitFunctionCall(self, ctx: MapperParser.FunctionCallContext):
+        pass
+
 
 
 
@@ -221,7 +321,7 @@ class MapperInterpreter(MapperVisitor):
             self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
 
         tile = self.visitTileSum(ctx.tileSum())  # Get the tile type (e.g., sand, grass)
-        self.current_node.add_var(name,tile)
+        self.current_node.add_var(name,tile,Types.TILE)
 
 
     def visitBlendAssign(self, ctx):
@@ -268,7 +368,7 @@ class MapperInterpreter(MapperVisitor):
             
             percentage = int(option_ctx.INT().getText())
             blend_options.append((tile, percentage))
-        self.current_node.add_var(blend_name,Blend(figure, blend_options))
+        self.current_node.add_var(blend_name,Blend(figure, blend_options),Types.BLEND)
 
     
     def l_r_type(self,ctx):
@@ -299,7 +399,7 @@ class MapperInterpreter(MapperVisitor):
         value = self.l_r_type(ctx)
 
         self._debug_print(f"Evaluated value: {value}")
-        self.current_node.add_var(name,value)
+        self.current_node.add_var(name,value,Types.NUMBER)
         self._debug_print(f"Number assigned: {name} = {value}")
 
     def visitBoolAssign(self, ctx):
@@ -320,7 +420,7 @@ class MapperInterpreter(MapperVisitor):
         elif ctx.exprComp():
             value = self.visit(ctx.exprComp())
 
-        self.current_node.add_var(name, value)
+        self.current_node.add_var(name, value,Types.BOOL)
 
         self._debug_print(f"Boolean assigned: {name} = {value}")
         return value
@@ -584,77 +684,99 @@ class MapperInterpreter(MapperVisitor):
 
 
     def visitFunctionDecl(self, ctx):
-        self._debug_print("fun decl")
-        function_name = ctx.IDENTIFIER().getText()
-        self._debug_print(function_name)
-
-        params = []
-
-        statements = ctx.statement()  # List of statements in the function body
-        self._debug_print(f"dir: {dir(ctx)}")
-
-        for param in ctx.param():
-            self._debug_print(param.type_().getText())
-            self._debug_print(param.IDENTIFIER())
-            # Store both TYPE and IDENTIFIER for each parameter
-            param_type = param.type_().getText() # assuming TYPE is defined as 'number', 'tile', etc.
-            param_identifier = param.IDENTIFIER().getText()
-            params.append({'type': param_type, 'identifier': param_identifier})
-
-        # Store the function definition
-        self.functions[function_name] = {
-            'params': params,
-            'statements': statements
+        # self._debug_print("fun decl")
+        # function_name = ctx.IDENTIFIER().getText()
+        # self._debug_print(function_name)
+        #
+        # params = []
+        #
+        # statements = ctx.statement()  # List of statements in the function body
+        # self._debug_print(f"dir: {dir(ctx)}")
+        #
+        # for param in ctx.param():
+        #     self._debug_print(param.type_().getText())
+        #     self._debug_print(param.IDENTIFIER())
+        #     # Store both TYPE and IDENTIFIER for each parameter
+        #     param_type = param.type_().getText() # assuming TYPE is defined as 'number', 'tile', etc.
+        #     param_identifier = param.IDENTIFIER().getText()
+        #     params.append({'type': param_type, 'identifier': param_identifier})
+        #
+        # # Store the function definition
+        # self.functions[function_name] = {
+        #     'params': params,
+        #     'statements': statements
+        # }
+        #
+        # self._debug_print(f"Function '{function_name}' declared with parameters {params}")
+        pass
+    def get_type(self,ctx,type_str: str):
+        print("entered ")
+        type_map = {
+            "number": Types.NUMBER,
+            "bool": Types.BOOL,
+            "tile": Types.TILE,
+            "blend": Types.BLEND,
+            "road": Types.ROAD,
         }
+        if type_str not in type_map:
+            self.raiseError(ctx,f"Unknown type: {type_str}")
+        return type_map[type_str]
+    def visitFunctionCall(self, ctx):
+        self._debug_print("fun call")
+        function_name = ctx.IDENTIFIER().getText()
+        expr_list = [self.visit(expr) for expr in ctx.exprList().expr()] if ctx.exprList() else []
 
-        self._debug_print(f"Function '{function_name}' declared with parameters {params}")
-#to be done kurwa
-    # def visitFunctionCall(self, ctx):
-    #     self._debug_print("fun call")
-    #     function_name = ctx.IDENTIFIER().getText()
-    #     expr_list = [self.visit(expr) for expr in ctx.exprList().expr()] if ctx.exprList() else []
-    #
-    #     if function_name == "print":
-    #         self._debug_print(*expr_list)
-    #         return None
-    #
-    #     if function_name not in self.functions:
-    #         self._raise_error(f"❌ Błąd: Funkcja '{function_name}' nie jest zadeklarowana!")
-    #
-    #     function = self.functions[function_name]
-    #     params = function['params']
-    #     statements = function['statements']
-    #
-    #     if len(expr_list) != len(params):
-    #         self._raise_error(
-    #             f"❌ Błąd: Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
-    #
-    #     # Here we ensure that each parameter is paired with its corresponding argument
-    #     local_vars = {}
-    #     local_var_types = {}
-    #     for param, expr in zip(params, expr_list):
-    #         self._debug_print(f"expr: {expr}")
-    #         param_identifier = param['identifier']
-    #         param_type = param['type']
-    #         # You may want to add type-checking here if needed, e.g. ensure the type matches
-    #         local_var_types[param_identifier] = param_type  # Update var_types with the parameter type
-    #         local_vars[param_identifier] = expr
-    #
-    #     original_vars = copy.deepcopy(self.variables)
-    #     original_var_types = copy.deepcopy(self.var_types)
-    #     self.var_types.update(local_var_types)
-    #     self.variables.update(local_vars)
-    #
-    #     self._debug_print(f"Local variables: {local_vars}")
-    #
-    #     result = None
-    #     for stmt in statements:
-    #         result = self.visit(stmt)
-    #
-    #     self.variables = original_vars
-    #     self.var_types = original_var_types
-    #     return result
+        if function_name == "print":
+            self._debug_print(*expr_list)
+            return None
 
+        if function_name not in self.root.functions:
+            self._raise_error(f"❌ Błąd: Funkcja '{function_name}' nie jest zadeklarowana!")
+
+        function = self.root.functions[function_name]
+        params = function['params']
+        statements = function['statements']
+        print("here")
+        return_type = function['return_type']
+        print({return_type})
+
+        if len(expr_list) != len(params):
+            self._raise_error(
+                f"❌ Błąd: Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
+        self.enterScope()
+
+        for param, value in zip(params, expr_list):
+            param_identifier = param['identifier']
+            param_type = param['type']
+
+            lval = param_type
+            rvalue = value
+            rtype=type(value)
+            print(f"type: {lval} rtype: {rtype}")
+            if rtype != lval:
+                self.raiseError(ctx, f"{lval} '{param_identifier}' cannot be {rtype.__name__}")
+            self.current_node.add_type(param_identifier, param_type)
+            self.current_node.add_var(param_identifier, value)
+
+        try:
+            for stmt in statements:
+                self.visit(stmt)
+        except ReturnValue as rv:
+            self.exitScope()
+            value = rv.value
+            fun_value = return_type
+            val_type = type(value)
+            if return_type!=val_type:
+                self.raiseError(ctx,f"return type '{val_type.__name__}' should be function return type: '{fun_value.__name__}'")
+            return value
+        self.exitScope()
+        return None
+
+
+
+    def visitReturnStatement(self, ctx):
+        value = self.visit(ctx.expr()) if ctx.expr() else None
+        raise ReturnValue(value)
     def visitExprComp(self, ctx):
         self._debug_print("Processing comparison expression")
         left = self.visit(ctx.expr(0))
@@ -731,7 +853,7 @@ class MapperInterpreter(MapperVisitor):
     def visitRoadStart(self, ctx: MapperParser.RoadStartContext):
         name = ctx.IDENTIFIER().getText()
         self._debug_print(f"Starting road: {name}")
-        self.current_node.add_var(name, Road(Position(self.renderer.pointer_x, self.renderer.pointer_y)))
+        self.current_node.add_var(name, Road(Position(self.renderer.pointer_x, self.renderer.pointer_y)),Types.ROAD)
 
 
     # Visit a parse tree produced by MapperParser#roadEnd.

@@ -17,6 +17,7 @@ class TreeNode:
         self.scope = {}
         self.children = [] #lista dzieci po kolei kazde dziecko to scope
         self.parent = parent
+        self.functions = {}
     def reset_scope_counter(self):
         root = self.get_root()
         root._dfs_reset_i()
@@ -68,9 +69,13 @@ class TreeNode:
         return var_name in self.scope
     def add_type(self, name, type):
         info = VarInfo(type,None)
+        print(f"name {name} adding type {type}")
         self.scope[name] = info
-    def add_var(self,name,obj):
-        print("adding var")
+    def add_var(self,name,obj,type = None):
+        print(f"adding var {name}, val = {obj}")
+        print(f"scope {self.scope}")
+        if name not in self.scope:
+            self.add_type(name,type)
         print(self.scope[name].type)
         self.scope[name].obj = obj
     def var_change_up(self,name,obj):
