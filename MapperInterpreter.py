@@ -136,7 +136,7 @@ class VariableDeclarationListener(ParseTreeListener):
             token = ctx.start
         line = token.line
         column = token.column
-        raise RuntimeError(f"❌ Błąd: linia {line}, kolumna {column} – {msg}")
+        raise RuntimeError(f"line {line}, column {column} – {msg}")
 
 
     def get_type(self,ctx,type_str: str):
@@ -209,7 +209,7 @@ class VariableDeclarationListener(ParseTreeListener):
 
         if len(expr_list) != len(params):
             self.raiseError(ctx,
-                f"❌ Błąd: Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
+                f"Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
         self.enterScope()
 
         for param, value in zip(params, expr_list):
@@ -337,7 +337,7 @@ class MapperInterpreter(MapperVisitor):
             height = int(ctx.figure().INT(1).getText())
             figure = Figure('rectangle', {'width': width, 'height': height})
         else:
-            self._raise_error("❌ Błąd: Nieznany typ figury!")
+            self._raise_error("Nieznany typ figury!")
 
         # Iterate through the blend options (ctx.blendOption())
         for option_ctx in ctx.blendOption():
@@ -358,7 +358,7 @@ class MapperInterpreter(MapperVisitor):
                 else:
                     tile = Tile(args = [identifier],ctx = ctx)
             else:
-                self._raise_error("❌ Błąd: Nieznany typ opcji blendu!")
+                self._raise_error("Nieznany typ opcji blendu!")
             
             percentage = int(option_ctx.INT().getText())
             blend_options.append((tile, percentage))
@@ -752,7 +752,7 @@ class MapperInterpreter(MapperVisitor):
             return None
 
         if function_name not in self.root.functions:
-            self._raise_error(f"❌ Błąd: Funkcja '{function_name}' nie jest zadeklarowana!")
+            self._raise_error(f"Funkcja '{function_name}' nie jest zadeklarowana!")
 
         function = self.root.functions[function_name]
         params = function['params']
@@ -763,7 +763,7 @@ class MapperInterpreter(MapperVisitor):
 
         if len(expr_list) != len(params):
             self._raise_error(
-                f"❌ Błąd: Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
+                f"Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
         self.enterScope()
 
         for param, value in zip(params, expr_list):
@@ -775,7 +775,7 @@ class MapperInterpreter(MapperVisitor):
             rtype=type(value)
             print(f"type: {lval} rtype: {rtype}")
             if rtype != lval:
-                self.raiseError(ctx, f"{lval} '{param_identifier}' cannot be {rtype.__name__}")
+                self.raiseError(ctx, f"{lval.__name__} '{param_identifier}' cannot be {rtype.__name__}")
             self.current_node.add_type(param_identifier, param_type)
             self.current_node.add_var(param_identifier, value)
 
