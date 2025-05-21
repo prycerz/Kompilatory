@@ -42,29 +42,47 @@ class TreeNode:
     def move_out(self):
         print("move out {curr scope = }")
         return self.parent
-    def type_search_up(self, var_name):
+    def type_search_up(self, var_name,jumps=0):
         return self.search_up(var_name,True)
 
-    def value_search_up(self, var_name):
-        return self.search_up(var_name,False)
-
-    def search_up(self,var_name,type):
+    def value_search_up(self, var_name,jumps=0):
+        return self.search_up(var_name,False,jumps)
+    def obj_search_up(self, var_name,jumps=0):
+        return self.search_up_obj(var_name, jumps)
+    def search_up(self,var_name,type,jumps=0):
         if type:
             var_type = None
             if var_name not in self.scope:
                 if self.parent!=None:
-                    var_type = self.parent.search_up(var_name,True)
+                    var_type = self.parent.search_up(var_name,True,jumps)
             else:
-                var_type = self.scope[var_name].type
+                if (jumps == 0):
+                    var_type = self.scope[var_name].type
+                else:
+                    var_type = self.parent.search_up(var_name,True,jumps-1)
             return var_type
         else:
             val = None
             if var_name not in self.scope:
                 if self.parent!=None:
-                    val = self.parent.search_up(var_name,False)
+                    val = self.parent.search_up(var_name,False,jumps)
             else:
-                val = self.scope[var_name].obj
+                if(jumps == 0):
+                    val = self.scope[var_name].obj
+                else:
+                    val = self.parent.search_up(var_name,False,jumps-1)
             return val
+    def search_up_obj(self,var_name,jumps=0):
+        val = None
+        if var_name not in self.scope:
+            if self.parent != None:
+                val = self.parent.search_up_obj(var_name, jumps)
+        else:
+            if (jumps == 0):
+                val = self.scope[var_name]
+            else:
+                val = self.parent.search_up_obj(var_name, jumps - 1)
+        return val
     def var_name_is_declared(self,var_name):
         return var_name in self.scope
     def add_type(self, name, type):
@@ -99,10 +117,20 @@ class TreeNode:
     def n_Exists_curr_scope(self,name):
         return name in self.scope
 
-    def name_Exists_up(self, name): #just for the root
+    def name_Exists_up(self, name,jumps=0): #just for the root
+        if jumps==None:
+            jumps=0
+
         if name in self.scope:
-            return True
+
+            if jumps == 0:
+                return True
+            else:
+                if self.parent != None:
+                    return self.parent.name_Exists_up(name,jumps-1)
+                print("throwing false")
+                return False
         if self.parent!=None:
-            return self.parent.name_Exists_up(name)
+            return self.parent.name_Exists_up(name,jumps)
         return False
 

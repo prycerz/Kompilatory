@@ -184,13 +184,18 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#ExprVar.
-    def visitExprVar(self, ctx:MapperParser.ExprVarContext):
+    # Visit a parse tree produced by MapperParser#scopedIdentifier.
+    def visitScopedIdentifier(self, ctx:MapperParser.ScopedIdentifierContext):
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by MapperParser#ExprAddSub.
     def visitExprAddSub(self, ctx:MapperParser.ExprAddSubContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ScopedExprVar.
+    def visitScopedExprVar(self, ctx:MapperParser.ScopedExprVarContext):
         return self.visitChildren(ctx)
 
 

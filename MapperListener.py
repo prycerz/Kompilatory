@@ -323,12 +323,12 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#ExprVar.
-    def enterExprVar(self, ctx:MapperParser.ExprVarContext):
+    # Enter a parse tree produced by MapperParser#scopedIdentifier.
+    def enterScopedIdentifier(self, ctx:MapperParser.ScopedIdentifierContext):
         pass
 
-    # Exit a parse tree produced by MapperParser#ExprVar.
-    def exitExprVar(self, ctx:MapperParser.ExprVarContext):
+    # Exit a parse tree produced by MapperParser#scopedIdentifier.
+    def exitScopedIdentifier(self, ctx:MapperParser.ScopedIdentifierContext):
         pass
 
 
@@ -338,6 +338,15 @@ class MapperListener(ParseTreeListener):
 
     # Exit a parse tree produced by MapperParser#ExprAddSub.
     def exitExprAddSub(self, ctx:MapperParser.ExprAddSubContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ScopedExprVar.
+    def enterScopedExprVar(self, ctx:MapperParser.ScopedExprVarContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ScopedExprVar.
+    def exitScopedExprVar(self, ctx:MapperParser.ScopedExprVarContext):
         pass
 
 

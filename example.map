@@ -1,12 +1,5 @@
-function silnia(number n) {
-    if (n == 0) {
-        return 1
-    }
-
-    number nMinusOne = n - 1
-    number result = n * silnia(nMinusOne)
-    return result
+blend island= circle 10 sand 100%
+{
+blend island = circle 3 rock 100%
+draw island
 }
-
-number val = silnia(5)
-print val

@@ -38,15 +38,15 @@ exprList     : exprOrExprComp (',' exprOrExprComp)*;
 
 // Przypisania zmiennych
 increment
-    : IDENTIFIER '++'
-    | IDENTIFIER '--'
-    | IDENTIFIER '+=' expr
-    | IDENTIFIER '-=' expr
+    : scopedIdentifier '++'
+    | scopedIdentifier '--'
+    | scopedIdentifier '+=' expr
+    | scopedIdentifier '-=' expr
     ;
 
 tileSum      : IDENTIFIER ('+' IDENTIFIER)*;
 
-reasignment  : IDENTIFIER '=' (expr | exprComp);
+reasignment  : scopedIdentifier '=' (expr | exprComp);
 assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign | noValueAssign | reasignment | roadStart;
 noValueAssign: type IDENTIFIER;
 
@@ -66,7 +66,7 @@ blendOption  : (IDENTIFIER | tileSum) INT '%';
 
 // Rysowanie płytek
 drawRoad    : 'drawRoad' IDENTIFIER;
-draw        : 'draw' IDENTIFIER ('+' IDENTIFIER)*
+draw        : 'draw' scopedIdentifier ('+' scopedIdentifier)*
             | 'draw' 'radius' INT percentagePair+;
 percentagePair : INT '%' IDENTIFIER;
 
@@ -85,7 +85,7 @@ conditional : 'if' '(' (exprComp) ')' '{' ifConditionStatements '}' ('else' '{' 
 ifConditionStatements : statement*;
 elseConditionStatements : statement*;
 
-
+scopedIdentifier : (SCOPE)? IDENTIFIER ;
 // Wyrażenia arytmetyczne i logiczne
 expr
             : '-' expr                                 # ExprUnaryMinus
@@ -93,7 +93,8 @@ expr
             | expr ('+'|'-') expr                      # ExprAddSub
             | '(' expr ')'                             # ExprParens
             | INT                                      # ExprInt
-            | IDENTIFIER                               # ExprVar
+//            | IDENTIFIER                               # ExprVar
+            | scopedIdentifier                         # ScopedExprVar
             | functionCall                             # ExprFUnctionCall;
 
 exprComp    : NOT exprComp                             # ExprNot
@@ -111,6 +112,7 @@ OR          : 'or';
 NOT         : 'not';
 INT         : [0-9]+;
 BOOL        : 'true' | 'false';
+SCOPE      : ':'+ ;
 IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]*;
 WS          : [ \t\r\n]+ -> skip;
 

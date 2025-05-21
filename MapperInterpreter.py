@@ -22,6 +22,7 @@ class Types:
     TILE = Tile
     BLEND = Blend
     ROAD = Road
+
 class ReturnValue(Exception):
     def __init__(self, value):
         self.value = value
@@ -128,10 +129,13 @@ class VariableDeclarationListener(ParseTreeListener):
 
 
     def raiseError(self, ctx, msg):
-        token = ctx.IDENTIFIER().getSymbol()
+        try:
+            token = ctx.IDENTIFIER().getSymbol()
+        except AttributeError:
+            token = ctx.start
         line = token.line
         column = token.column
-        raise RuntimeError(f"line: {line}, column: {column} {msg}")
+        raise RuntimeError(f"❌ Błąd: linia {line}, kolumna {column} – {msg}")
 
 
     def get_type(self,ctx,type_str: str):
@@ -296,7 +300,7 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print("Visiting tile sum...")
         tile = Tile()
         for arg in ctx.IDENTIFIER():
-            tile.add_obj(arg.getText())
+            tile.add_obj(arg.getText(), ctx)
         return tile
     
 
@@ -349,7 +353,7 @@ class MapperInterpreter(MapperVisitor):
                 if(self.current_node.name_Exists_up(identifier)  and isinstance(self.getVariableOfName(ctx,identifier), Tile)):
                     tile = self.getVariableOfName(ctx,identifier)
                 else:
-                    tile = Tile([identifier])
+                    tile = Tile([identifier],ctx)
             else:
                 self._raise_error("❌ Błąd: Nieznany typ opcji blendu!")
             
@@ -358,11 +362,18 @@ class MapperInterpreter(MapperVisitor):
         self.current_node.add_var(blend_name,Blend(figure, blend_options),Types.BLEND)
 
     
-    def l_r_type(self,ctx):
-        # to nie dziala i przechodzi number a = false
-        name = ctx.IDENTIFIER().getText()
-        print("checking lr type")
-        lval = self.current_node.type_search_up(name)
+    def l_r_type(self,ctx, scoped=False):
+        if scoped==False:
+            # to nie dziala i przechodzi number a = false
+            name = ctx.IDENTIFIER().getText()
+            print("checking lr type")
+            lval = self.current_node.type_search_up(name)
+        else:
+            scoped = ctx.scopedIdentifier()
+            name, jumps_ = self.visitScopedIdentifier(ctx)
+            jumps = len(jumps_)
+            print("checking lr type")
+            lval = self.current_node.type_search_up(name,jumps)
         expr = ctx.expr() or ctx.exprComp()
         if not expr:
             self._debug_print("Error: ctx.expr() is None!")
@@ -405,19 +416,33 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print(f"Boolean assigned: {name} = {value}")
         return value
 
-    def getVariableOfName(self,ctx,name):
-        val = self.current_node.value_search_up(name)
+    def getVariableOfName(self,ctx,name,jumps = 0):
+        print("getting var of name")
+        val = self.current_node.value_search_up(name, jumps)
         if val!=None:
             return val
         self.raiseError(ctx,f"variable of name {name} isn't initialized")
-
+    def getObjOfName(self,ctx,name,jumps = 0):
+        obj = self.current_node.obj_search_up(name, jumps)
+        if obj!=None:
+            return obj
+        self.raiseError(ctx,f"variable of name {name} isn't initialized")
     def visitIncrement(self, ctx):
-        name = ctx.IDENTIFIER().getText()
-        self._debug_print(f"🆔 name: {name}")
-        if not self.current_node.name_Exists_up:
-            self.raiseError(ctx, f"Use of undeclared variable '{name}'")
+        print("visit incremet")
+        print(ctx.getText())
+        name, jumps_ = self.visitScopedIdentifier(ctx)
 
-        current_value = self.getVariableOfName(ctx,name)
+        jumps = len(jumps_)
+        print(jumps_)
+
+        self._debug_print(f"🆔 name: {name}")
+        if not self.current_node.name_Exists_up(name,jumps):
+            self.raiseError(ctx, f"Use of undeclared variable '{jumps_}{name}'")
+
+        current_obj = self.getObjOfName(ctx,name,jumps)
+        print(current_obj)
+        print(current_obj.obj)
+        current_value = current_obj.obj
         op = ctx.getChild(1).getText()
         if op in ('+=', '-='):
             value = self.visit(ctx.expr())
@@ -425,10 +450,10 @@ class MapperInterpreter(MapperVisitor):
                 delta = int(value)
                 if op == '+=':
                     self._debug_print(f"🔄 {name} = {current_value} + {delta}")
-                    self.current_node.scope[name].obj += delta
+                    current_obj.obj += delta
                 else:
                     self._debug_print(f"🔄 {name} = {current_value} - {delta}")
-                    self.current_node.scope[name].obj -= delta
+                    current_obj.obj -= delta
             elif isinstance(current_value, Tile):
                 if op == '+=':
                     self._debug_print(f"🧱 Dodaję do Tile: {name}.add_obj({value})")
@@ -442,11 +467,11 @@ class MapperInterpreter(MapperVisitor):
                 self._raise_error(f"❌ Operator '{op}' działa tylko na liczbach całkowitych")
             if op == '++':
                 self._debug_print("++")
-                self.current_node.scope[name].obj += 1
+                current_obj.obj += 1
             else:
-                self.current_node.scope[name].obj -= 1
-            self._debug_print(f"🔢 {name} po '{op}': {self.current_node.scope[name].obj}")
-        return self.getVariableOfName(ctx,name)
+                current_obj.obj -= 1
+            self._debug_print(f"🔢 {name} po '{op}': {current_obj.obj}")
+        return self.getVariableOfName(ctx,name,jumps)
 
     def get_type_string(self, value):
         if isinstance(value, int) or isinstance(value, float):
@@ -466,19 +491,24 @@ class MapperInterpreter(MapperVisitor):
         
     def visitReasignment(self, ctx):
         self._debug_print("Reassignment detected")
-        name = ctx.IDENTIFIER().getText()
-        if not self.current_node.name_Exists_up(name):
-            self.raiseError(ctx, f"Undeclared variable '{name}'")
+        scoped = ctx.scopedIdentifier()
+        name, jumps_ = self.visitScopedIdentifier(ctx)
+        jumps = len(jumps_)
+        if not self.current_node.name_Exists_up(name, jumps):
+            self.raiseError(scoped, f"Use of undeclared variable '{jumps_}{name}'")
+       # return self.getVariableOfName(ctx, var_name, jumps)
+
         if ctx.expr() or ctx.exprComp():
-            value = self.l_r_type(ctx)
+            value = self.l_r_type(ctx,True)
             print(value)
            # value = self.visit(ctx.expr())
            #  previous_type = self.current_node.type_search_up(name)
            #  new_type = self.get_type_string(value)
            #  if  new_type != previous_type:
            #      self.raiseError(ctx, f"'reassignment of {previous_type} '{name}' to {new_type} you have to constrain to previous type!'")
-            self.current_node.var_change_up(name,value)
-            self._debug_print(f"Reassigned: {name} = {value}")
+            obj = self.current_node.search_up_obj(name,jumps)
+            obj.obj = value
+            self._debug_print(f"Reassigned: {jumps_}{name} = {value}")
             return value
         else:
             self.raiseError(ctx, f"expression not resolved")
@@ -503,6 +533,9 @@ class MapperInterpreter(MapperVisitor):
         elif ctx.noValueAssign():
             self._debug_print("✅ No value assignment detected!")
             return self.visitNoValueAssign(ctx.noValueAssign())
+        elif ctx.roadStart():
+            print("roadstart")
+            return self.visitRoadStart(ctx.roadStart())
         else:
             self._debug_print("❌ Unknown assignment type!")
 
@@ -533,21 +566,24 @@ class MapperInterpreter(MapperVisitor):
 
         self._debug_print("drawing..")
         # if it is not Tile or Blend, make a Tile from given arguments (tree, bush, sand, etc.)
-        if ctx.IDENTIFIER():
-            self._debug_print("ctx")
+        if ctx.scopedIdentifier():
+
             args = []
             counter = 0
-            while(ctx.IDENTIFIER(counter)):
-                args.append(ctx.IDENTIFIER(counter).getText())
+            while (ctx.scopedIdentifier(counter)):
+                name, jumps_ = self.visitScopedIdentifier(ctx,counter)
+                self._debug_print("scoped draw")
+                jumps = len(jumps_)
+                krotka = (name,jumps)
+                args.append(krotka)
                 counter += 1
-                
-            for arg in args:
-                if(self.current_node.name_Exists_up(arg)):
-                    self.renderer.draw_tile(self.getVariableOfName(ctx,arg))
+
+            for name, jumps in args:
+                if (self.current_node.name_Exists_up(name,jumps)):
+                    self.renderer.draw_tile(self.getVariableOfName(ctx, name,jumps))
                     return
-
-
-            self.renderer.draw_tile(Tile(args=args))
+            tile = Tile(args,ctx)
+            self.renderer.draw_tile(tile)
 
 
         elif ctx.INT():  # Rysowanie z promieniem
@@ -562,7 +598,8 @@ class MapperInterpreter(MapperVisitor):
             blend = Blend(radius,percentages)
             self.renderer.draw_tile(blend)
         else:
-            self._debug_print("ERROR: Invalid draw command!")
+            self.raiseError(ctx.scopedIdentifier(),"invalid draw command")
+
 
 
     def visitErrorHandling(self, ctx):
@@ -893,7 +930,25 @@ class MapperInterpreter(MapperVisitor):
         if not self.current_node.name_Exists_up(var_name):
             self.raiseError(ctx, f"Use of undeclared variable '{var_name}'")
         return self.getVariableOfName(ctx,var_name)
-
+    def visitScopedExprVar(self, ctx):
+        scoped = ctx.scopedIdentifier()
+        var_name, jumps_ = self.visitScopedIdentifier(ctx)
+        jumps = len(jumps_)
+        print(f"name:{var_name}, jumps: {jumps}")
+        print(self.current_node.scope)
+        #self._debug_print(f"Processing variable reference: {var_name}: value: {self.variables.get(var_name)}")
+        if not self.current_node.name_Exists_up(var_name,jumps):
+            self.raiseError(scoped, f"Use of undeclared variable '{jumps_}{var_name}'")
+        return self.getVariableOfName(ctx,var_name,jumps)
+    def visitScopedIdentifier(self, ctx:MapperParser.ScopedIdentifierContext,counter=0):
+        scoped = ctx.scopedIdentifier(counter)
+        var_name = scoped.IDENTIFIER().getText()
+        jumps = scoped.SCOPE()
+        if jumps == None:
+            jumps = ""
+        else:
+            jumps = jumps.getText()
+        return var_name, jumps
     def visitExprInt(self, ctx):
         value = int(ctx.INT().getText())
         self._debug_print(f"Processing integer literal: {value}")
@@ -918,11 +973,18 @@ class MapperInterpreter(MapperVisitor):
     def visitRoadEnd(self, ctx: MapperParser.RoadEndContext):
         name = ctx.IDENTIFIER().getText()
         self._debug_print(f"Ending road {name}")
-        if not self.current_node.name_Exists_up:
+        if not self.current_node.name_Exists_up(name):
             self.raiseError(ctx,f"road '{name}' doesnt have a starting point!")
         else:
+            print("else")
             pos = Position(self.renderer.pointer_x, self.renderer.pointer_y)
-            self.current_node.end_road_up(name,pos,self.renderer)
+            print("else")
+            obj = self.current_node.obj_search_up(name)
+            print("else")
+            print(obj.obj)
+            print("4else")
+            obj.obj.end(pos, self.renderer)
+
 
 
 if __name__ == "__main__":
