@@ -38,9 +38,12 @@ class VariableDeclarationListener(ParseTreeListener):
         self.var_tree = self.root #drzewo przechowujące zmienne i ich typy
         self.errors = []     # Lista błędów (redeklaracje)
 
-    def enterScope(self):
+    def enterScope(self,isFun = False):
         #self.var_types_scoped.append({})
-        new_child = TreeNode(self.current_node)
+        if isFun:
+            new_child = TreeNode(self.current_node,True)
+        else:
+            new_child = TreeNode(self.current_node)
         self.current_node.add_child(new_child)
         print("added child")
         self.current_node = self.current_node.move_in()
@@ -210,7 +213,7 @@ class VariableDeclarationListener(ParseTreeListener):
         if len(expr_list) != len(params):
             self.raiseError(ctx,
                 f"Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
-        self.enterScope()
+        self.enterScope(True)
 
         for param, value in zip(params, expr_list):
             param_identifier = param['identifier']

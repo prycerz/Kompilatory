@@ -1,0 +1,7 @@
+void function foo(number a)
+{
+	print :a
+}
+
+number a = 10
+foo(3)

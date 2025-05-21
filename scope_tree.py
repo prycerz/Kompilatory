@@ -12,12 +12,13 @@ class TreeNode:
 
 
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,isFun=False):
         self.i = 0
         self.scope = {}
         self.children = [] #lista dzieci po kolei kazde dziecko to scope
         self.parent = parent
         self.functions = {}
+        self.isFun = isFun
     def reset_scope_counter(self):
         root = self.get_root()
         root._dfs_reset_i()
@@ -53,12 +54,12 @@ class TreeNode:
         if type:
             var_type = None
             if var_name not in self.scope:
-                if self.parent!=None:
+                if self.parent!=None and not self.isFun:
                     var_type = self.parent.search_up(var_name,True,jumps)
             else:
                 if (jumps == 0):
                     var_type = self.scope[var_name].type
-                else:
+                elif not self.isFun:
                     var_type = self.parent.search_up(var_name,True,jumps-1)
             return var_type
         else:
@@ -75,12 +76,12 @@ class TreeNode:
     def search_up_obj(self,var_name,jumps=0):
         val = None
         if var_name not in self.scope:
-            if self.parent != None:
+            if self.parent != None and not self.isFun:
                 val = self.parent.search_up_obj(var_name, jumps)
         else:
             if (jumps == 0):
                 val = self.scope[var_name]
-            else:
+            elif not self.isFun:
                 val = self.parent.search_up_obj(var_name, jumps - 1)
         return val
     def var_name_is_declared(self,var_name):
@@ -99,7 +100,8 @@ class TreeNode:
     def var_change_up(self,name,obj):
         if name in self.scope:
             self.scope[name].obj = obj
-        if self.parent!=None:
+
+        if self.parent!=None and not self.isFun:
             return self.parent.var_change_up(name,obj)
 
     def end_road_up(self, name, obj,renderer):
@@ -126,6 +128,8 @@ class TreeNode:
             if jumps == 0:
                 return True
             else:
+                if self.isFun:
+                    return False
                 if self.parent != None:
                     return self.parent.name_Exists_up(name,jumps-1)
                 print("throwing false")
