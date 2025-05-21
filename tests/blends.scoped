@@ -1,0 +1,7 @@
+blend island= circle 10 sand 100%
+{
+blend island = circle 3 rocks 100%
+draw :island
+pointer right 7
+draw island
+}
