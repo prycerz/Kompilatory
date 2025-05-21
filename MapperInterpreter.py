@@ -496,6 +496,7 @@ class MapperInterpreter(MapperVisitor):
         scoped = ctx.scopedIdentifier()
         name, jumps_ = self.visitScopedIdentifier(ctx)
         jumps = len(jumps_)
+        print(f"jumps {jumps}")
         if not self.current_node.name_Exists_up(name, jumps):
             self.raiseError(scoped, f"Use of undeclared variable '{jumps_}{name}'")
        # return self.getVariableOfName(ctx, var_name, jumps)
@@ -872,13 +873,13 @@ class MapperInterpreter(MapperVisitor):
 
     def visitExprCompVar(self, ctx: MapperParser.ExprCompVarContext):
         self._debug_print("Processing variable in exprComp")
-        var_name = ctx.IDENTIFIER().getText()
-
+        var_name, jumps_ = self.visitScopedIdentifier(ctx)
+        jumps = len(jumps_)
         # TESTTEST
-        if not self.current_node.name_Exists_up(var_name):
-            self.raiseError(ctx, f"Use of  undeclared number '{var_name}'")
+        if not self.current_node.name_Exists_up(var_name,jumps):
+            self.raiseError(ctx, f"Use of  undeclared variable '{jumps}{var_name}'")
         
-        value = self.getVariableOfName(ctx, var_name)
+        value = self.getVariableOfName(ctx, var_name,jumps)
         if not isinstance(value, bool):
             self._raise_error(f"❌ Variable '{var_name}' must be boolean in logical expression")
         return value
@@ -943,7 +944,10 @@ class MapperInterpreter(MapperVisitor):
             self.raiseError(scoped, f"Use of undeclared variable '{jumps_}{var_name}'")
         return self.getVariableOfName(ctx,var_name,jumps)
     def visitScopedIdentifier(self, ctx:MapperParser.ScopedIdentifierContext,counter=0):
-        scoped = ctx.scopedIdentifier(counter)
+        try:
+            scoped = ctx.scopedIdentifier(counter)
+        except TypeError:
+            scoped = ctx.scopedIdentifier()
         var_name = scoped.IDENTIFIER().getText()
         jumps = scoped.SCOPE()
         if jumps == None:

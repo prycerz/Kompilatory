@@ -104,7 +104,7 @@ exprComp    : NOT exprComp                             # ExprNot
             | '(' exprComp ')'                         # ExprCompParens
             | exprComp ('==' | '!=') exprComp          # ExprCompBools
             | BOOL                                     # ExprCompBool
-            | IDENTIFIER                               # ExprCompVar;
+            | scopedIdentifier                         # ExprCompVar;
 
 
 AND         : 'and';

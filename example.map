@@ -1,7 +1,15 @@
+// assignments
+bool a
+bool b = false
+a = not (b and b)
+print a
 
-{
-blend island = circle 3 rocks 100%
-draw :island
-pointer right 7
-draw island
-}
+bool c = 10 > 5
+print c
+
+// reasignment
+c = false
+print c
+// reasignment na inny typ - error
+// c = 10
+
