@@ -1,5 +1,9 @@
+from twisted.test.raiser import raiseException
+
+from Raiser import Raiser
+
 class Tile:
-    def __init__(self, args=[]):
+    def __init__(self, args=[],ctx=None):
         self.background = 'grass'
         self.foreground = None
         self.road = None
@@ -12,16 +16,23 @@ class Tile:
         }
 
         for arg in args:
-            self.add_obj(arg)
+
+            self.add_obj(arg[0],ctx)
 
     def remove_foreground (self):
         self.foreground = None
     
-    def add_obj(self, obj):
+    def add_obj(self, obj,ctx=None):
         if obj in ['grass', 'soil', 'sand', 'water', 'rocks']:
             self.background = obj
         elif obj in ['tree', 'bush', 'stones', 'mountains', 'cabin', 'church']:
             self.foreground = obj
+        else:
+            if ctx == None:
+                print(ctx)
+                raise Exception(f"'{obj}' is not a valid tile object")
+            else:
+                Raiser.raiseError(ctx,f"'{obj}' is not a valid tile object")
 
     def get_road_image(self):
         if(self.road_directions['top'] and self.road_directions['bottom'] and self.road_directions['left'] and self.road_directions['right']):
