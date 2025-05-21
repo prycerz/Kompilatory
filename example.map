@@ -4,4 +4,5 @@ bool b = false
 {
     number b =3
     print :b
+    print b
 }

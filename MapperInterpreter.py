@@ -102,7 +102,8 @@ class VariableDeclarationListener(ParseTreeListener):
             raise RuntimeError(f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
         else:
             self.current_node.add_type(var_name,var_type)
-            # print(f"Declared {var_type} {var_name}")
+
+            print(f"Declared {var_type} {var_name}")
 
     def enterRoadStart(self, ctx:MapperParser.RoadStartContext):
         var_name = ctx.IDENTIFIER().getText()
@@ -386,7 +387,7 @@ class MapperInterpreter(MapperVisitor):
         rtype = type(rval)
         print(f"type: {lval} rtype: {rtype}")
         if  rtype!=lval:
-            self.raiseError(ctx, f"{lval} '{name}' cannot be {rtype.__name__}")
+            self.raiseError(ctx, f"{lval.__name__} '{name}' cannot be {rtype.__name__}")
         return rval
 
     def visitNumberAssign(self, ctx):
