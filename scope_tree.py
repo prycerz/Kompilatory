@@ -43,7 +43,7 @@ class TreeNode:
         print("move out {curr scope = }")
         return self.parent
     def type_search_up(self, var_name,jumps=0):
-        return self.search_up(var_name,True)
+        return self.search_up(var_name,True,jumps)
 
     def value_search_up(self, var_name,jumps=0):
         return self.search_up(var_name,False,jumps)

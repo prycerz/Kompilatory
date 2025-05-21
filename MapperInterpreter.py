@@ -368,15 +368,16 @@ class MapperInterpreter(MapperVisitor):
         if scoped==False:
             # to nie dziala i przechodzi number a = false
             name = ctx.IDENTIFIER().getText()
-            print("checking lr type")
-            lval = self.current_node.type_search_up(name)
+            print("checking lr type 1")
+            lval = self.current_node.type_search_up(name,0)
         else:
-            scoped = ctx.scopedIdentifier()
             name, jumps_ = self.visitScopedIdentifier(ctx)
             jumps = len(jumps_)
-            print("checking lr type")
+            print("checking lr type scoped")
             lval = self.current_node.type_search_up(name,jumps)
+        print(f"lval: {lval}")
         expr = ctx.expr() or ctx.exprComp()
+
         if not expr:
             self._debug_print("Error: ctx.expr() is None!")
             return None
@@ -504,6 +505,7 @@ class MapperInterpreter(MapperVisitor):
         if ctx.expr() or ctx.exprComp():
             value = self.l_r_type(ctx,True)
             print(value)
+            print(f"name {name},ujumps {jumps_}")
            # value = self.visit(ctx.expr())
            #  previous_type = self.current_node.type_search_up(name)
            #  new_type = self.get_type_string(value)

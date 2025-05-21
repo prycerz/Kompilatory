@@ -20,7 +20,7 @@ print boo(10, 22)
 // void function
 void function foo (number a, bool b){
 	
-	// return 2 // błąd
+	// return 2 // blad
 	if(b){
 		print a * 10
 	} else {
