@@ -319,6 +319,7 @@ class MapperInterpreter(MapperVisitor):
 
         self._debug_print('visted blend assign')
         blend_name = ctx.IDENTIFIER().getText()  # Get the blend name
+        print(blend_name)
         blend_options = []  # List to store the blend options
         if not self.current_node.name_Exists_up(blend_name):
             self.raiseError(ctx, f"Assignment of undeclared number '{blend_name}'")
@@ -350,10 +351,11 @@ class MapperInterpreter(MapperVisitor):
             # blend blendName = circle 10 grass 20%
             elif (option_ctx.IDENTIFIER()):
                 identifier = option_ctx.IDENTIFIER().getText()
+                print(identifier)
                 if(self.current_node.name_Exists_up(identifier)  and isinstance(self.getVariableOfName(ctx,identifier), Tile)):
                     tile = self.getVariableOfName(ctx,identifier)
                 else:
-                    tile = Tile([identifier],ctx)
+                    tile = Tile(args = [identifier],ctx = ctx)
             else:
                 self._raise_error("❌ Błąd: Nieznany typ opcji blendu!")
             
@@ -582,7 +584,7 @@ class MapperInterpreter(MapperVisitor):
                 if (self.current_node.name_Exists_up(name,jumps)):
                     self.renderer.draw_tile(self.getVariableOfName(ctx, name,jumps))
                     return
-            tile = Tile(args,ctx)
+            tile = Tile(args=args,ctx=ctx)
             self.renderer.draw_tile(tile)
 
 

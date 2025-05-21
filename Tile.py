@@ -17,7 +17,7 @@ class Tile:
 
         for arg in args:
 
-            self.add_obj(arg[0],ctx)
+            self.add_obj(arg,ctx)
 
     def remove_foreground (self):
         self.foreground = None
