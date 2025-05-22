@@ -190,9 +190,9 @@ class MapperInterpreter(MapperVisitor):
         raise RuntimeError(f"line: {line}, column: {column} {msg}")
 
     #scope functions
-    def enterScope(self):
+    def enterScope(self,isFun = False):
         #self.var_types_scoped.append({})
-        new_child = TreeNode(self.current_node)
+        new_child = TreeNode(self.current_node,isFun)
         self.current_node.add_child(new_child)
         self.current_node = self.current_node.move_in()
     def exitScope(self):
@@ -734,7 +734,7 @@ class MapperInterpreter(MapperVisitor):
         if len(expr_list) != len(params):
             self._raise_error(
                 f"Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
-        self.enterScope()
+        self.enterScope(True)
 
         for param, value in zip(params, expr_list):
             param_identifier = param['identifier']

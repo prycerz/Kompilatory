@@ -18,6 +18,7 @@ class TreeNode:
         self.children = [] #lista dzieci po kolei kazde dziecko to scope
         self.parent = parent
         self.functions = {}
+        self.isFun = isFun
     def reset_scope_counter(self):
         root = self.get_root()
         root._dfs_reset_i()
