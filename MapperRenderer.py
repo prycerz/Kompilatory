@@ -56,6 +56,15 @@ class MapperRenderer:
 		self.pointer_x = max(0, min(MAP_WIDTH - 1, self.pointer_x + dx))
 		self.pointer_y = max(0, min(MAP_HEIGHT - 1, self.pointer_y + dy))
 
+
+	def process_events(self):
+		for event in pygame.event.get():
+			if event.type == pygame.QUIT:
+				pygame.quit()
+				return
+		pygame.display.flip()
+
+
 	def copy_tile(self, x, y, tile : Tile):
 		# debug
 		print(f'copying tile {tile} to {y}, {x}')
@@ -76,6 +85,8 @@ class MapperRenderer:
 		elif isinstance(tile, Blend):
 			for x, y in tile.figure.tiles_to_visit():
 				self.copy_tile(self.pointer_x + x, self.pointer_y + y, tile.random_tile())
+		else:
+			raise TypeError(f"Cannot draw object of type {type(tile).__name__}")
 		self.render()  # Force an update on screen
 
 
@@ -85,7 +96,7 @@ class MapperRenderer:
 
 	def render(self):
 		self.screen.fill((0, 0, 0))  # Clear screen
-		print('RENDERING')
+		# print('RENDERING')
 		for y, row in enumerate(self.map_data):
 			for x, tile in enumerate(row):
 				if isinstance(tile, Tile):
@@ -121,7 +132,6 @@ class MapperRenderer:
 				if event.type == pygame.QUIT:
 					running = False  # Close window when user clicks 'X'
 			pygame.display.flip()  # Continuously update display
-
 		pygame.quit()  # Properly exit Pygame when loop ends
 
 

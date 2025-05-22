@@ -26,21 +26,12 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#varDecl.
-    def enterVarDecl(self, ctx:MapperParser.VarDeclContext):
+    # Enter a parse tree produced by MapperParser#block.
+    def enterBlock(self, ctx:MapperParser.BlockContext):
         pass
 
-    # Exit a parse tree produced by MapperParser#varDecl.
-    def exitVarDecl(self, ctx:MapperParser.VarDeclContext):
-        pass
-
-
-    # Enter a parse tree produced by MapperParser#errorStatement.
-    def enterErrorStatement(self, ctx:MapperParser.ErrorStatementContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#errorStatement.
-    def exitErrorStatement(self, ctx:MapperParser.ErrorStatementContext):
+    # Exit a parse tree produced by MapperParser#block.
+    def exitBlock(self, ctx:MapperParser.BlockContext):
         pass
 
 
@@ -80,12 +71,30 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#exprOrExprComp.
+    def enterExprOrExprComp(self, ctx:MapperParser.ExprOrExprCompContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#exprOrExprComp.
+    def exitExprOrExprComp(self, ctx:MapperParser.ExprOrExprCompContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#functionCall.
     def enterFunctionCall(self, ctx:MapperParser.FunctionCallContext):
         pass
 
     # Exit a parse tree produced by MapperParser#functionCall.
     def exitFunctionCall(self, ctx:MapperParser.FunctionCallContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#returnStatement.
+    def enterReturnStatement(self, ctx:MapperParser.ReturnStatementContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#returnStatement.
+    def exitReturnStatement(self, ctx:MapperParser.ReturnStatementContext):
         pass
 
 
@@ -107,21 +116,21 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#tileAssign.
-    def enterTileAssign(self, ctx:MapperParser.TileAssignContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#tileAssign.
-    def exitTileAssign(self, ctx:MapperParser.TileAssignContext):
-        pass
-
-
     # Enter a parse tree produced by MapperParser#tileSum.
     def enterTileSum(self, ctx:MapperParser.TileSumContext):
         pass
 
     # Exit a parse tree produced by MapperParser#tileSum.
     def exitTileSum(self, ctx:MapperParser.TileSumContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#reasignment.
+    def enterReasignment(self, ctx:MapperParser.ReasignmentContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#reasignment.
+    def exitReasignment(self, ctx:MapperParser.ReasignmentContext):
         pass
 
 
@@ -134,21 +143,30 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#noValueAssign.
+    def enterNoValueAssign(self, ctx:MapperParser.NoValueAssignContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#noValueAssign.
+    def exitNoValueAssign(self, ctx:MapperParser.NoValueAssignContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#tileAssign.
+    def enterTileAssign(self, ctx:MapperParser.TileAssignContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#tileAssign.
+    def exitTileAssign(self, ctx:MapperParser.TileAssignContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#numberAssign.
     def enterNumberAssign(self, ctx:MapperParser.NumberAssignContext):
         pass
 
     # Exit a parse tree produced by MapperParser#numberAssign.
     def exitNumberAssign(self, ctx:MapperParser.NumberAssignContext):
-        pass
-
-
-    # Enter a parse tree produced by MapperParser#varAssign.
-    def enterVarAssign(self, ctx:MapperParser.VarAssignContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#varAssign.
-    def exitVarAssign(self, ctx:MapperParser.VarAssignContext):
         pass
 
 
@@ -161,12 +179,12 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#roadPlacement.
-    def enterRoadPlacement(self, ctx:MapperParser.RoadPlacementContext):
+    # Enter a parse tree produced by MapperParser#blendAssign.
+    def enterBlendAssign(self, ctx:MapperParser.BlendAssignContext):
         pass
 
-    # Exit a parse tree produced by MapperParser#roadPlacement.
-    def exitRoadPlacement(self, ctx:MapperParser.RoadPlacementContext):
+    # Exit a parse tree produced by MapperParser#blendAssign.
+    def exitBlendAssign(self, ctx:MapperParser.BlendAssignContext):
         pass
 
 
@@ -179,21 +197,21 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#roadPlacement.
+    def enterRoadPlacement(self, ctx:MapperParser.RoadPlacementContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#roadPlacement.
+    def exitRoadPlacement(self, ctx:MapperParser.RoadPlacementContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#roadEnd.
     def enterRoadEnd(self, ctx:MapperParser.RoadEndContext):
         pass
 
     # Exit a parse tree produced by MapperParser#roadEnd.
     def exitRoadEnd(self, ctx:MapperParser.RoadEndContext):
-        pass
-
-
-    # Enter a parse tree produced by MapperParser#blendAssign.
-    def enterBlendAssign(self, ctx:MapperParser.BlendAssignContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#blendAssign.
-    def exitBlendAssign(self, ctx:MapperParser.BlendAssignContext):
         pass
 
 
@@ -287,12 +305,30 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#ExprVar.
-    def enterExprVar(self, ctx:MapperParser.ExprVarContext):
+    # Enter a parse tree produced by MapperParser#ifConditionStatements.
+    def enterIfConditionStatements(self, ctx:MapperParser.IfConditionStatementsContext):
         pass
 
-    # Exit a parse tree produced by MapperParser#ExprVar.
-    def exitExprVar(self, ctx:MapperParser.ExprVarContext):
+    # Exit a parse tree produced by MapperParser#ifConditionStatements.
+    def exitIfConditionStatements(self, ctx:MapperParser.IfConditionStatementsContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#elseConditionStatements.
+    def enterElseConditionStatements(self, ctx:MapperParser.ElseConditionStatementsContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#elseConditionStatements.
+    def exitElseConditionStatements(self, ctx:MapperParser.ElseConditionStatementsContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#scopedIdentifier.
+    def enterScopedIdentifier(self, ctx:MapperParser.ScopedIdentifierContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#scopedIdentifier.
+    def exitScopedIdentifier(self, ctx:MapperParser.ScopedIdentifierContext):
         pass
 
 
@@ -302,6 +338,15 @@ class MapperListener(ParseTreeListener):
 
     # Exit a parse tree produced by MapperParser#ExprAddSub.
     def exitExprAddSub(self, ctx:MapperParser.ExprAddSubContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ScopedExprVar.
+    def enterScopedExprVar(self, ctx:MapperParser.ScopedExprVarContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ScopedExprVar.
+    def exitScopedExprVar(self, ctx:MapperParser.ScopedExprVarContext):
         pass
 
 
@@ -332,21 +377,93 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#ExprBool.
-    def enterExprBool(self, ctx:MapperParser.ExprBoolContext):
+    # Enter a parse tree produced by MapperParser#ExprFUnctionCall.
+    def enterExprFUnctionCall(self, ctx:MapperParser.ExprFUnctionCallContext):
         pass
 
-    # Exit a parse tree produced by MapperParser#ExprBool.
-    def exitExprBool(self, ctx:MapperParser.ExprBoolContext):
+    # Exit a parse tree produced by MapperParser#ExprFUnctionCall.
+    def exitExprFUnctionCall(self, ctx:MapperParser.ExprFUnctionCallContext):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#exprComp.
-    def enterExprComp(self, ctx:MapperParser.ExprCompContext):
+    # Enter a parse tree produced by MapperParser#ExprUnaryMinus.
+    def enterExprUnaryMinus(self, ctx:MapperParser.ExprUnaryMinusContext):
         pass
 
-    # Exit a parse tree produced by MapperParser#exprComp.
-    def exitExprComp(self, ctx:MapperParser.ExprCompContext):
+    # Exit a parse tree produced by MapperParser#ExprUnaryMinus.
+    def exitExprUnaryMinus(self, ctx:MapperParser.ExprUnaryMinusContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprAnd.
+    def enterExprAnd(self, ctx:MapperParser.ExprAndContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprAnd.
+    def exitExprAnd(self, ctx:MapperParser.ExprAndContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprCompRel.
+    def enterExprCompRel(self, ctx:MapperParser.ExprCompRelContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprCompRel.
+    def exitExprCompRel(self, ctx:MapperParser.ExprCompRelContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprCompBool.
+    def enterExprCompBool(self, ctx:MapperParser.ExprCompBoolContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprCompBool.
+    def exitExprCompBool(self, ctx:MapperParser.ExprCompBoolContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprCompVar.
+    def enterExprCompVar(self, ctx:MapperParser.ExprCompVarContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprCompVar.
+    def exitExprCompVar(self, ctx:MapperParser.ExprCompVarContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprCompBools.
+    def enterExprCompBools(self, ctx:MapperParser.ExprCompBoolsContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprCompBools.
+    def exitExprCompBools(self, ctx:MapperParser.ExprCompBoolsContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprOr.
+    def enterExprOr(self, ctx:MapperParser.ExprOrContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprOr.
+    def exitExprOr(self, ctx:MapperParser.ExprOrContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprNot.
+    def enterExprNot(self, ctx:MapperParser.ExprNotContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprNot.
+    def exitExprNot(self, ctx:MapperParser.ExprNotContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprCompParens.
+    def enterExprCompParens(self, ctx:MapperParser.ExprCompParensContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprCompParens.
+    def exitExprCompParens(self, ctx:MapperParser.ExprCompParensContext):
         pass
 
 

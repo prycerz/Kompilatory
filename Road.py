@@ -25,6 +25,8 @@ class Road:
         self.endPos = None  # End position is initially unset
 
     def end(self, end: Position, renderer : MapperRenderer):
+        print(end)
+        print(renderer)
         self.endPos = end
         self.add_road_layer(renderer)  # Call the method to add road layer
 

@@ -4,7 +4,9 @@ grammar Mapper;
 program     : statement* EOF;
 
 // Możliwe instrukcje
-statement   : assignment
+statement   : printStatement
+            | reasignment
+            | assignment
             | draw
             | move
             | loop
@@ -12,55 +14,59 @@ statement   : assignment
             | roadPlacement
             | functionDecl
             | functionCall
-            | errorStatement
-            | varDecl
-            | printStatement
+            | returnStatement
+            | block
             ;
 
+block : '{' statement* '}' ;
+
 // Deklaracja zmiennej
-varDecl    : type IDENTIFIER ';';  // np. number x; tile y;
-errorStatement : ERROR expr DOT;
-printStatement : 'print' exprList? ';';  // np. print x; print x, y, 42;
+printStatement : 'print' exprList?;  // np. print x; print x, y, 42
 
 //funkcje
 param     : type IDENTIFIER ;
-type : 'number'|'tile'|'blend';
+type : 'number'|'tile'|'blend'|'bool'|'void';
 
-functionDecl : 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement* '}';
+functionDecl :type 'function' IDENTIFIER '(' (param (',' param)*)? ')' '{' statement* '}';
 
+exprOrExprComp : expr | exprComp;
 
 functionCall : IDENTIFIER '(' exprList? ')';
-exprList     : expr (',' expr)*;
+returnStatement : 'return' exprOrExprComp?  ;
+exprList     : exprOrExprComp (',' exprOrExprComp)*;
 
 
 // Przypisania zmiennych
 increment
-    : IDENTIFIER '++'
-    | IDENTIFIER '--'
-    | IDENTIFIER '+=' expr
-    | IDENTIFIER '-=' expr
+    : scopedIdentifier '++'
+    | scopedIdentifier '--'
+    | scopedIdentifier '+=' expr
+    | scopedIdentifier '-=' expr
     ;
 
-tileAssign   : 'tile' IDENTIFIER '=' tileSum; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
 tileSum      : IDENTIFIER ('+' IDENTIFIER)*;
 
-assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign|varAssign;
+reasignment  : scopedIdentifier '=' (expr | exprComp);
+assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign | noValueAssign | reasignment | roadStart;
+noValueAssign: type IDENTIFIER;
+
+tileAssign   : 'tile' IDENTIFIER '=' tileSum; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
 numberAssign : 'number' IDENTIFIER '=' expr;
-varAssign    : IDENTIFIER '=' expr;
-boolAssign   : 'bool' IDENTIFIER '=' expr;
+boolAssign   : 'bool' IDENTIFIER '=' (expr | exprComp);
+blendAssign  : 'blend' IDENTIFIER '=' figure blendOption+; 
+roadStart    : 'road' IDENTIFIER 'start';
+
 
 roadPlacement: roadStart | roadEnd;
-roadStart    : 'road' IDENTIFIER 'start';
 roadEnd      : 'road' IDENTIFIER 'end';
 
-blendAssign  : 'blend' IDENTIFIER '=' figure blendOption+; 
 figure       : ('circle' INT) | ('rectangle' INT INT);
 blendOption  : (IDENTIFIER | tileSum) INT '%';
 
 
 // Rysowanie płytek
 drawRoad    : 'drawRoad' IDENTIFIER;
-draw        : 'draw' IDENTIFIER ('+' IDENTIFIER)*
+draw        : 'draw' scopedIdentifier ('+' scopedIdentifier)*
             | 'draw' 'radius' INT percentagePair+;
 percentagePair : INT '%' IDENTIFIER;
 
@@ -70,29 +76,45 @@ move        : 'pointer' ('up' expr | 'down' expr | 'left' expr | 'right' expr);
 // Pętle
 loop        : whileLoop | forLoop; 
 whileLoop   : 'while' '(' exprComp ')' '{' statement* '}';
-forLoop     : 'for' '(' numberAssign ';' expr ';' increment ')' '{' statement* '}';
+forLoop     : 'for' '(' assignment ';' exprComp ';' increment ')' '{' statement* '}';
 
 
 // Instrukcja warunkowa
-conditional : 'if' '(' exprComp ')' '{' statement* '}' ('else' '{' statement* '}')?;
+conditional : 'if' '(' (exprComp) ')' '{' ifConditionStatements '}' ('else' '{' elseConditionStatements '}')?;
 
+ifConditionStatements : statement*;
+elseConditionStatements : statement*;
 
-
+scopedIdentifier : (SCOPE)? IDENTIFIER ;
 // Wyrażenia arytmetyczne i logiczne
 expr
-            : expr ('*'|'/') expr                      # ExprMulDiv
+            : '-' expr                                 # ExprUnaryMinus
+            | expr ('*'|'/') expr                      # ExprMulDiv
             | expr ('+'|'-') expr                      # ExprAddSub
             | '(' expr ')'                             # ExprParens
-            | IDENTIFIER                               # ExprVar
             | INT                                      # ExprInt
-            | BOOL                                     # ExprBool;
+//            | IDENTIFIER                               # ExprVar
+            | scopedIdentifier                         # ScopedExprVar
+            | functionCall                             # ExprFUnctionCall;
 
-exprComp    : expr ('=='|'!='|'>'|'<'|'>='|'<=') expr;
+exprComp    : NOT exprComp                             # ExprNot
+            | exprComp AND exprComp                    # ExprAnd
+            | exprComp OR exprComp                     # ExprOr
+            | expr ('=='|'!='|'>'|'<'|'>='|'<=') expr  # ExprCompRel
+            | '(' exprComp ')'                         # ExprCompParens
+            | exprComp ('==' | '!=') exprComp          # ExprCompBools
+            | BOOL                                     # ExprCompBool
+            | scopedIdentifier                         # ExprCompVar;
 
-IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]*;
+
+AND         : 'and';
+OR          : 'or';
+NOT         : 'not';
 INT         : [0-9]+;
 BOOL        : 'true' | 'false';
-STRING      : '"' .*? '"';
+SCOPE      : ':'+ ;
+IDENTIFIER : [a-zA-Z_][a-zA-Z0-9_]*;
 WS          : [ \t\r\n]+ -> skip;
-DOT         :'.';
-ERROR       :'YAPPING';
+
+SINGLE_LINE_COMMENT: '//' ~[\r\n]* -> skip;
+MULTI_LINE_COMMENT: '/*' .*? '*/' -> skip;
