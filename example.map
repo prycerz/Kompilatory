@@ -1,8 +1,14 @@
 
 
-bool b = false
-{
-    number b =3
-    print :b
-    print b
+number function silnia(number n) {
+    if (n == 0) {
+        return 1
+    }
+
+    number nMinusOne = n - 1
+    number result = n * silnia(nMinusOne)
+    return result
 }
+
+number val = silnia(5)
+print val

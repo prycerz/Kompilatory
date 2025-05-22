@@ -34,31 +34,29 @@ class VariableDeclarationListener(ParseTreeListener):
         #self.all_var_types = {}
 
         self.root = TreeNode() #korzen drzewa
-        self.current_node: TreeNode = self.root #obecny node
-        self.var_tree = self.root #drzewo przechowujące zmienne i ich typy
         self.errors = []     # Lista błędów (redeklaracje)
 
-    def enterScope(self):
-        #self.var_types_scoped.append({})
-        new_child = TreeNode(self.current_node)
-        self.current_node.add_child(new_child)
-        print("added child")
-        self.current_node = self.current_node.move_in()
+    # def enterScope(self):
+    #     #self.var_types_scoped.append({})
+    #     new_child = TreeNode(self.current_node)
+    #     self.current_node.add_child(new_child)
+    #     print("added child")
+    #     self.current_node = self.current_node.move_in()
 
-    def exitScope(self):
-        self.current_node = self.current_node.move_out()
+    # def exitScope(self):
+    #     self.current_node = self.current_node.move_out()
 
         #for name, vartype in current_scope.items():
         #    self.all_var_types[name] = vartype
 
 
-    def enterBlock(self,ctx):
-        self.enterScope()
-        for stmt in ctx.statement():
-            self.enterEveryRule(stmt)
+    # def enterBlock(self,ctx):
+    #     self.enterScope()
+    #     for stmt in ctx.statement():
+    #         self.enterEveryRule(stmt)
 
-    def exitBlock(self,ctx):
-        self.exitScope()
+    # def exitBlock(self,ctx):
+    #     self.exitScope()
 
     # def nameExists(self,name):
     #     for scope in self.var_types_scoped:
@@ -70,73 +68,11 @@ class VariableDeclarationListener(ParseTreeListener):
     #         if name in scope:
     #             return scope[name]
 
-    def enterAssignment(self, ctx: MapperParser.AssignmentContext):
-        if ctx.numberAssign():
-            var_name = ctx.numberAssign().IDENTIFIER().getText()
-            var_type = Types.NUMBER
 
-        elif ctx.boolAssign():
-            var_name = ctx.boolAssign().IDENTIFIER().getText()
-            var_type = Types.BOOL
-
-        elif ctx.tileAssign():
-            var_name = ctx.tileAssign().IDENTIFIER().getText()
-            var_type = Types.TILE
-
-        elif ctx.blendAssign():
-            var_name = ctx.blendAssign().IDENTIFIER().getText()
-            var_type = Types.BLEND
-
-        elif ctx.noValueAssign():
-            var_name = ctx.noValueAssign().IDENTIFIER().getText()
-            # type according to types class
-            var_type = getattr(Types, ctx.noValueAssign().type_().getText().upper())
-        else:
-            return
- 
-        # Now store in dictionary
-        if self.current_node.var_name_is_declared(var_name):
-            token = ctx.start  # safer way to get token position
-            line = token.line
-            column = token.column
-            raise RuntimeError(f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
-        else:
-            self.current_node.add_type(var_name,var_type)
-
-            print(f"Declared {var_type} {var_name}")
-
-    def enterRoadStart(self, ctx:MapperParser.RoadStartContext):
-        var_name = ctx.IDENTIFIER().getText()
-        var_type = Types.ROAD
-        # Now store in dictionary
-        if self.current_node.var_name_is_declared(var_name):
-            token = ctx.start  # safer way to get token position
-            line = token.line
-            column = token.column
-            raise RuntimeError(f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
-        else:
-            self.current_node.add_type(var_name, var_type)
-
-    def enterRoadEnd(self, ctx:MapperParser.RoadEndContext):
-        var_name = ctx.IDENTIFIER().getText()
-        var_type = Types.ROAD
-        # Now store in dictionary
-        if not self.current_node.name_Exists_up(var_name):
-            token = ctx.start  # safer way to get token position
-            line = token.line
-            column = token.column
-            raise RuntimeError(
-                f"line: {line}, column: {column} the road '{var_name}' you are trying to end doesnt start in this or the parent scope!")
+    # def enterRoadStart(self, ctx:MapperParser.RoadStartContext):
 
 
-    def raiseError(self, ctx, msg):
-        try:
-            token = ctx.IDENTIFIER().getSymbol()
-        except AttributeError:
-            token = ctx.start
-        line = token.line
-        column = token.column
-        raise RuntimeError(f"line {line}, column {column} – {msg}")
+
 
 
     def get_type(self,ctx,type_str: str):
@@ -156,7 +92,7 @@ class VariableDeclarationListener(ParseTreeListener):
     # Enter a parse tree produced by MapperParser#functionDecl.
     def enterFunctionDecl(self, ctx: MapperParser.FunctionDeclContext):
         function_name = ctx.IDENTIFIER().getText()
-        if function_name in self.current_node.functions:
+        if function_name in self.root.functions:
             self.raiseError(ctx,f"function {function_name} already exists in this scope")
         params = []
         seen_names = set()
@@ -187,57 +123,57 @@ class VariableDeclarationListener(ParseTreeListener):
 
 
         print(f"Function '{function_name}' declared with parameters {params}")
-    # Exit a parse tree produced by MapperParser#functionDecl.
-    def exitFunctionDecl(self, ctx: MapperParser.FunctionDeclContext):
-        pass
+    # # Exit a parse tree produced by MapperParser#functionDecl.
+    # def exitFunctionDecl(self, ctx: MapperParser.FunctionDeclContext):
+    #     pass
 
     # Enter a parse tree produced by MapperParser#functionCall.
-    def enterFunctionCall(self, ctx: MapperParser.FunctionCallContext):
-        print("fun call listener")
-        function_name = ctx.IDENTIFIER().getText()
-        expr_list = [self.enterEveryRule(expr) for expr in ctx.exprList().exprOrExprComp()] if ctx.exprList() else []
+    # def enterFunctionCall(self, ctx: MapperParser.FunctionCallContext):
+    #     print("fun call listener")
+    #     function_name = ctx.IDENTIFIER().getText()
+    #     expr_list = [self.enterEveryRule(expr) for expr in ctx.exprList().exprOrExprComp()] if ctx.exprList() else []
+    #
+    #     if function_name == "print":
+    #         pass
+    #
+    #     if function_name not in self.root.functions:
+    #         self.raiseError(ctx,f"function'{function_name}' isnt declared!")
+    #
+    #     function = self.root.functions[function_name]
+    #     params = function['params']
+    #     statements = function['statements']
+    #
+    #     if len(expr_list) != len(params):
+    #         self.raiseError(ctx,
+    #             f"Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
+    #     self.enterScope()
+    #
+    #     for param, value in zip(params, expr_list):
+    #         param_identifier = param['identifier']
+    #         param_type = param['type']
+    #         print(f"value {value}")
+    #         self.current_node.add_type(param_identifier, param_type)
+    #         #self.current_node.add_var(param_identifier, value)
 
-        if function_name == "print":
-            pass
-
-        if function_name not in self.root.functions:
-            self.raiseError(ctx,f"function'{function_name}' isnt declared!")
-
-        function = self.root.functions[function_name]
-        params = function['params']
-        statements = function['statements']
-
-        if len(expr_list) != len(params):
-            self.raiseError(ctx,
-                f"Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
-        self.enterScope()
-
-        for param, value in zip(params, expr_list):
-            param_identifier = param['identifier']
-            param_type = param['type']
-            print(f"value {value}")
-            self.current_node.add_type(param_identifier, param_type)
-            #self.current_node.add_var(param_identifier, value)
-
-        result = None
+        # result = None
         # for stmt in statements:
         #     result = self.visit(stmt)
 
-        self.exitScope()
+
         # return result
 
-    # Exit a parse tree produced by MapperParser#functionCall.
-    def exitFunctionCall(self, ctx: MapperParser.FunctionCallContext):
-        pass
+    # # Exit a parse tree produced by MapperParser#functionCall.
+    # def exitFunctionCall(self, ctx: MapperParser.FunctionCallContext):
+    #     self.exitScope()
 
 
 class MapperInterpreter(MapperVisitor):
-    DEBUG = True  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
+    DEBUG = False  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
     SHOW_ERRORS = True  # Flaga błędów - True włącza rzucanie wyjątków, False je ignoruje
 
-    def __init__(self, types_tree, renderer=None, logger=None):
+    def __init__(self, root, renderer=None, logger=None):
 
-        self.root = types_tree.get_root() #korzen drzewa
+        self.root = root #korzen drzewa
         self.current_node = self.root #obecny node
         #self.variables = {}         # Przechowuje wartości zmiennych
         self.functions = {}         # Przechowuje funkcje
@@ -520,6 +456,40 @@ class MapperInterpreter(MapperVisitor):
             self.raiseError(ctx, f"expression not resolved")
 
     def visitAssignment(self, ctx):
+        if ctx.numberAssign():
+            var_name = ctx.numberAssign().IDENTIFIER().getText()
+            var_type = Types.NUMBER
+
+        elif ctx.boolAssign():
+            var_name = ctx.boolAssign().IDENTIFIER().getText()
+            var_type = Types.BOOL
+
+        elif ctx.tileAssign():
+            var_name = ctx.tileAssign().IDENTIFIER().getText()
+            var_type = Types.TILE
+
+        elif ctx.blendAssign():
+            var_name = ctx.blendAssign().IDENTIFIER().getText()
+            var_type = Types.BLEND
+
+        elif ctx.noValueAssign():
+            var_name = ctx.noValueAssign().IDENTIFIER().getText()
+            # type according to types class
+            var_type = getattr(Types, ctx.noValueAssign().type_().getText().upper())
+        else:
+            return
+
+        # Now store in dictionary
+        if self.current_node.var_name_is_declared(var_name):
+            token = ctx.start  # safer way to get token position
+            line = token.line
+            column = token.column
+            raise RuntimeError(
+                f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
+        else:
+            self.current_node.add_type(var_name, var_type)
+
+            print(f"Declared {var_type} {var_name}")
         self._debug_print("⚠️ Visiting assignment...")  # Debug
         if ctx.tileAssign():
             self._debug_print("✅ Tile assignment detected!")
@@ -973,13 +943,34 @@ class MapperInterpreter(MapperVisitor):
 
     # Visit a parse tree produced by MapperParser#roadStart.
     def visitRoadStart(self, ctx: MapperParser.RoadStartContext):
-        name = ctx.IDENTIFIER().getText()
-        self._debug_print(f"Starting road: {name}")
-        self.current_node.add_var(name, Road(Position(self.renderer.pointer_x, self.renderer.pointer_y)),Types.ROAD)
+        var_name = ctx.IDENTIFIER().getText()
+        var_type = Types.ROAD
+        # Now store in dictionary
+        if self.current_node.var_name_is_declared(var_name):
+            token = ctx.start  # safer way to get token position
+            line = token.line
+            column = token.column
+            raise RuntimeError(
+                f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
+        else:
+            self.current_node.add_type(var_name, var_type)
+
+            name = ctx.IDENTIFIER().getText()
+            self._debug_print(f"Starting road: {name}")
+            self.current_node.add_var(name, Road(Position(self.renderer.pointer_x, self.renderer.pointer_y)),Types.ROAD)
 
 
     # Visit a parse tree produced by MapperParser#roadEnd.
     def visitRoadEnd(self, ctx: MapperParser.RoadEndContext):
+        var_name = ctx.IDENTIFIER().getText()
+        var_type = Types.ROAD
+        # Now store in dictionary
+        if not self.current_node.name_Exists_up(var_name):
+            token = ctx.start  # safer way to get token position
+            line = token.line
+            column = token.column
+            raise RuntimeError(
+                f"line: {line}, column: {column} the road '{var_name}' you are trying to end doesnt start in this or the parent scope!")
         name = ctx.IDENTIFIER().getText()
         self._debug_print(f"Ending road {name}")
         if not self.current_node.name_Exists_up(name):

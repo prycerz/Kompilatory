@@ -98,7 +98,6 @@ class MapEditorApp(tk.Tk):
                 var_listener = VariableDeclarationListener()
                 walker = ParseTreeWalker()
                 walker.walk(var_listener, tree)
-                var_listener.root.reset_scope_counter()
                 if var_listener.errors:
                     for error in var_listener.errors:
                         # print to console
@@ -108,6 +107,7 @@ class MapEditorApp(tk.Tk):
                 interpreter = MapperInterpreter(var_listener.root, renderer=self.renderer, logger=self)
                 self.renderer.reset_map()  # Reset map before interpreting
                 interpreter.visit(tree)
+                print()
             except Exception as e:
                 self.log(f"Error: {e}")
 
