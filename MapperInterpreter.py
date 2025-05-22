@@ -865,7 +865,7 @@ class MapperInterpreter(MapperVisitor):
         
         value = self.getVariableOfName(ctx, var_name,jumps)
         if not isinstance(value, bool):
-            self._raise_error(f"❌ Variable '{var_name}' must be boolean in logical expression")
+            self.raiseError(ctx,f"Variable '{var_name}' must be boolean in logical expression")
         return value
     
     def visitExprCompBools(self, ctx: MapperParser.ExprCompBoolsContext):
