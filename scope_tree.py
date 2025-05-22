@@ -12,7 +12,7 @@ class TreeNode:
 
 
 
-    def __init__(self, parent=None):
+    def __init__(self, parent=None,isFun=False):
         self.i = 0
         self.scope = {}
         self.children = [] #lista dzieci po kolei kazde dziecko to scope
