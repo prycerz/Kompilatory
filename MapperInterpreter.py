@@ -276,7 +276,7 @@ class MapperInterpreter(MapperVisitor):
             height = int(ctx.figure().INT(1).getText())
             figure = Figure('rectangle', {'width': width, 'height': height})
         else:
-            self._raise_error("Nieznany typ figury!")
+            self.raiseError(ctx,"Nieznany typ figury!")
 
         # Iterate through the blend options (ctx.blendOption())
         for option_ctx in ctx.blendOption():
@@ -297,7 +297,7 @@ class MapperInterpreter(MapperVisitor):
                 else:
                     tile = Tile(args = [identifier],ctx = ctx)
             else:
-                self._raise_error("Nieznany typ opcji blendu!")
+                self.raiseError(ctx,"Nieznany typ opcji blendu!")
             
             percentage = int(option_ctx.INT().getText())
             blend_options.append((tile, percentage))
@@ -390,7 +390,7 @@ class MapperInterpreter(MapperVisitor):
         op = ctx.getChild(1).getText()
         if op in ('+=', '-='):
             value = self.visit(ctx.expr())
-            if isinstance(current_value, int):
+            if type(current_value) == int:
                 delta = int(value)
                 if op == '+=':
                     self._debug_print(f"🔄 {name} = {current_value} + {delta}")
@@ -403,12 +403,12 @@ class MapperInterpreter(MapperVisitor):
                     self._debug_print(f"🧱 Dodaję do Tile: {name}.add_obj({value})")
                     self.current_node.add_var(name,value)
                 else:
-                    self._raise_error(f"❌ Tile nie obsługuje '-=': {name}")
+                    self.raiseError(ctx,f"Tile nie obsługuje '-=': {name}")
             else:
-                self._raise_error(f"❌ Nieobsługiwany typ dla {op}: {type(current_value).__name__}")
+                self.raiseError(ctx,f" Nieobsługiwany typ dla {op}: {type(current_value).__name__}")
         elif op in ('++', '--'):
-            if not isinstance(current_value, int):
-                self._raise_error(f"❌ Operator '{op}' działa tylko na liczbach całkowitych")
+            if not type(current_value) == int:
+                self.raiseError(ctx,f" Nieobsługiwany typ dla '{op}' {type(current_value).__name__}")
             if op == '++':
                 self._debug_print("++")
                 current_obj.obj += 1
@@ -733,7 +733,7 @@ class MapperInterpreter(MapperVisitor):
             return None
 
         if function_name not in self.root.functions:
-            self._raise_error(f"Funkcja '{function_name}' nie jest zadeklarowana!")
+            self.raiseError(ctx,f"Funkcja '{function_name}' nie jest zadeklarowana!")
 
         function = self.root.functions[function_name]
         params = function['params']
@@ -743,7 +743,7 @@ class MapperInterpreter(MapperVisitor):
         print({return_type})
 
         if len(expr_list) != len(params):
-            self._raise_error(
+            self.raiseError(ctx,
                 f"Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
         self.enterScope(True)
 
@@ -807,7 +807,7 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print("Processing logical NOT")
         value = self.visit(ctx.exprComp())
         if not isinstance(value, bool):
-            self._raise_error("❌ Operator 'not' requires a boolean operand")
+            self.raiseError(ctx," Operator 'not' requires a boolean operand")
         return not value
 
     def visitExprAnd(self, ctx: MapperParser.ExprAndContext):
@@ -815,7 +815,7 @@ class MapperInterpreter(MapperVisitor):
         left = self.visit(ctx.exprComp(0))
         right = self.visit(ctx.exprComp(1))
         if not (isinstance(left, bool) and isinstance(right, bool)):
-            self._raise_error("❌ Operator 'and' requires boolean operands")
+            self.raiseError(ctx,"Operator 'and' requires boolean operands")
         return left and right
 
     def visitExprOr(self, ctx: MapperParser.ExprOrContext):
@@ -823,7 +823,7 @@ class MapperInterpreter(MapperVisitor):
         left = self.visit(ctx.exprComp(0))
         right = self.visit(ctx.exprComp(1))
         if not (isinstance(left, bool) and isinstance(right, bool)):
-            self._raise_error("❌ Operator 'or' requires boolean operands")
+            self.raiseError(ctx," Operator 'or' requires boolean operands")
         return left or right
 
     def visitExprCompRel(self, ctx: MapperParser.ExprCompRelContext):
