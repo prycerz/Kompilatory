@@ -54,34 +54,34 @@ class TreeNode:
         if type:
             var_type = None
             if var_name not in self.scope:
-                if self.parent!=None:
+                if self.parent!=None and not self.isFun:
                     var_type = self.parent.search_up(var_name,True,jumps)
             else:
                 if (jumps == 0):
                     var_type = self.scope[var_name].type
-                else:
+                elif not self.isFun:
                     var_type = self.parent.search_up(var_name,True,jumps-1)
             return var_type
         else:
             val = None
-            if var_name not in self.scope:
+            if var_name not in self.scope and not self.isFun:
                 if self.parent!=None:
                     val = self.parent.search_up(var_name,False,jumps)
             else:
                 if(jumps == 0):
                     val = self.scope[var_name].obj
-                else:
+                elif not self.isFun:
                     val = self.parent.search_up(var_name,False,jumps-1)
             return val
     def search_up_obj(self,var_name,jumps=0):
         val = None
         if var_name not in self.scope:
-            if self.parent != None:
+            if self.parent != None and not self.isFun:
                 val = self.parent.search_up_obj(var_name, jumps)
         else:
             if (jumps == 0):
                 val = self.scope[var_name]
-            else:
+            elif not self.isFun:
                 val = self.parent.search_up_obj(var_name, jumps - 1)
         return val
     def var_name_is_declared(self,var_name):
@@ -100,13 +100,13 @@ class TreeNode:
     def var_change_up(self,name,obj):
         if name in self.scope:
             self.scope[name].obj = obj
-        if self.parent!=None:
+        if self.parent!=None and not self.isFun:
             return self.parent.var_change_up(name,obj)
 
     def end_road_up(self, name, obj,renderer):
         if name in self.scope:
             self.scope[name].obj.end(obj, renderer)
-        if self.parent != None:
+        if self.parent != None and not self.isFun:
             return self.parent.end_road_up(name, obj,renderer)
     def get_root(self):
         if self.parent!=None:
@@ -127,11 +127,11 @@ class TreeNode:
             if jumps == 0:
                 return True
             else:
-                if self.parent != None:
+                if self.parent != None and not self.isFun:
                     return self.parent.name_Exists_up(name,jumps-1)
                 print("throwing false")
                 return False
-        if self.parent!=None:
+        if self.parent!=None and not self.isFun:
             return self.parent.name_Exists_up(name,jumps)
         return False
 

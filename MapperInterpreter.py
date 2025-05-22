@@ -168,7 +168,7 @@ class VariableDeclarationListener(ParseTreeListener):
 
 
 class MapperInterpreter(MapperVisitor):
-    DEBUG = False  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
+    DEBUG = True  # Flaga debugowania - ustaw na True, aby włączyć printy, False, aby wyłączyć
     SHOW_ERRORS = True  # Flaga błędów - True włącza rzucanie wyjątków, False je ignoruje
 
     def __init__(self, root, renderer=None, logger=None):
@@ -184,7 +184,10 @@ class MapperInterpreter(MapperVisitor):
 
 
     def raiseError(self, ctx, msg):
-        token = ctx.IDENTIFIER().getSymbol()
+        try:
+            token = ctx.IDENTIFIER().getSymbol()
+        except AttributeError:
+            token = ctx.start
         line = token.line
         column = token.column
         raise RuntimeError(f"line: {line}, column: {column} {msg}")
@@ -318,6 +321,7 @@ class MapperInterpreter(MapperVisitor):
         if not expr:
             self._debug_print("Error: ctx.expr() is None!")
             return None
+        print("sofar")
         rval = self.visit(expr)
         print(rval)
         rtype = type(rval)
@@ -456,6 +460,7 @@ class MapperInterpreter(MapperVisitor):
             self.raiseError(ctx, f"expression not resolved")
 
     def visitAssignment(self, ctx):
+        omit = False
         if ctx.numberAssign():
             var_name = ctx.numberAssign().IDENTIFIER().getText()
             var_type = Types.NUMBER
@@ -476,20 +481,26 @@ class MapperInterpreter(MapperVisitor):
             var_name = ctx.noValueAssign().IDENTIFIER().getText()
             # type according to types class
             var_type = getattr(Types, ctx.noValueAssign().type_().getText().upper())
+        elif ctx.increment():
+            omit = True
+            self._debug_print("✅ Increament assignment detected!")
+        elif ctx.roadStart():
+            omit = True
         else:
             return
 
         # Now store in dictionary
-        if self.current_node.var_name_is_declared(var_name):
-            token = ctx.start  # safer way to get token position
-            line = token.line
-            column = token.column
-            raise RuntimeError(
-                f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
-        else:
-            self.current_node.add_type(var_name, var_type)
+        if not omit:
+            if self.current_node.var_name_is_declared(var_name):
+                token = ctx.start  # safer way to get token position
+                line = token.line
+                column = token.column
+                raise RuntimeError(
+                    f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
+            else:
+                self.current_node.add_type(var_name, var_type)
 
-            print(f"Declared {var_type} {var_name}")
+                print(f"Declared {var_type} {var_name}")
         self._debug_print("⚠️ Visiting assignment...")  # Debug
         if ctx.tileAssign():
             self._debug_print("✅ Tile assignment detected!")
