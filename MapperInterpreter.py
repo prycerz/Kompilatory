@@ -2,6 +2,7 @@ import sys
 from logging import exception
 
 from antlr4 import ParseTreeListener
+from xdg.Mime import get_type
 
 from ErrorListener import MapperErrorListener
 from antlr4 import *
@@ -29,25 +30,8 @@ class ReturnValue(Exception):
         
 class VariableDeclarationListener(ParseTreeListener):
     def __init__(self):
-        #self.var_types = {}  # Słownik przechowujący zmienne i ich typy -> zmiana koncepcji
-        #self.var_types_scoped = [{}]  # lista słowników, pierwszy to globalny kolejne są młodsze
-        #self.all_var_types = {}
-
         self.root = TreeNode() #korzen drzewa
         self.errors = []     # Lista błędów (redeklaracje)
-
-    # def enterScope(self):
-    #     #self.var_types_scoped.append({})
-    #     new_child = TreeNode(self.current_node)
-    #     self.current_node.add_child(new_child)
-    #     print("added child")
-    #     self.current_node = self.current_node.move_in()
-
-    # def exitScope(self):
-    #     self.current_node = self.current_node.move_out()
-
-        #for name, vartype in current_scope.items():
-        #    self.all_var_types[name] = vartype
 
     def raiseError(self, ctx, msg):
         try:
@@ -57,31 +41,6 @@ class VariableDeclarationListener(ParseTreeListener):
         line = token.line
         column = token.column
         raise RuntimeError(f"line: {line}, column: {column} {msg}")
-
-    # def enterBlock(self,ctx):
-    #     self.enterScope()
-    #     for stmt in ctx.statement():
-    #         self.enterEveryRule(stmt)
-
-    # def exitBlock(self,ctx):
-    #     self.exitScope()
-
-    # def nameExists(self,name):
-    #     for scope in self.var_types_scoped:
-    #         if name in scope:
-    #             return True
-    #     return False
-    # def getTypeOfName(self,ctx,name):
-    #     for scope in reversed (self.var_types_scoped):
-    #         if name in scope:
-    #             return scope[name]
-
-
-    # def enterRoadStart(self, ctx:MapperParser.RoadStartContext):
-
-
-
-
 
     def get_type(self,ctx,type_str: str):
         print("entered ")
@@ -107,6 +66,7 @@ class VariableDeclarationListener(ParseTreeListener):
         statements = ctx.statement()  # List of statements in the function body
 
         return_type = self.get_type(ctx, ctx.children[0].getText())
+
         print(f"return type {return_type}")
         
         for param in ctx.param():
@@ -131,48 +91,6 @@ class VariableDeclarationListener(ParseTreeListener):
 
 
         print(f"Function '{function_name}' declared with parameters {params}")
-    # # Exit a parse tree produced by MapperParser#functionDecl.
-    # def exitFunctionDecl(self, ctx: MapperParser.FunctionDeclContext):
-    #     pass
-
-    # Enter a parse tree produced by MapperParser#functionCall.
-    # def enterFunctionCall(self, ctx: MapperParser.FunctionCallContext):
-    #     print("fun call listener")
-    #     function_name = ctx.IDENTIFIER().getText()
-    #     expr_list = [self.enterEveryRule(expr) for expr in ctx.exprList().exprOrExprComp()] if ctx.exprList() else []
-    #
-    #     if function_name == "print":
-    #         pass
-    #
-    #     if function_name not in self.root.functions:
-    #         self.raiseError(ctx,f"function'{function_name}' isnt declared!")
-    #
-    #     function = self.root.functions[function_name]
-    #     params = function['params']
-    #     statements = function['statements']
-    #
-    #     if len(expr_list) != len(params):
-    #         self.raiseError(ctx,
-    #             f"Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
-    #     self.enterScope()
-    #
-    #     for param, value in zip(params, expr_list):
-    #         param_identifier = param['identifier']
-    #         param_type = param['type']
-    #         print(f"value {value}")
-    #         self.current_node.add_type(param_identifier, param_type)
-    #         #self.current_node.add_var(param_identifier, value)
-
-        # result = None
-        # for stmt in statements:
-        #     result = self.visit(stmt)
-
-
-        # return result
-
-    # # Exit a parse tree produced by MapperParser#functionCall.
-    # def exitFunctionCall(self, ctx: MapperParser.FunctionCallContext):
-    #     self.exitScope()
 
 
 class MapperInterpreter(MapperVisitor):
@@ -247,7 +165,7 @@ class MapperInterpreter(MapperVisitor):
     def visitTileSum(self, ctx):
         self._debug_print("Visiting tile sum...")
         tile = Tile()
-        for arg in ctx.IDENTIFIER():
+        for arg in ctx.TILE_KEYWORD():
             tile.add_obj(arg.getText(), ctx)
         return tile
     
@@ -258,8 +176,13 @@ class MapperInterpreter(MapperVisitor):
         name = ctx.IDENTIFIER().getText()
         if not self.current_node.name_Exists_up(name):
             self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
+        if ctx.expr():
+            tile = self.visit(ctx.expr())  # Expression takes precedence
+        elif ctx.tileSum():
+            tile = self.visitTileSum(ctx.tileSum())  # Fallback to tileSum
+        else:
+            tile = self.visit(ctx.children[-1])  # Default/fallback behavior
 
-        tile = self.visitTileSum(ctx.tileSum())  # Get the tile type (e.g., sand, grass)
         self.current_node.add_var(name,tile,Types.TILE)
 
 
@@ -425,22 +348,25 @@ class MapperInterpreter(MapperVisitor):
             self._debug_print(f"🔢 {name} po '{op}': {current_obj.obj}")
         return self.getVariableOfName(ctx,name,jumps)
 
-    def get_type_string(self, value):
-        if isinstance(value, int) or isinstance(value, float):
-            return "number"
-        elif isinstance(value, bool):
+    def get_type_string(self, value_or_type):
+        val_type = value_or_type if isinstance(value_or_type, type) else type(value_or_type)
+
+        if val_type is type(None):
+            return "void"
+        elif issubclass(val_type, bool):
             return "bool"
-        elif isinstance(value, str):
+        elif issubclass(val_type, (int, float)):
+            return "number"
+        elif issubclass(val_type, str):
             return "tile"
-        elif isinstance(value,Road):
+        elif issubclass(val_type, Road):
             return "road"
-        elif isinstance(value,Tile):
+        elif issubclass(val_type, Tile):
             return "tile"
-        elif isinstance(value,Blend):
+        elif issubclass(val_type, Blend):
             return "blend"
         else:
             return "unknown"
-        
     def visitReasignment(self, ctx):
         self._debug_print("Reassignment detected")
         scoped = ctx.scopedIdentifier()
@@ -694,30 +620,6 @@ class MapperInterpreter(MapperVisitor):
 
 
     def visitFunctionDecl(self, ctx):
-        # self._debug_print("fun decl")
-        # function_name = ctx.IDENTIFIER().getText()
-        # self._debug_print(function_name)
-        #
-        # params = []
-        #
-        # statements = ctx.statement()  # List of statements in the function body
-        # self._debug_print(f"dir: {dir(ctx)}")
-        #
-        # for param in ctx.param():
-        #     self._debug_print(param.type_().getText())
-        #     self._debug_print(param.IDENTIFIER())
-        #     # Store both TYPE and IDENTIFIER for each parameter
-        #     param_type = param.type_().getText() # assuming TYPE is defined as 'number', 'tile', etc.
-        #     param_identifier = param.IDENTIFIER().getText()
-        #     params.append({'type': param_type, 'identifier': param_identifier})
-        #
-        # # Store the function definition
-        # self.functions[function_name] = {
-        #     'params': params,
-        #     'statements': statements
-        # }
-        #
-        # self._debug_print(f"Function '{function_name}' declared with parameters {params}")
         pass
     def get_type(self,ctx,type_str: str):
         print("entered ")
@@ -748,12 +650,13 @@ class MapperInterpreter(MapperVisitor):
         statements = function['statements']
         print("here")
         return_type = function['return_type']
+
         print({return_type})
 
         if len(expr_list) != len(params):
             self.raiseError(ctx,
                 f"Funkcja '{function_name}' oczekuje {len(params)} argumentów, a otrzymała {len(expr_list)}!")
-        self.enterScope(True)
+        self.enterScope(False)
 
         for param, value in zip(params, expr_list):
             param_identifier = param['identifier']
@@ -768,20 +671,27 @@ class MapperInterpreter(MapperVisitor):
             self.current_node.add_type(param_identifier, param_type)
             self.current_node.add_var(param_identifier, value)
 
+        val_type = None
+        value = None
         try:
             for stmt in statements:
                 self.visit(stmt)
         except ReturnValue as rv:
-            self.exitScope()
+
             value = rv.value
-            fun_value = return_type
+
             val_type = type(value)
 
-            if return_type!=val_type:
-                self.raiseError(ctx,f"return type '{val_type.__name__}' should be function return type: '{fun_value.__name__ if fun_value else 'void'}'")
-            return value
+
         self.exitScope()
-        return None
+        if return_type != val_type:
+
+            val_type = "void" if val_type is None else self.get_type_string(val_type)
+            fun_type = "void" if return_type is None else self.get_type_string(return_type)
+
+            self.raiseError(ctx, f"Declared function return type is: '{fun_type}' meanwhile '{function_name}' returns '{val_type}'")
+        return value
+
 
 
     def visitReturnStatement(self, ctx):
@@ -894,6 +804,22 @@ class MapperInterpreter(MapperVisitor):
         left = self.visit(ctx.expr(0))  # Evaluate left expression
         right = self.visit(ctx.expr(1))  # Evaluate right expression
         op = ctx.children[1].getText()  # Get the operator ('+' or '-')
+        print(f"left {left}       right {right}")
+        if isinstance(left,Tile) and isinstance(right,Tile):
+            new_tile = Tile()
+
+
+            for obj in [left.background, left.foreground]:
+                if obj is not None and obj != 'grass':
+                    new_tile.add_obj(obj, ctx)
+
+
+            for obj in [right.background, right.foreground]:
+                if obj is not None and obj != 'grass':
+                    new_tile.add_obj(obj, ctx)
+
+            print(f"returning {new_tile} tile")
+            return new_tile
 
         # Perform the actual operation
         if op == '+':
@@ -936,6 +862,7 @@ class MapperInterpreter(MapperVisitor):
             self.raiseError(scoped, f"Use of undeclared variable '{jumps_}{var_name}'")
         return self.getVariableOfName(ctx,var_name,jumps)
     def visitScopedIdentifier(self, ctx:MapperParser.ScopedIdentifierContext,counter=0):
+
         try:
             scoped = ctx.scopedIdentifier(counter)
         except TypeError:
@@ -951,6 +878,10 @@ class MapperInterpreter(MapperVisitor):
         value = int(ctx.INT().getText())
         self._debug_print(f"Processing integer literal: {value}")
         return value
+
+    def visitExprTileKeyword(self, ctx):
+        keyword = ctx.getText()
+        return Tile([keyword], ctx)  # tworzy np. Tile z foregroundem 'cabin'
 
     def visitExprBool(self, ctx):
         print("looking at bool in expr")
