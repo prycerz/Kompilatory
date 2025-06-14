@@ -33,7 +33,10 @@ class Tile:
                 raise Exception(f"'{obj}' is not a valid tile object")
             else:
                 Raiser.raiseError(ctx,f"'{obj}' is not a valid tile object")
-
+    def add_tile(self,right,ctx=None):
+        for obj in [right.background, right.foreground]:
+            if obj is not None and obj != 'grass':  # Pomiń grass
+                self.add_obj(obj, ctx)
     def get_road_image(self):
         if(self.road_directions['top'] and self.road_directions['bottom'] and self.road_directions['left'] and self.road_directions['right']):
             self.road = "cross"

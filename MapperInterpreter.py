@@ -331,8 +331,9 @@ class MapperInterpreter(MapperVisitor):
                     current_obj.obj -= delta
             elif isinstance(current_value, Tile):
                 if op == '+=':
+                    current_value.add_tile(value)
                     self._debug_print(f"🧱 Dodaję do Tile: {name}.add_obj({value})")
-                    self.current_node.add_var(name,value)
+                    self.current_node.add_var(name,current_value)
                 else:
                     self.raiseError(ctx,f"Tile nie obsługuje '-=': {name}")
             else:
@@ -430,7 +431,7 @@ class MapperInterpreter(MapperVisitor):
                 line = token.line
                 column = token.column
                 raise RuntimeError(
-                    f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
+                    f"line: {line}, column: {column} Redeclaration of variable '{var_name}'")
             else:
                 self.current_node.add_type(var_name, var_type)
 
@@ -901,7 +902,7 @@ class MapperInterpreter(MapperVisitor):
             line = token.line
             column = token.column
             raise RuntimeError(
-                f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope raised in listener")
+                f"line: {line}, column: {column} Redeclaration of variable '{var_name}' in the scope")
         else:
             self.current_node.add_type(var_name, var_type)
 
