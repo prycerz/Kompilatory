@@ -49,6 +49,14 @@ class VariableDeclarationListener(ParseTreeListener):
         #for name, vartype in current_scope.items():
         #    self.all_var_types[name] = vartype
 
+    def raiseError(self, ctx, msg):
+        try:
+            token = ctx.IDENTIFIER().getSymbol()
+        except AttributeError:
+            token = ctx.start
+        line = token.line
+        column = token.column
+        raise RuntimeError(f"line: {line}, column: {column} {msg}")
 
     # def enterBlock(self,ctx):
     #     self.enterScope()
