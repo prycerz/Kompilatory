@@ -199,6 +199,11 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#ExprTileKeyword.
+    def visitExprTileKeyword(self, ctx:MapperParser.ExprTileKeywordContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#ExprMulDiv.
     def visitExprMulDiv(self, ctx:MapperParser.ExprMulDivContext):
         return self.visitChildren(ctx)

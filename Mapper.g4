@@ -44,13 +44,13 @@ increment
     | scopedIdentifier '-=' expr
     ;
 
-tileSum      : IDENTIFIER ('+' IDENTIFIER)*;
+tileSum      : TILE_KEYWORD ('+' TILE_KEYWORD)*;
 
 reasignment  : scopedIdentifier '=' (expr | exprComp);
 assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign | noValueAssign | reasignment | roadStart;
 noValueAssign: type IDENTIFIER;
 
-tileAssign   : 'tile' IDENTIFIER '=' tileSum; // atrybuty foreground i background są nadpisywane przez kolejne argumenty
+tileAssign   : 'tile' IDENTIFIER '=' (tileSum|expr); // atrybuty foreground i background są nadpisywane przez kolejne argumenty
 numberAssign : 'number' IDENTIFIER '=' expr;
 boolAssign   : 'bool' IDENTIFIER '=' (expr | exprComp);
 blendAssign  : 'blend' IDENTIFIER '=' figure blendOption+; 
@@ -95,7 +95,8 @@ expr
             | INT                                      # ExprInt
 //            | IDENTIFIER                               # ExprVar
             | scopedIdentifier                         # ScopedExprVar
-            | functionCall                             # ExprFUnctionCall;
+            | functionCall                             # ExprFUnctionCall
+            | TILE_KEYWORD                             # ExprTileKeyword;
 
 exprComp    : NOT exprComp                             # ExprNot
             | exprComp AND exprComp                    # ExprAnd
@@ -105,7 +106,19 @@ exprComp    : NOT exprComp                             # ExprNot
             | exprComp ('==' | '!=') exprComp          # ExprCompBools
             | BOOL                                     # ExprCompBool
             | scopedIdentifier                         # ExprCompVar;
-
+TILE_KEYWORD
+    : 'cabin'
+    | 'church'
+    | 'grass'
+    | 'soil'
+    | 'sand'
+    | 'water'
+    | 'rocks'
+    | 'tree'
+    | 'bush'
+    | 'stones'
+    | 'mountains'
+    ;
 
 AND         : 'and';
 OR          : 'or';
