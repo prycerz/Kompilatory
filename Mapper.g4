@@ -50,7 +50,10 @@ reasignment  : scopedIdentifier '=' (expr | exprComp);
 assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign | noValueAssign | reasignment | roadStart;
 noValueAssign: type IDENTIFIER;
 
-tileAssign   : 'tile' IDENTIFIER '=' (tileSum|expr); // atrybuty foreground i background są nadpisywane przez kolejne argumenty
+
+tileAssign   : 'tile' IDENTIFIER '=' (tileSum | expr | tileCast); // atrybuty foreground i background są nadpisywane przez kolejne argumenty
+tileCast     : '(tile)' IDENTIFIER;
+
 numberAssign : 'number' IDENTIFIER '=' expr;
 boolAssign   : 'bool' IDENTIFIER '=' (expr | exprComp);
 blendAssign  : 'blend' IDENTIFIER '=' figure blendOption+; 
@@ -96,7 +99,8 @@ expr
 //            | IDENTIFIER                               # ExprVar
             | scopedIdentifier                         # ScopedExprVar
             | functionCall                             # ExprFUnctionCall
-            | TILE_KEYWORD                             # ExprTileKeyword;
+            | TILE_KEYWORD                             # ExprTileKeyword
+            ;
 
 exprComp    : NOT exprComp                             # ExprNot
             | exprComp AND exprComp                    # ExprAnd
@@ -105,7 +109,10 @@ exprComp    : NOT exprComp                             # ExprNot
             | '(' exprComp ')'                         # ExprCompParens
             | exprComp ('==' | '!=') exprComp          # ExprCompBools
             | BOOL                                     # ExprCompBool
-            | scopedIdentifier                         # ExprCompVar;
+            | scopedIdentifier                         # ExprCompVar
+            | '(bool)' expr                            # ExprCompCastToBool
+            ;
+            
 TILE_KEYWORD
     : 'cabin'
     | 'church'

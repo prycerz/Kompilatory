@@ -2,7 +2,7 @@ import sys
 from logging import exception
 
 from antlr4 import ParseTreeListener
-from xdg.Mime import get_type
+# from xdg.Mime import get_type
 
 from ErrorListener import MapperErrorListener
 from antlr4 import *
@@ -180,10 +180,30 @@ class MapperInterpreter(MapperVisitor):
             tile = self.visit(ctx.expr())  # Expression takes precedence
         elif ctx.tileSum():
             tile = self.visitTileSum(ctx.tileSum())  # Fallback to tileSum
+        elif ctx.tileCast():
+            tile = self.tileCast(ctx.tileCast())
         else:
             tile = self.visit(ctx.children[-1])  # Default/fallback behavior
 
         self.current_node.add_var(name,tile,Types.TILE)
+
+    def tileCast(self, ctx):
+        self._debug_print("Visiting tile cast...")
+        name = ctx.IDENTIFIER().getText()
+        # check if the name exists in the current scope and if it is a Blend or Tile
+        if not self.current_node.name_Exists_up(name):
+            self.raiseError(ctx, f"Assignment of undeclared number '{name}'")
+        else:
+            # check if the name is a Tile or Blend 
+            print(f"tile cast: {name} exists in scope")
+            variable = self.getVariableOfName(ctx,name)
+            if isinstance(variable, Tile):
+                self._debug_print(f"{name} is a tile returning it")
+                return variable
+            elif isinstance(variable, Blend):
+                self._debug_print(f"{name} is a blend, converting to tile")
+                # tile has 
+                return variable.random_tile()
 
 
     def visitBlendAssign(self, ctx):
@@ -890,7 +910,13 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print(f"Processing boolean literal: {value}")
         return value
 
-
+    def visitExprCompCastToBool(self, ctx):
+        self._debug_print("Processing cast to boolean")
+        value = self.visit(ctx.expr())
+        if isinstance(value, bool):
+            return value
+        elif isinstance(value, (int, float)):
+            return value != 0
 
     # Visit a parse tree produced by MapperParser#roadStart.
     def visitRoadStart(self, ctx: MapperParser.RoadStartContext):

@@ -94,6 +94,11 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#tileCast.
+    def visitTileCast(self, ctx:MapperParser.TileCastContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#numberAssign.
     def visitNumberAssign(self, ctx:MapperParser.NumberAssignContext):
         return self.visitChildren(ctx)
@@ -231,6 +236,11 @@ class MapperVisitor(ParseTreeVisitor):
 
     # Visit a parse tree produced by MapperParser#ExprAnd.
     def visitExprAnd(self, ctx:MapperParser.ExprAndContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprCompCastToBool.
+    def visitExprCompCastToBool(self, ctx:MapperParser.ExprCompCastToBoolContext):
         return self.visitChildren(ctx)
 
 

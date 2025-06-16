@@ -161,6 +161,15 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#tileCast.
+    def enterTileCast(self, ctx:MapperParser.TileCastContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#tileCast.
+    def exitTileCast(self, ctx:MapperParser.TileCastContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#numberAssign.
     def enterNumberAssign(self, ctx:MapperParser.NumberAssignContext):
         pass
@@ -410,6 +419,15 @@ class MapperListener(ParseTreeListener):
 
     # Exit a parse tree produced by MapperParser#ExprAnd.
     def exitExprAnd(self, ctx:MapperParser.ExprAndContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprCompCastToBool.
+    def enterExprCompCastToBool(self, ctx:MapperParser.ExprCompCastToBoolContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprCompCastToBool.
+    def exitExprCompCastToBool(self, ctx:MapperParser.ExprCompCastToBoolContext):
         pass
 
 
