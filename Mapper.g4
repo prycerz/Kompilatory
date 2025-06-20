@@ -70,6 +70,7 @@ blendOption  : (IDENTIFIER | tileSum) INT '%';
 // Rysowanie płytek
 drawRoad    : 'drawRoad' IDENTIFIER;
 draw        : 'draw' scopedIdentifier ('+' scopedIdentifier)*
+            | 'draw' tileSum
             | 'draw' 'radius' INT percentagePair+;
 percentagePair : INT '%' IDENTIFIER;
 
@@ -110,7 +111,7 @@ exprComp    : NOT exprComp                             # ExprNot
             | exprComp ('==' | '!=') exprComp          # ExprCompBools
             | BOOL                                     # ExprCompBool
             | scopedIdentifier                         # ExprCompVar
-            | '(bool)' expr                            # ExprCompCastToBool
+            | '(bool)' (expr | exprComp)               # ExprCompCastToBool
             ;
             
 TILE_KEYWORD

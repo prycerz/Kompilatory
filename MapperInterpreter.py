@@ -509,7 +509,6 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print("drawing..")
         # if it is not Tile or Blend, make a Tile from given arguments (tree, bush, sand, etc.)
         if ctx.scopedIdentifier():
-
             args = []
             counter = 0
             while (ctx.scopedIdentifier(counter)):
@@ -526,7 +525,10 @@ class MapperInterpreter(MapperVisitor):
                     return
             tile = Tile(args=args,ctx=ctx)
             self.renderer.draw_tile(tile)
-
+            
+        elif ctx.tileSum():  # Rysowanie z TileSum
+            tile = self.visitTileSum(ctx.tileSum())
+            self.renderer.draw_tile(tile)
 
         elif ctx.INT():  # Rysowanie z promieniem
             radius = int(ctx.INT().getText())
@@ -912,7 +914,14 @@ class MapperInterpreter(MapperVisitor):
 
     def visitExprCompCastToBool(self, ctx):
         self._debug_print("Processing cast to boolean")
-        value = self.visit(ctx.expr())
+        if(ctx.expr()):
+            value = self.visit(ctx.expr())
+        elif(ctx.exprComp()):
+            value = self.visit(ctx.exprComp())
+        else:
+            self._debug_print("Error: ctx.expr() and ctx.exprComp() are both None!")
+            return None
+
         if isinstance(value, bool):
             return value
         elif isinstance(value, (int, float)):
