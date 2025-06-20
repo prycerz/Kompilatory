@@ -312,7 +312,7 @@ class MapperInterpreter(MapperVisitor):
         return value
 
     def getVariableOfName(self,ctx,name,jumps = 0):
-        print("getting var of name")
+        print(f"getting var of name {name}")
         val = self.current_node.value_search_up(name, jumps)
         if val!=None:
             return val
@@ -503,34 +503,15 @@ class MapperInterpreter(MapperVisitor):
             self.renderer.move_pointer(value, 0)
         self._debug_print(f"Pointer moved {direction} by {value}. New position: ({self.renderer.pointer_x}, {self.renderer.pointer_y})")
 
-
     def visitDraw(self, ctx):
-
         self._debug_print("drawing..")
         # if it is not Tile or Blend, make a Tile from given arguments (tree, bush, sand, etc.)
-        if ctx.scopedIdentifier():
-            args = []
-            counter = 0
-            while (ctx.scopedIdentifier(counter)):
-                name, jumps_ = self.visitScopedIdentifier(ctx,counter)
-                self._debug_print("scoped draw")
-                jumps = len(jumps_)
-                krotka = (name,jumps)
-                args.append(krotka)
-                counter += 1
+        
+        # draw has mixture of TILE_KEYWORD and scopedIdentifier (
+        # f.e TILE_KEYOWRD + scopedIndentifier + TILE_KEYWORD 
+        # or radius
 
-            for name, jumps in args:
-                if (self.current_node.name_Exists_up(name,jumps)):
-                    self.renderer.draw_tile(self.getVariableOfName(ctx, name,jumps))
-                    return
-            tile = Tile(args=args,ctx=ctx)
-            self.renderer.draw_tile(tile)
-            
-        elif ctx.tileSum():  # Rysowanie z TileSum
-            tile = self.visitTileSum(ctx.tileSum())
-            self.renderer.draw_tile(tile)
-
-        elif ctx.INT():  # Rysowanie z promieniem
+        if ctx.INT():  # Rysowanie z promieniem
             radius = int(ctx.INT().getText())
             percentages = []
             for pair in ctx.percentagePair():
@@ -541,6 +522,42 @@ class MapperInterpreter(MapperVisitor):
             self._debug_print(f"Drawing radius {radius} with: {percentages}")
             blend = Blend(radius,percentages)
             self.renderer.draw_tile(blend)
+
+        elif (ctx.TILE_KEYWORD or ctx.scopedIdentifier):  # Rysowanie z Tile
+            tile = Tile([],ctx=ctx)
+            tile_keyword_counter = 0
+            scoped_identifier_counter = 0
+
+            while (ctx.TILE_KEYWORD(tile_keyword_counter)):
+                tile_keyword = ctx.TILE_KEYWORD(tile_keyword_counter).getText()
+                self._debug_print(f"Tile keyword: {tile_keyword}")
+                if tile_keyword in self.backgroundObjects + self.foregroundObjects:
+                    tile.add_obj(tile_keyword, ctx)
+                else:
+                    self.raiseError(ctx, f"Invalid tile keyword: {tile_keyword}")
+                tile_keyword_counter += 1
+            while(ctx.scopedIdentifier(scoped_identifier_counter)):
+
+
+                name, jumps_ = self.visitScopedIdentifier(ctx,scoped_identifier_counter)
+                self._debug_print(f"Scoped identifier: {name}, jumps: {jumps_}")
+                jumps = len(jumps_)
+                if (self.current_node.name_Exists_up(name,jumps)):
+                    if(isinstance(self.getVariableOfName(ctx, name,jumps), Tile)):
+                        self._debug_print(f"Adding Tile: {name} with jumps {jumps}")
+                        tile.add_tile(self.getVariableOfName(ctx, name,jumps),ctx)
+                    elif(isinstance(self.getVariableOfName(ctx, name,jumps), Blend)):
+                        self._debug_print(f"Adding Blend: {name} with jumps {jumps}")
+                        self.renderer.draw_tile(self.getVariableOfName(ctx, name,jumps))
+                        return
+                    else:
+                        self.raiseError(ctx,f"Variable '{name}' with is not a Tile")
+                else:
+                    self.raiseError(ctx,f"Variable '{name}' is not initialized")
+                scoped_identifier_counter += 1
+
+            self.renderer.draw_tile(tile)
+       
         else:
             self.raiseError(ctx.scopedIdentifier(),"invalid draw command")
 
@@ -551,8 +568,6 @@ class MapperInterpreter(MapperVisitor):
         self._debug_print(f"Error: {message}")
 
 
-
-    
     def visitWhileLoop(self, ctx):
         self._debug_print("Handling while loop")
         # Get condition expression
@@ -656,6 +671,41 @@ class MapperInterpreter(MapperVisitor):
         if type_str not in type_map:
             self.raiseError(ctx,f"Unknown type: {type_str}")
         return type_map[type_str]
+    
+
+    def visitExprUnary(self, ctx):
+        self._debug_print("Processing unary expression")
+        
+        atom_value = self.visit(ctx.atom())
+        prefix_ctx = ctx.prefixOp()
+
+        print(prefix_ctx.getText() if prefix_ctx else "No prefix operators")
+
+        # Jeśli nie ma prefixów, zwróć atom bez zmian
+        if prefix_ctx is None:
+            return atom_value
+
+        prefix_ops = prefix_ctx.getText()  # np. '---', '++', '+-+'
+
+        # Redukuj operator unarny
+        is_negative = False
+        for op in prefix_ops:
+            if op == '-':
+                is_negative = not is_negative  # flip sign
+            elif op != '+':
+                self.raiseError(ctx, f"Invalid unary operator: {op}")
+
+        # Obsługa typu Tile lub int
+        if isinstance(atom_value, Tile):
+            if is_negative:
+                self.raiseError(ctx, f"Cannot negate Tile object")
+            return atom_value
+        elif isinstance(atom_value, (int, float)):
+            return -atom_value if is_negative else atom_value
+        else:
+            self.raiseError(ctx, f"Unsupported type for unary operator: {type(atom_value)}")
+
+
     def visitFunctionCall(self, ctx):
         self._debug_print("fun call")
         function_name = ctx.IDENTIFIER().getText()

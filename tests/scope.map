@@ -1,6 +1,0 @@
-number x = 10
-{
-    number x = 3
-    print(x)
-}
-print x

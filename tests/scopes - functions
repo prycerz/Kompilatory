@@ -1,0 +1,17 @@
+void function foo(number  a, bool b){
+    number x = 25
+    print(x)
+    print(:x)
+    print(::x)
+    if(b){
+        print a * 10
+    } else {
+        print a * (-10)
+    }
+}
+
+number x = 90
+{
+    number x = 3
+    foo(1, true)
+}

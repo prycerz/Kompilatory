@@ -1,0 +1,10 @@
+number x = 0
+bool z = true
+bool y = (bool) x
+bool w = z or ((bool) x)
+
+print y, w
+
+
+bool a = (bool) false
+print a
