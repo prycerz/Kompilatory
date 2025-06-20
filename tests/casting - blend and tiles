@@ -1,0 +1,20 @@
+blend testblend = circle 10 sand 33% grass 33% rocks 34%
+
+draw testblend
+
+tile casted1 = (tile) testblend
+tile casted2 = (tile) testblend
+tile casted3 = (tile) testblend
+tile casted4 = (tile) casted3 
+
+pointer left 13
+draw casted1
+
+pointer left 1
+draw casted2
+
+pointer left 1
+draw casted3
+
+pointer left 1
+draw casted4

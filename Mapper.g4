@@ -36,21 +36,34 @@ returnStatement : 'return' exprOrExprComp?  ;
 exprList     : exprOrExprComp (',' exprOrExprComp)*;
 
 
+
+INCREMENT_OP_EXT : '+=';
+DECREMENT_OP_EXT : '-=';
+
 // Przypisania zmiennych
 increment
-    : scopedIdentifier '++'
-    | scopedIdentifier '--'
-    | scopedIdentifier '+=' expr
-    | scopedIdentifier '-=' expr
+    : scopedIdentifier INCREMENT_OP_EXT expr
+    | scopedIdentifier DECREMENT_OP_EXT expr
     ;
 
 tileSum      : TILE_KEYWORD ('+' TILE_KEYWORD)*;
 
 reasignment  : scopedIdentifier '=' (expr | exprComp);
-assignment   : tileAssign | numberAssign | boolAssign | increment | blendAssign | noValueAssign | reasignment | roadStart;
+assignment  : tileAssign 
+            | numberAssign 
+            | boolAssign 
+            | increment 
+            | blendAssign 
+            | noValueAssign 
+            | reasignment 
+            | roadStart;
+
 noValueAssign: type IDENTIFIER;
 
-tileAssign   : 'tile' IDENTIFIER '=' (tileSum|expr); // atrybuty foreground i background są nadpisywane przez kolejne argumenty
+
+tileAssign   : 'tile' IDENTIFIER '=' (tileSum | expr | tileCast); // atrybuty foreground i background są nadpisywane przez kolejne argumenty
+tileCast     : '(tile)' IDENTIFIER;
+
 numberAssign : 'number' IDENTIFIER '=' expr;
 boolAssign   : 'bool' IDENTIFIER '=' (expr | exprComp);
 blendAssign  : 'blend' IDENTIFIER '=' figure blendOption+; 
@@ -64,9 +77,10 @@ figure       : ('circle' INT) | ('rectangle' INT INT);
 blendOption  : (IDENTIFIER | tileSum) INT '%';
 
 
+
 // Rysowanie płytek
 drawRoad    : 'drawRoad' IDENTIFIER;
-draw        : 'draw' scopedIdentifier ('+' scopedIdentifier)*
+draw        : 'draw' (TILE_KEYWORD | scopedIdentifier) ('+' (TILE_KEYWORD | scopedIdentifier))*
             | 'draw' 'radius' INT percentagePair+;
 percentagePair : INT '%' IDENTIFIER;
 
@@ -87,16 +101,24 @@ elseConditionStatements : statement*;
 
 scopedIdentifier : (SCOPE)? IDENTIFIER ;
 // Wyrażenia arytmetyczne i logiczne
+
+
 expr
-            : '-' expr                                 # ExprUnaryMinus
-            | expr ('*'|'/') expr                      # ExprMulDiv
-            | expr ('+'|'-') expr                      # ExprAddSub
-            | '(' expr ')'                             # ExprParens
-            | INT                                      # ExprInt
-//            | IDENTIFIER                               # ExprVar
-            | scopedIdentifier                         # ScopedExprVar
-            | functionCall                             # ExprFUnctionCall
-            | TILE_KEYWORD                             # ExprTileKeyword;
+    : prefixOp? atom                              # ExprUnary
+    | expr op=('*'|'/') expr                      # ExprMulDiv
+    | expr op=('+'|'-') expr                      # ExprAddSub
+    ;
+
+prefixOp
+    : ('+' | '-')+ ;
+
+atom
+    : '(' expr ')'                                # ExprParens
+    | INT                                          # ExprInt
+    | scopedIdentifier                             # ScopedExprVar
+    | functionCall                                 # ExprFunctionCall
+    | TILE_KEYWORD                                 # ExprTileKeyword
+    ;
 
 exprComp    : NOT exprComp                             # ExprNot
             | exprComp AND exprComp                    # ExprAnd
@@ -105,7 +127,10 @@ exprComp    : NOT exprComp                             # ExprNot
             | '(' exprComp ')'                         # ExprCompParens
             | exprComp ('==' | '!=') exprComp          # ExprCompBools
             | BOOL                                     # ExprCompBool
-            | scopedIdentifier                         # ExprCompVar;
+            | scopedIdentifier                         # ExprCompVar
+            | '(bool)' (expr | exprComp)               # ExprCompCastToBool
+            ;
+            
 TILE_KEYWORD
     : 'cabin'
     | 'church'

@@ -161,6 +161,15 @@ class MapperListener(ParseTreeListener):
         pass
 
 
+    # Enter a parse tree produced by MapperParser#tileCast.
+    def enterTileCast(self, ctx:MapperParser.TileCastContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#tileCast.
+    def exitTileCast(self, ctx:MapperParser.TileCastContext):
+        pass
+
+
     # Enter a parse tree produced by MapperParser#numberAssign.
     def enterNumberAssign(self, ctx:MapperParser.NumberAssignContext):
         pass
@@ -341,30 +350,30 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#ScopedExprVar.
-    def enterScopedExprVar(self, ctx:MapperParser.ScopedExprVarContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#ScopedExprVar.
-    def exitScopedExprVar(self, ctx:MapperParser.ScopedExprVarContext):
-        pass
-
-
-    # Enter a parse tree produced by MapperParser#ExprTileKeyword.
-    def enterExprTileKeyword(self, ctx:MapperParser.ExprTileKeywordContext):
-        pass
-
-    # Exit a parse tree produced by MapperParser#ExprTileKeyword.
-    def exitExprTileKeyword(self, ctx:MapperParser.ExprTileKeywordContext):
-        pass
-
-
     # Enter a parse tree produced by MapperParser#ExprMulDiv.
     def enterExprMulDiv(self, ctx:MapperParser.ExprMulDivContext):
         pass
 
     # Exit a parse tree produced by MapperParser#ExprMulDiv.
     def exitExprMulDiv(self, ctx:MapperParser.ExprMulDivContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprUnary.
+    def enterExprUnary(self, ctx:MapperParser.ExprUnaryContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprUnary.
+    def exitExprUnary(self, ctx:MapperParser.ExprUnaryContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#prefixOp.
+    def enterPrefixOp(self, ctx:MapperParser.PrefixOpContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#prefixOp.
+    def exitPrefixOp(self, ctx:MapperParser.PrefixOpContext):
         pass
 
 
@@ -386,21 +395,30 @@ class MapperListener(ParseTreeListener):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#ExprFUnctionCall.
-    def enterExprFUnctionCall(self, ctx:MapperParser.ExprFUnctionCallContext):
+    # Enter a parse tree produced by MapperParser#ScopedExprVar.
+    def enterScopedExprVar(self, ctx:MapperParser.ScopedExprVarContext):
         pass
 
-    # Exit a parse tree produced by MapperParser#ExprFUnctionCall.
-    def exitExprFUnctionCall(self, ctx:MapperParser.ExprFUnctionCallContext):
+    # Exit a parse tree produced by MapperParser#ScopedExprVar.
+    def exitScopedExprVar(self, ctx:MapperParser.ScopedExprVarContext):
         pass
 
 
-    # Enter a parse tree produced by MapperParser#ExprUnaryMinus.
-    def enterExprUnaryMinus(self, ctx:MapperParser.ExprUnaryMinusContext):
+    # Enter a parse tree produced by MapperParser#ExprFunctionCall.
+    def enterExprFunctionCall(self, ctx:MapperParser.ExprFunctionCallContext):
         pass
 
-    # Exit a parse tree produced by MapperParser#ExprUnaryMinus.
-    def exitExprUnaryMinus(self, ctx:MapperParser.ExprUnaryMinusContext):
+    # Exit a parse tree produced by MapperParser#ExprFunctionCall.
+    def exitExprFunctionCall(self, ctx:MapperParser.ExprFunctionCallContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprTileKeyword.
+    def enterExprTileKeyword(self, ctx:MapperParser.ExprTileKeywordContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprTileKeyword.
+    def exitExprTileKeyword(self, ctx:MapperParser.ExprTileKeywordContext):
         pass
 
 
@@ -410,6 +428,15 @@ class MapperListener(ParseTreeListener):
 
     # Exit a parse tree produced by MapperParser#ExprAnd.
     def exitExprAnd(self, ctx:MapperParser.ExprAndContext):
+        pass
+
+
+    # Enter a parse tree produced by MapperParser#ExprCompCastToBool.
+    def enterExprCompCastToBool(self, ctx:MapperParser.ExprCompCastToBoolContext):
+        pass
+
+    # Exit a parse tree produced by MapperParser#ExprCompCastToBool.
+    def exitExprCompCastToBool(self, ctx:MapperParser.ExprCompCastToBoolContext):
         pass
 
 

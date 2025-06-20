@@ -1,0 +1,11 @@
+blend island= circle 10 sand 100%
+tile bush_tile = grass + bush
+{
+    blend island = circle 3 rocks 100%
+    tile bush_tile = grass + tree
+    draw :island
+    draw bush_tile
+    pointer right 7
+    draw island
+    draw :bush_tile
+}

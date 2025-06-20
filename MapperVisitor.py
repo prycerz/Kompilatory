@@ -94,6 +94,11 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
+    # Visit a parse tree produced by MapperParser#tileCast.
+    def visitTileCast(self, ctx:MapperParser.TileCastContext):
+        return self.visitChildren(ctx)
+
+
     # Visit a parse tree produced by MapperParser#numberAssign.
     def visitNumberAssign(self, ctx:MapperParser.NumberAssignContext):
         return self.visitChildren(ctx)
@@ -194,18 +199,18 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#ScopedExprVar.
-    def visitScopedExprVar(self, ctx:MapperParser.ScopedExprVarContext):
-        return self.visitChildren(ctx)
-
-
-    # Visit a parse tree produced by MapperParser#ExprTileKeyword.
-    def visitExprTileKeyword(self, ctx:MapperParser.ExprTileKeywordContext):
-        return self.visitChildren(ctx)
-
-
     # Visit a parse tree produced by MapperParser#ExprMulDiv.
     def visitExprMulDiv(self, ctx:MapperParser.ExprMulDivContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprUnary.
+    def visitExprUnary(self, ctx:MapperParser.ExprUnaryContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#prefixOp.
+    def visitPrefixOp(self, ctx:MapperParser.PrefixOpContext):
         return self.visitChildren(ctx)
 
 
@@ -219,18 +224,28 @@ class MapperVisitor(ParseTreeVisitor):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#ExprFUnctionCall.
-    def visitExprFUnctionCall(self, ctx:MapperParser.ExprFUnctionCallContext):
+    # Visit a parse tree produced by MapperParser#ScopedExprVar.
+    def visitScopedExprVar(self, ctx:MapperParser.ScopedExprVarContext):
         return self.visitChildren(ctx)
 
 
-    # Visit a parse tree produced by MapperParser#ExprUnaryMinus.
-    def visitExprUnaryMinus(self, ctx:MapperParser.ExprUnaryMinusContext):
+    # Visit a parse tree produced by MapperParser#ExprFunctionCall.
+    def visitExprFunctionCall(self, ctx:MapperParser.ExprFunctionCallContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprTileKeyword.
+    def visitExprTileKeyword(self, ctx:MapperParser.ExprTileKeywordContext):
         return self.visitChildren(ctx)
 
 
     # Visit a parse tree produced by MapperParser#ExprAnd.
     def visitExprAnd(self, ctx:MapperParser.ExprAndContext):
+        return self.visitChildren(ctx)
+
+
+    # Visit a parse tree produced by MapperParser#ExprCompCastToBool.
+    def visitExprCompCastToBool(self, ctx:MapperParser.ExprCompCastToBoolContext):
         return self.visitChildren(ctx)
 
 

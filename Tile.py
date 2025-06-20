@@ -1,4 +1,4 @@
-from twisted.test.raiser import raiseException
+# from twisted.test.raiser import raiseException
 
 from Raiser import Raiser
 
