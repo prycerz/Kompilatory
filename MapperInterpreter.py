@@ -106,7 +106,9 @@ class MapperInterpreter(MapperVisitor):
         self.renderer = renderer or MapperRenderer()
         self.roads = {}
         self.logger = logger  # Logger do rejestrowania komunikatów
-
+        self.max_loop = 100
+        self.recursion_depth = 0  # Głębokość rekurencji
+        self.max_recursion_depth = 100
 
 
     def raiseError(self, ctx, msg):
@@ -567,6 +569,8 @@ class MapperInterpreter(MapperVisitor):
         message = ctx.STRING().getText()
         self._debug_print(f"Error: {message}")
 
+    
+
 
     def visitWhileLoop(self, ctx):
         self._debug_print("Handling while loop")
@@ -574,8 +578,13 @@ class MapperInterpreter(MapperVisitor):
         condition_expr = ctx.exprComp()
         self._debug_print(f"Loop condition: {condition_expr.getText()}")
 
+        loop_counter = 0
+
         # Evaluate condition
         while self.visit(condition_expr):  # Keep looping while condition is true
+            if(loop_counter >= self.max_loop):
+                self.raiseError(ctx, f"Loop exceeded maximum iterations ({self.max_loop})")
+            loop_counter += 1
             self._debug_print("Loop body execution...")
 
             # Visit each statement inside the loop
@@ -598,9 +607,15 @@ class MapperInterpreter(MapperVisitor):
         increment_expr = ctx.increment()
         self._debug_print(f"Increment expression: {increment_expr.getText()}")
 
+        loop_counter = 0
+
         # Loop execution
         while self.visit(condition_expr):  # Loop condition
             self._debug_print("Loop body execution...")
+
+            if(loop_counter >= self.max_loop):
+                self.raiseError(ctx, f"Loop exceeded maximum iterations ({self.max_loop})")
+            loop_counter += 1
 
             # Visit each statement inside the loop
             for stmt in ctx.statement():
@@ -708,11 +723,19 @@ class MapperInterpreter(MapperVisitor):
 
     def visitFunctionCall(self, ctx):
         self._debug_print("fun call")
+        # increase recursion depth
+        self.recursion_depth += 1
+
+        if self.recursion_depth > self.max_recursion_depth:
+            self.raiseError(ctx, "Błąd: Przepełnienie stosu (za duża głębokość rekurencji)!")
+
         function_name = ctx.IDENTIFIER().getText()
         expr_list = [self.visit(expr) for expr in ctx.exprList().exprOrExprComp()] if ctx.exprList() else []
 
         if function_name == "print":
             self._debug_print(*expr_list)
+            # decrease recursion depth
+            self.recursion_depth -= 1  
             return None
 
         if function_name not in self.root.functions:
@@ -757,6 +780,10 @@ class MapperInterpreter(MapperVisitor):
 
 
         self.exitScope()
+
+        # decrease recusrion depth    
+        self.recursion_depth -= 1
+
         if return_type != val_type:
 
             val_type = "void" if val_type is None else self.get_type_string(val_type)
