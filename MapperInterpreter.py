@@ -573,6 +573,7 @@ class MapperInterpreter(MapperVisitor):
 
 
     def visitWhileLoop(self, ctx):
+        self.enterScope()
         self._debug_print("Handling while loop")
         # Get condition expression
         condition_expr = ctx.exprComp()
@@ -582,6 +583,7 @@ class MapperInterpreter(MapperVisitor):
 
         # Evaluate condition
         while self.visit(condition_expr):  # Keep looping while condition is true
+            self.enterScope()
             if(loop_counter >= self.max_loop):
                 self.raiseError(ctx, f"Loop exceeded maximum iterations ({self.max_loop})")
             loop_counter += 1
@@ -591,9 +593,12 @@ class MapperInterpreter(MapperVisitor):
             for stmt in ctx.statement():
                 self._debug_print(f"Executing statement: {stmt.getText()}")
                 self.visit(stmt)  # Execute statement
+            self.exitScope()
         self._debug_print("Exiting loop")
+        self.exitScope()
 
     def visitForLoop(self, ctx):
+        self.enterScope()
         self._debug_print("Handling for loop")
         assignment = ctx.assignment()
         self.visit(assignment)  # Execute the number assignment statement
@@ -611,6 +616,7 @@ class MapperInterpreter(MapperVisitor):
 
         # Loop execution
         while self.visit(condition_expr):  # Loop condition
+            self.enterScope()
             self._debug_print("Loop body execution...")
 
             if(loop_counter >= self.max_loop):
@@ -625,9 +631,9 @@ class MapperInterpreter(MapperVisitor):
             # Evaluate the increment
             self.visit(increment_expr)
             self._debug_print(f"Increment executed?: {increment_expr.getText()}")
-            
+            self.exitScope()
         self._debug_print("Exiting for loop")
-
+        self.exitScope()
     def visitLoop(self, ctx):
         if(ctx.forLoop()):
             return self.visitForLoop(ctx.forLoop())

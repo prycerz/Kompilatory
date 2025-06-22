@@ -1,0 +1,20 @@
+for (number i = 0; i < 10; i +=1)
+{
+    for (number j = 0; j < i; j +=1) {
+        print i
+        print j
+        // i = i + 1
+    }
+}
+
+
+
+
+for (number i = 0; i < 3; i +=1)
+{
+    for (number j = 0; j < i; j +=1) {
+        print i
+
+        // i = i + 1
+    }
+}

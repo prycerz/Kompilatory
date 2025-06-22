@@ -1,0 +1,18 @@
+number x = 1
+number y = 100
+{
+  number x = 2
+  {
+    number x = 3
+    print x
+    print :x
+    print ::x
+
+    print y
+    //print :y
+    //print ::y
+
+    // print :::x
+    // print :::y
+  }
+}

@@ -142,7 +142,7 @@ TILE_KEYWORD
     | 'tree'
     | 'bush'
     | 'stones'
-    | 'mountains'
+
     ;
 
 AND         : 'and';
