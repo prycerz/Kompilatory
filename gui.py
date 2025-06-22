@@ -11,7 +11,7 @@ from MapperParser import MapperParser
 from MapperListener import MapperListener
 from MapperInterpreter import MapperInterpreter
 from ErrorListener import MapperErrorListener
-from MapperInterpreter import VariableDeclarationListener
+from MapperInterpreter import FunctionDeclarationListener
 import pygame
 
 # GUI Application
@@ -95,16 +95,16 @@ class MapEditorApp(tk.Tk):
                 parser.addErrorListener(MapperErrorListener())
                 tree = parser.program()
 
-                var_listener = VariableDeclarationListener()
+                fun_listener = FunctionDeclarationListener()
                 walker = ParseTreeWalker()
-                walker.walk(var_listener, tree)
-                if var_listener.errors:
-                    for error in var_listener.errors:
+                walker.walk(fun_listener, tree)
+                if fun_listener.errors:
+                    for error in fun_listener.errors:
                         # print to console
                         self.log(f"Error: {error}")
                     return
 
-                interpreter = MapperInterpreter(var_listener.root, renderer=self.renderer, logger=self)
+                interpreter = MapperInterpreter(fun_listener.root, renderer=self.renderer, logger=self)
                 self.renderer.reset_map()  # Reset map before interpreting
                 interpreter.visit(tree)
                 print()

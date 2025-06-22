@@ -28,7 +28,7 @@ class ReturnValue(Exception):
     def __init__(self, value):
         self.value = value
         
-class VariableDeclarationListener(ParseTreeListener):
+class FunctionDeclarationListener(ParseTreeListener):
     def __init__(self):
         self.root = TreeNode() #korzen drzewa
         self.errors = []     # Lista błędów (redeklaracje)
@@ -1064,20 +1064,20 @@ if __name__ == "__main__":
         tree = parser.program()
 
         # Pierwszy przebieg: rejestracja zmiennych
-        var_listener = VariableDeclarationListener()
+        fun_listener = FunctionDeclarationListener()
         walker = ParseTreeWalker()
-        walker.walk(var_listener, tree)
-        var_listener.root.reset_scope_counter()
-        # print("Registered variables:", var_listener.var_types)  # Debugowanie
+        walker.walk(fun_listener, tree)
+        fun_listener.root.reset_scope_counter()
+        # print("Registered variables:", fun_listener.var_types)  # Debugowanie
 
         # Sprawdzenie błędów redeklaracji
-        if var_listener.errors:
-            for error in var_listener.errors:
+        if fun_listener.errors:
+            for error in fun_listener.errors:
                 print(error)
             sys.exit(1)
 
         # Drugi przebieg: interpretacja programu
-        interpreter = MapperInterpreter(var_listener.root)
+        interpreter = MapperInterpreter(fun_listener.root)
         interpreter.visit(tree)
 
         # print("Starting Pygame loop...")
